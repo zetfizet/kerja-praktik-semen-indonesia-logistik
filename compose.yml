@@ -1,0 +1,128 @@
+x-airflow-env: &airflow-env
+  AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+  AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+  AIRFLOW__CELERY__BROKER_URL: redis://valkey:6379/0
+  AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+  AIRFLOW__CORE__FERNET_KEY: "DKD39Cfp3KGT1pcFQXmhQbpQIgViC+6jf9UyMt0cIi4="
+  AIRFLOW__API__SECRET_KEY: "cV4qZVjpycYWE1ZTo2hYK25fUp5DCJXxH+4SHHsQ1hU="
+  AIRFLOW__WEBSERVER__DEFAULT_USER_PASSWORD: "rafie123"
+  AIRFLOW_HOME: "/opt/airflow"
+
+services:
+  postgres:
+    image: docker.io/library/postgres:18
+    container_name: postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 10
+
+  valkey:
+    image: docker.io/valkey/valkey:9
+    container_name: valkey
+    volumes:
+      - valkey-data:/data
+    command: ["valkey-server", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p 6379 ping || exit 1"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-init:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-init
+    depends_on:
+      - postgres
+      - valkey
+    environment:
+      <<: *airflow-env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    command: ["bash", "-c", "airflow db migrate && airflow db check"]
+    restart: "no"
+
+  airflow-webserver:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-webserver
+    depends_on:
+      - airflow-init
+    environment:
+      <<: *airflow-env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    command: ["bash", "-c", "airflow standalone"]
+    ports:
+      - "8080:8080"
+    restart: always
+
+  airflow-scheduler:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-scheduler
+    depends_on:
+      - airflow-init
+    environment:
+      <<: *airflow-env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    command: ["bash", "-c", "airflow scheduler"]
+    restart: always
+
+  airflow-worker:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-worker
+    depends_on:
+      - airflow-init
+    environment:
+      <<: *airflow-env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    command: ["bash", "-c", "airflow celery worker"]
+    restart: always
+
+  airflow-triggerer:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-trigerrer
+    depends_on:
+      - airflow-init
+    environment:
+      <<: *airflow-env
+    command: ["bash", "-c", "airflow triggerer"]
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    restart: always
+
+  airflow-dag-processor:
+    image: docker.io/apache/airflow:3.1.3-python3.13
+    container_name: airflow-dag-processor
+    depends_on: 
+      - airflow-init
+    environment:
+      <<: *airflow-env
+    command: ["bash", "-c", "airflow dag-processor"]
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:Z
+      - ./airflow/logs:/opt/airflow/logs:Z
+      - ./airflow/plugins:/opt/airflow/plugins:Z
+    restart: always
+
+volumes:
+  postgres-data:
+  valkey-data:
