@@ -1,0 +1,101 @@
+{"timestamp":"2026-02-02T01:43:39.127185Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-02T01:43:39.128009Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/daily_warehouse_sync.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-02T01:43:39.143899Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-02T01:43:39.144043Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-02T01:43:39.222858Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.222980Z","level":"info","event":"Starting daily warehouse sync...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.223032Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.223073Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.223113Z","level":"info","event":"📍 PRIORITY: Syncing WEATHER data first...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380024Z","level":"info","event":"ERROR syncing weather.fact_weather_hourly: relation \"fact_weather_hourly\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380209Z","level":"info","event":"LINE 1: SELECT * FROM fact_weather_hourly LIMIT 0","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380266Z","level":"info","event":"                      ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380313Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380489Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.380590Z","level":"info","event":"📊 Syncing other schemas...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.537869Z","level":"info","event":"✓ driver.daftar_user: 24 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.629363Z","level":"info","event":"✓ driver.attachment_driver: 6 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.706184Z","level":"info","event":"✓ driver.laporan_pengemudi: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.785430Z","level":"info","event":"ERROR syncing driver.kontak_darurat: relation \"kontak_darurat_pengemudi\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.785612Z","level":"info","event":"LINE 1: SELECT * FROM kontak_darurat_pengemudi LIMIT 0","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.785667Z","level":"info","event":"                      ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.785711Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.909804Z","level":"info","event":"✓ armada.armada_tms: 3 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:39.996178Z","level":"info","event":"✓ armada.jenis_armada: 19 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.086817Z","level":"info","event":"✓ armada.driver_armada: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.166820Z","level":"info","event":"✓ armada.armada_perangkat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.269859Z","level":"info","event":"✓ armada.attachment_armada: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.360681Z","level":"info","event":"✓ delivery.delivery_order: 15 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.445989Z","level":"info","event":"✓ delivery.detail_do: 3 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.523153Z","level":"info","event":"✓ delivery.jenis_order: 5 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.609778Z","level":"info","event":"✓ delivery.attachment_gudang: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.740198Z","level":"info","event":"✓ activity.log_perjalanan_armada: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:40.879576Z","level":"info","event":"✓ activity.log_aktifitas_driver: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:41.008787Z","level":"info","event":"✓ activity.log_perangkat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:41.107276Z","level":"info","event":"✓ activity.log_chat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:42.830181Z","level":"info","event":"✓ activity.log_panggilan: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:42.905402Z","level":"info","event":"✓ activity.log_sensor: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:42.988626Z","level":"info","event":"✓ activity.alert_geofence: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.072551Z","level":"info","event":"✓ financial.orders: 5 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.162808Z","level":"info","event":"✓ financial.detail_po: 4 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.242427Z","level":"info","event":"✓ financial.jenis_transaksi: 1 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.335526Z","level":"info","event":"✓ financial.detail_qc: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.459913Z","level":"info","event":"✓ financial.bank: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.580452Z","level":"info","event":"✓ support.attachment: 12 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.684473Z","level":"info","event":"✓ support.jenis_file: 4 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.754396Z","level":"info","event":"✓ support.chat_room: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.832312Z","level":"info","event":"✓ support.attachment_chat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.896588Z","level":"info","event":"✓ support.attachment_pengembalian: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:43.971797Z","level":"info","event":"✓ support.attachment_perangkat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.056422Z","level":"info","event":"✓ support.attachment_qc: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.143746Z","level":"info","event":"ERROR syncing master.gudang: column \"uuid_tenant\" of relation \"gudang\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.143900Z","level":"info","event":"LINE 1: ...a, diubah_oleh, diubah_pada, id_tenant, lat, lng, uuid_tenan...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.143952Z","level":"info","event":"                                                             ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.143994Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.285146Z","level":"info","event":"✓ master.locations: 6 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.380305Z","level":"info","event":"✓ master.kategori_produk: 3 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.481079Z","level":"info","event":"✓ master.konversi: 13 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.644742Z","level":"info","event":"✓ master.jenis_satuan: 12 rows synced","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.747842Z","level":"info","event":"✓ master.atribut: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.841706Z","level":"info","event":"✓ master.atribut_produk: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:44.933130Z","level":"info","event":"✓ master.kriteria_produk: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.009442Z","level":"info","event":"✓ master.geofence: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.089462Z","level":"info","event":"✓ master.jenis_insiden: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.166794Z","level":"info","event":"✓ master.jenis_notifikasi: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.247217Z","level":"info","event":"✓ master.laporan_darurat: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327411Z","level":"info","event":"✓ master.rating: 0 rows (table empty in source)","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327673Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327739Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327784Z","level":"info","event":"SYNC SUMMARY","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327826Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327865Z","level":"info","event":"✅ Success: 43 tables","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327943Z","level":"info","event":"❌ Failed: 3 tables","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328000Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328065Z","level":"info","event":"Failed tables:","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328110Z","level":"info","event":"  - ERROR syncing weather.fact_weather_hourly: relation \"fact_weather_hourly\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328150Z","level":"info","event":"LINE 1: SELECT * FROM fact_weather_hourly LIMIT 0","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328188Z","level":"info","event":"                      ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328228Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328266Z","level":"info","event":"  - ERROR syncing driver.kontak_darurat: relation \"kontak_darurat_pengemudi\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328329Z","level":"info","event":"LINE 1: SELECT * FROM kontak_darurat_pengemudi LIMIT 0","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328446Z","level":"info","event":"                      ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328493Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328537Z","level":"info","event":"  - ERROR syncing master.gudang: column \"uuid_tenant\" of relation \"gudang\" does not exist","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328589Z","level":"info","event":"LINE 1: ...a, diubah_oleh, diubah_pada, id_tenant, lat, lng, uuid_tenan...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328628Z","level":"info","event":"                                                             ^","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328676Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328715Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328765Z","level":"info","event":"Detailed results:","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328800Z","level":"info","event":"  ✓ driver.daftar_user: 24 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328836Z","level":"info","event":"  ✓ driver.attachment_driver: 6 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328871Z","level":"info","event":"  ✓ driver.laporan_pengemudi: 0 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328906Z","level":"info","event":"  ✓ armada.armada_tms: 3 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328939Z","level":"info","event":"  ✓ armada.jenis_armada: 19 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.328973Z","level":"info","event":"  ✓ armada.driver_armada: 0 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.329007Z","level":"info","event":"  ✓ armada.armada_perangkat: 0 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.329041Z","level":"info","event":"  ✓ armada.attachment_armada: 0 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.329076Z","level":"info","event":"  ✓ delivery.delivery_order: 15 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.329110Z","level":"info","event":"  ✓ delivery.detail_do: 3 rows","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.329143Z","level":"info","event":"  ... and 33 more","logger":"task.stdout"}
+{"timestamp":"2026-02-02T01:43:45.327875Z","level":"info","event":"Done. Returned value was: {'success_count': 43, 'failed_count': 3}","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2026-02-02T01:43:45.328233Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019c1c04-fd64-7ff6-99aa-0c543bc5cc54'), task_id='sync_warehouse_tables', dag_id='daily_warehouse_sync', run_id='scheduled__2026-01-31T00:00:00+00:00', try_number=1, dag_version_id=UUID('019c0c72-692d-79fb-81df-b2080f20290a'), map_index=-1, hostname='OM-RAFIE.localdomain', context_carrier={}, task=<Task(PythonOperator): sync_warehouse_tables>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=2, start_date=datetime.datetime(2026, 2, 2, 1, 43, 35, 263061, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

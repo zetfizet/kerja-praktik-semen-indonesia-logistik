@@ -1,0 +1,299 @@
+{"timestamp":"2026-02-03T13:34:35.483221Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-03T13:34:35.484159Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/daily_warehouse_sync_upd.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-03T13:34:35.502680Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync_upd.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-03T13:34:35.502807Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync_upd.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-03T13:34:35.525127Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:34:35.525241Z","level":"info","event":"Starting daily warehouse sync...","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:34:35.525283Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:34:35.525319Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:34:35.525353Z","level":"info","event":"📍 PRIORITY: Syncing WEATHER data first...","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:36:49.909424Z","level":"info","event":"ERROR syncing weather.fact_weather_hourly: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:36:49.909635Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:36:49.909697Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:36:49.909779Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:36:49.909829Z","level":"info","event":"📊 Syncing other schemas...","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:39:05.077941Z","level":"info","event":"ERROR syncing driver.daftar_user: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:39:05.078311Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:39:05.078413Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:41:20.245786Z","level":"info","event":"ERROR syncing driver.attachment_driver: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:41:20.246084Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:41:20.246163Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:43:35.413330Z","level":"info","event":"ERROR syncing driver.laporan_pengemudi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:43:35.413630Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:43:35.413805Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:45:50.581575Z","level":"info","event":"ERROR syncing driver.kontak_darurat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:45:50.582029Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:45:50.582099Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:48:05.749377Z","level":"info","event":"ERROR syncing armada.armada_tms: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:48:05.749704Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:48:05.749787Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:50:20.917224Z","level":"info","event":"ERROR syncing armada.jenis_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:50:20.917466Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:50:20.917892Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:52:36.085720Z","level":"info","event":"ERROR syncing armada.driver_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:52:36.085882Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:52:36.085928Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:54:51.253837Z","level":"info","event":"ERROR syncing armada.armada_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:54:51.254145Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:54:51.254231Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:57:06.421418Z","level":"info","event":"ERROR syncing armada.attachment_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:57:06.421646Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:57:06.429055Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:59:21.589430Z","level":"info","event":"ERROR syncing delivery.delivery_order: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:59:21.589636Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T13:59:21.589714Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:01:36.760369Z","level":"info","event":"ERROR syncing delivery.detail_do: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:01:36.760691Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:01:36.760825Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:03:51.925704Z","level":"info","event":"ERROR syncing delivery.jenis_order: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:03:51.934949Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:03:51.935129Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:06:07.093457Z","level":"info","event":"ERROR syncing delivery.attachment_gudang: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:06:07.093973Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:06:07.094121Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:08:22.261618Z","level":"info","event":"ERROR syncing activity.log_perjalanan_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:08:22.263034Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:08:22.263162Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:10:37.429466Z","level":"info","event":"ERROR syncing activity.log_aktifitas_driver: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:10:37.429982Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:10:37.430090Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:12:52.603048Z","level":"info","event":"ERROR syncing activity.log_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:12:52.603356Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:12:52.603831Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:15:07.767717Z","level":"info","event":"ERROR syncing activity.log_chat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:15:07.768263Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:15:07.768444Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:17:22.933663Z","level":"info","event":"ERROR syncing activity.log_panggilan: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:17:22.934076Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:17:22.934196Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:19:38.101715Z","level":"info","event":"ERROR syncing activity.log_sensor: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:19:38.102102Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:19:38.102348Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:21:53.269324Z","level":"info","event":"ERROR syncing activity.alert_geofence: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:21:53.269679Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:21:53.269905Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:24:08.444869Z","level":"info","event":"ERROR syncing financial.orders: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:24:08.445263Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:24:08.445336Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:26:25.653646Z","level":"info","event":"ERROR syncing financial.detail_po: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:26:25.653931Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:26:25.654070Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:28:40.821400Z","level":"info","event":"ERROR syncing financial.jenis_transaksi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:28:40.821634Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:28:40.821730Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:30:55.989657Z","level":"info","event":"ERROR syncing financial.detail_qc: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:30:55.990765Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:30:55.991730Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:33:11.157515Z","level":"info","event":"ERROR syncing financial.bank: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:33:11.157796Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:33:11.157895Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:35:26.326016Z","level":"info","event":"ERROR syncing support.attachment: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:35:26.326395Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:35:26.327099Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:37:41.493399Z","level":"info","event":"ERROR syncing support.jenis_file: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:37:41.493701Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:37:41.493795Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:39:56.661420Z","level":"info","event":"ERROR syncing support.chat_room: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:39:56.661762Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:39:56.661914Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:42:15.925828Z","level":"info","event":"ERROR syncing support.attachment_chat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:42:15.926320Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:42:15.926488Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:44:31.103368Z","level":"info","event":"ERROR syncing support.attachment_pengembalian: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:44:31.107966Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:44:31.108093Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:46:46.263185Z","level":"info","event":"ERROR syncing support.attachment_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:46:46.263739Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:46:46.263896Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:49:01.440039Z","level":"info","event":"ERROR syncing support.attachment_qc: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:49:01.440857Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:49:01.441069Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:51:16.597861Z","level":"info","event":"ERROR syncing master.gudang: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:51:16.598179Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:51:16.598326Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:53:31.765492Z","level":"info","event":"ERROR syncing master.locations: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:53:31.765763Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:53:31.765845Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:55:46.933354Z","level":"info","event":"ERROR syncing master.kategori_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:55:46.933643Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:55:46.933788Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:58:02.102374Z","level":"info","event":"ERROR syncing master.konversi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:58:02.102692Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T14:58:02.102890Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:00:17.269549Z","level":"info","event":"ERROR syncing master.jenis_satuan: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:00:17.270383Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:00:17.270577Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:02:32.437474Z","level":"info","event":"ERROR syncing master.atribut: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:02:32.438284Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:02:32.438838Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:04:47.605376Z","level":"info","event":"ERROR syncing master.atribut_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:04:47.614864Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:04:47.615419Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:07:02.773664Z","level":"info","event":"ERROR syncing master.kriteria_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:07:02.782296Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:07:02.782407Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:09:17.947042Z","level":"info","event":"ERROR syncing master.geofence: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:09:17.949952Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:09:17.952225Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:11:33.112609Z","level":"info","event":"ERROR syncing master.jenis_insiden: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:11:33.114829Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:11:33.115027Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:13:48.288694Z","level":"info","event":"ERROR syncing master.jenis_notifikasi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:13:48.289162Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:13:48.289343Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:16:03.445897Z","level":"info","event":"ERROR syncing master.laporan_darurat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:16:03.446317Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:16:03.446569Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.613976Z","level":"info","event":"ERROR syncing master.rating: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614693Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614752Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614852Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614898Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614952Z","level":"info","event":"SYNC SUMMARY","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.614988Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.615162Z","level":"info","event":"✅ Success: 0 tables","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.615227Z","level":"info","event":"❌ Failed: 46 tables","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.615297Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.615340Z","level":"info","event":"Failed tables:","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.615504Z","level":"info","event":"  - ERROR syncing weather.fact_weather_hourly: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616429Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616582Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616642Z","level":"info","event":"  - ERROR syncing driver.daftar_user: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616686Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616725Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616763Z","level":"info","event":"  - ERROR syncing driver.attachment_driver: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.616801Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617433Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617500Z","level":"info","event":"  - ERROR syncing driver.laporan_pengemudi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617539Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617587Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617629Z","level":"info","event":"  - ERROR syncing driver.kontak_darurat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617663Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617694Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617725Z","level":"info","event":"  - ERROR syncing armada.armada_tms: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.617787Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618168Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618228Z","level":"info","event":"  - ERROR syncing armada.jenis_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618265Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618307Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618341Z","level":"info","event":"  - ERROR syncing armada.driver_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618407Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618868Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.618992Z","level":"info","event":"  - ERROR syncing armada.armada_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619151Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619209Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619246Z","level":"info","event":"  - ERROR syncing armada.attachment_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619278Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619309Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619339Z","level":"info","event":"  - ERROR syncing delivery.delivery_order: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619369Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619399Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619428Z","level":"info","event":"  - ERROR syncing delivery.detail_do: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619458Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619487Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619516Z","level":"info","event":"  - ERROR syncing delivery.jenis_order: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619546Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619577Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619808Z","level":"info","event":"  - ERROR syncing delivery.attachment_gudang: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619861Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619895Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619927Z","level":"info","event":"  - ERROR syncing activity.log_perjalanan_armada: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.619991Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.620562Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.620687Z","level":"info","event":"  - ERROR syncing activity.log_aktifitas_driver: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.620779Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.620834Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.620878Z","level":"info","event":"  - ERROR syncing activity.log_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621338Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621416Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621456Z","level":"info","event":"  - ERROR syncing activity.log_chat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621558Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621603Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621672Z","level":"info","event":"  - ERROR syncing activity.log_panggilan: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621771Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621817Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621886Z","level":"info","event":"  - ERROR syncing activity.log_sensor: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.621931Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.622385Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.622475Z","level":"info","event":"  - ERROR syncing activity.alert_geofence: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623503Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623577Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623618Z","level":"info","event":"  - ERROR syncing financial.orders: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623682Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623723Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623877Z","level":"info","event":"  - ERROR syncing financial.detail_po: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623924Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623959Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.623992Z","level":"info","event":"  - ERROR syncing financial.jenis_transaksi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624038Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624072Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624102Z","level":"info","event":"  - ERROR syncing financial.detail_qc: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624133Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624165Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624194Z","level":"info","event":"  - ERROR syncing financial.bank: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624225Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624254Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624283Z","level":"info","event":"  - ERROR syncing support.attachment: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624311Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624340Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624367Z","level":"info","event":"  - ERROR syncing support.jenis_file: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624397Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624426Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624498Z","level":"info","event":"  - ERROR syncing support.chat_room: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624545Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624579Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624610Z","level":"info","event":"  - ERROR syncing support.attachment_chat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624642Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624673Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624703Z","level":"info","event":"  - ERROR syncing support.attachment_pengembalian: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624755Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624798Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624829Z","level":"info","event":"  - ERROR syncing support.attachment_perangkat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624858Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624897Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624951Z","level":"info","event":"  - ERROR syncing support.attachment_qc: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.624999Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625030Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625059Z","level":"info","event":"  - ERROR syncing master.gudang: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625371Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625433Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625469Z","level":"info","event":"  - ERROR syncing master.locations: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625502Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625534Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625564Z","level":"info","event":"  - ERROR syncing master.kategori_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625595Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625625Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625655Z","level":"info","event":"  - ERROR syncing master.konversi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625685Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.625714Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626099Z","level":"info","event":"  - ERROR syncing master.jenis_satuan: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626414Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626468Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626548Z","level":"info","event":"  - ERROR syncing master.atribut: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626596Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626630Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626663Z","level":"info","event":"  - ERROR syncing master.atribut_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626695Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626725Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626796Z","level":"info","event":"  - ERROR syncing master.kriteria_produk: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626850Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626885Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.626990Z","level":"info","event":"  - ERROR syncing master.geofence: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627031Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627064Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627137Z","level":"info","event":"  - ERROR syncing master.jenis_insiden: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627218Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627264Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627613Z","level":"info","event":"  - ERROR syncing master.jenis_notifikasi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627685Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627792Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.627846Z","level":"info","event":"  - ERROR syncing master.laporan_darurat: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628209Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628272Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628314Z","level":"info","event":"  - ERROR syncing master.rating: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628353Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628390Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628426Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.628480Z","level":"info","event":"Detailed results:","logger":"task.stdout"}
+{"timestamp":"2026-02-03T15:18:18.637238Z","level":"info","event":"Done. Returned value was: {'success_count': 0, 'failed_count': 46}","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2026-02-03T15:18:18.654188Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019c23b6-4b55-71db-b895-d7d12216ea5d'), task_id='sync_warehouse_tables', dag_id='daily_warehouse_sync', run_id='scheduled__2026-02-03T13:34:34.660395+00:00', try_number=1, dag_version_id=UUID('019c23b5-8414-711e-9e1b-77487f9e9fc8'), map_index=-1, hostname='OM-RAFIE.localdomain', context_carrier={}, task=<Task(PythonOperator): sync_warehouse_tables>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=2, start_date=datetime.datetime(2026, 2, 3, 13, 34, 35, 461836, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

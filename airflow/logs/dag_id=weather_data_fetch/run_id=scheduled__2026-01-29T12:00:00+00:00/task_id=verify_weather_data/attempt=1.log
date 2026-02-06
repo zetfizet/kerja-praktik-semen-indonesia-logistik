@@ -1,0 +1,16 @@
+{"timestamp":"2026-01-29T13:22:54.975492Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-01-29T13:22:54.987981Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-01-29T13:22:55.205296Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-01-29T13:22:55.205604Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-01-29T13:22:55.447452Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.447809Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448015Z","level":"info","event":"✓ Weather data verification:","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448259Z","level":"info","event":"  Total records in database: 62","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448420Z","level":"info","event":"  Latest records:","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448516Z","level":"info","event":"    - Kota Surabaya | 2026-01-31 16:00:00 | Cerah Berawan | 24.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448622Z","level":"info","event":"    - Kota Surabaya | 2026-01-31 13:00:00 | Berawan | 25.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448714Z","level":"info","event":"    - Kota Surabaya | 2026-01-31 10:00:00 | Berawan | 26.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448788Z","level":"info","event":"    - Kota Surabaya | 2026-01-31 07:00:00 | Berawan | 27.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448880Z","level":"info","event":"    - Kota Surabaya | 2026-01-31 04:00:00 | Berawan | 30.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.448956Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-29T13:22:55.447165Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}

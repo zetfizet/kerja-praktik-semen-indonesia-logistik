@@ -1,0 +1,9 @@
+{"timestamp":"2026-02-02T10:26:21.741916Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-02T10:26:21.745022Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/daily_warehouse_sync.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-02T10:26:21.804991Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-02T10:26:21.805379Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-02T10:26:22.029788Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T10:26:22.030033Z","level":"info","event":"Starting daily warehouse sync...","logger":"task.stdout"}
+{"timestamp":"2026-02-02T10:26:22.030136Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-02T10:26:22.030269Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-02T10:26:22.030352Z","level":"info","event":"📍 PRIORITY: Syncing WEATHER data first...","logger":"task.stdout"}

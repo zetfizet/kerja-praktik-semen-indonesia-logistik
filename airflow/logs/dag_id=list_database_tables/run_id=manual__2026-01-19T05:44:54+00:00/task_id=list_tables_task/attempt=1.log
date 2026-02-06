@@ -1,0 +1,61 @@
+{"timestamp":"2026-01-19T05:44:59.020287Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-01-19T05:44:59.021712Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/list_database_tables.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-01-19T05:44:59.034634Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/list_database_tables.py","lineno":5,"logger":"py.warnings"}
+{"timestamp":"2026-01-19T05:44:59.101021Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101144Z","level":"info","event":"======================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101193Z","level":"info","event":"TABLES IN AIRFLOW DATABASE ON PORT 5433","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101234Z","level":"info","event":"======================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101272Z","level":"info","event":"  public.alembic_version","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101310Z","level":"info","event":"  public.asset","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101345Z","level":"info","event":"  public.asset_active","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101380Z","level":"info","event":"  public.asset_alias","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101416Z","level":"info","event":"  public.asset_alias_asset","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101450Z","level":"info","event":"  public.asset_alias_asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101576Z","level":"info","event":"  public.asset_dag_run_queue","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101627Z","level":"info","event":"  public.asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101668Z","level":"info","event":"  public.asset_trigger","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101705Z","level":"info","event":"  public.backfill","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101798Z","level":"info","event":"  public.backfill_dag_run","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101858Z","level":"info","event":"  public.callback_request","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101922Z","level":"info","event":"  public.connection","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.101968Z","level":"info","event":"  public.dag","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102008Z","level":"info","event":"  public.dag_bundle","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102046Z","level":"info","event":"  public.dag_bundle_team","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102084Z","level":"info","event":"  public.dag_code","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102121Z","level":"info","event":"  public.dag_favorite","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102157Z","level":"info","event":"  public.dag_owner_attributes","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102194Z","level":"info","event":"  public.dag_priority_parsing_request","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102231Z","level":"info","event":"  public.dag_run","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102269Z","level":"info","event":"  public.dag_run_note","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102306Z","level":"info","event":"  public.dag_schedule_asset_alias_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102343Z","level":"info","event":"  public.dag_schedule_asset_name_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102394Z","level":"info","event":"  public.dag_schedule_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102476Z","level":"info","event":"  public.dag_schedule_asset_uri_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102534Z","level":"info","event":"  public.dag_tag","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102575Z","level":"info","event":"  public.dag_version","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102612Z","level":"info","event":"  public.dag_warning","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102647Z","level":"info","event":"  public.dagrun_asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102683Z","level":"info","event":"  public.deadline","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102718Z","level":"info","event":"  public.hitl_detail","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102752Z","level":"info","event":"  public.import_error","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102787Z","level":"info","event":"  public.job","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102828Z","level":"info","event":"  public.log","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102866Z","level":"info","event":"  public.log_template","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102900Z","level":"info","event":"  public.rendered_task_instance_fields","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102935Z","level":"info","event":"  public.serialized_dag","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.102970Z","level":"info","event":"  public.slot_pool","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103004Z","level":"info","event":"  public.task_inlet_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103039Z","level":"info","event":"  public.task_instance","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103074Z","level":"info","event":"  public.task_instance_history","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103106Z","level":"info","event":"  public.task_instance_note","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103139Z","level":"info","event":"  public.task_map","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103172Z","level":"info","event":"  public.task_outlet_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103206Z","level":"info","event":"  public.task_reschedule","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103239Z","level":"info","event":"  public.team","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103272Z","level":"info","event":"  public.trigger","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103305Z","level":"info","event":"  public.variable","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103338Z","level":"info","event":"  public.xcom","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103371Z","level":"info","event":"======================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.103404Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-19T05:44:59.119487Z","level":"info","event":"Done. Returned value was: 50","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2026-01-19T05:44:59.120210Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019bd4c8-ed7f-71a4-a256-59c486caad1e'), task_id='list_tables_task', dag_id='list_database_tables', run_id='manual__2026-01-19T05:44:54+00:00', try_number=1, dag_version_id=UUID('019bd4c8-1b34-7d4a-bc91-4f2305e7ae22'), map_index=-1, hostname='OM-RAFIE.localdomain', context_carrier={}, task=<Task(PythonOperator): list_tables_task>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=1, start_date=datetime.datetime(2026, 1, 19, 5, 44, 57, 206489, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

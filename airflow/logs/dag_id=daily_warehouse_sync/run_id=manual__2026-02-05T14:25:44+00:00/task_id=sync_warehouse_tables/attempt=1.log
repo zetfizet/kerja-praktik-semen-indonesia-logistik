@@ -1,0 +1,25 @@
+{"timestamp":"2026-02-05T14:25:54.551737Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-05T14:25:54.552488Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/daily_warehouse_sync.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-05T14:25:54.562485Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-05T14:25:54.562617Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/daily_warehouse_sync.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-05T14:25:54.595657Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:25:54.595827Z","level":"info","event":"Starting daily warehouse sync...","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:25:54.595878Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:25:54.595919Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:25:54.595958Z","level":"info","event":"📍 PRIORITY: Syncing WEATHER data first...","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:28:09.148095Z","level":"info","event":"ERROR syncing weather.fact_weather_hourly: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:28:09.148300Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:28:09.148382Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:28:09.148434Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:28:09.148482Z","level":"info","event":"📊 Syncing other schemas...","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:30:24.316126Z","level":"info","event":"ERROR syncing driver.daftar_user: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:30:24.316330Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:30:24.316397Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:32:39.484037Z","level":"info","event":"ERROR syncing driver.attachment_driver: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:32:39.484231Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:32:39.484290Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:34:54.652371Z","level":"info","event":"ERROR syncing driver.laporan_pengemudi: connection to server at \"devom.silog.co.id\" (103.165.247.93), port 5432 failed: Connection timed out","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:34:54.652890Z","level":"info","event":"\tIs the server running on that host and accepting TCP/IP connections?","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:34:54.652996Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T14:37:00.079759Z","level":"error","event":"Server indicated the task shouldn't be running anymore. Terminating process","detail":{"detail":{"reason":"not_found","message":"Task Instance not found"}},"logger":"task"}
+{"timestamp":"2026-02-05T14:37:05.111055Z","level":"error","event":"Task killed!","logger":"task"}

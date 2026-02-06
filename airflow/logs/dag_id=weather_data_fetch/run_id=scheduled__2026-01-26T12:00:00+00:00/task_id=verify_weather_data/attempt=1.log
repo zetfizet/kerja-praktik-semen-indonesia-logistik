@@ -1,0 +1,16 @@
+{"timestamp":"2026-01-26T12:03:24.456311Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-01-26T12:03:24.463510Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-01-26T12:03:24.602215Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-01-26T12:03:24.602684Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-01-26T12:03:24.769666Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.770477Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.770620Z","level":"info","event":"✓ Weather data verification:","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.770795Z","level":"info","event":"  Total records in database: 68","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.770890Z","level":"info","event":"  Latest records:","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.771064Z","level":"info","event":"    - Gresik | 2026-01-28 16:00:00 | Berawan | 25.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.771314Z","level":"info","event":"    - Gresik | 2026-01-28 13:00:00 | Berawan | 25.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.771487Z","level":"info","event":"    - Gresik | 2026-01-28 10:00:00 | Berawan | 27.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.771655Z","level":"info","event":"    - Gresik | 2026-01-28 07:00:00 | Cerah Berawan | 30.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.772190Z","level":"info","event":"    - Gresik | 2026-01-28 04:00:00 | Cerah Berawan | 31.0°C","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.772413Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-26T12:03:24.769968Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-02-06T09:29:15.660048+07:00",
+  "total_forecasts": 42,
+  "execution_time_seconds": 0.4286808967590332,
+  "locations": {
+    "35.78.21.1004": {
+      "status": "SUCCESS",
+      "records": 21
+    },
+    "35.25.14.1010": {
+      "status": "SUCCESS",
+      "records": 21
+    }
+  },
+  "mlflow_tracking_uri": "http://localhost:5000"
+}

@@ -1,0 +1,10 @@
+{"timestamp":"2026-01-30T03:00:11.801690Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-01-30T03:00:11.803520Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-01-30T03:00:11.830734Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-01-30T03:00:11.830966Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-01-30T03:00:11.911589Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-30T03:00:11.911929Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-30T03:00:11.912051Z","level":"info","event":"🗑️  Weather data cleanup completed:","logger":"task.stdout"}
+{"timestamp":"2026-01-30T03:00:11.912152Z","level":"info","event":"  Deleted 3 old/past weather records","logger":"task.stdout"}
+{"timestamp":"2026-01-30T03:00:11.912346Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-30T03:00:11.913525Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}

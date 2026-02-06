@@ -1,0 +1,733 @@
+{"timestamp":"2026-01-20T01:13:20.834867Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-01-20T01:13:20.844938Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/explore_database_schema.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-01-20T01:13:21.097468Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/explore_database_schema.py","lineno":5,"logger":"py.warnings"}
+{"timestamp":"2026-01-20T01:13:21.974871Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975147Z","level":"info","event":"====================================================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975290Z","level":"info","event":"DATABASE SCHEMA EXPLORER - DETAILED VIEW","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975369Z","level":"info","event":"====================================================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975466Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975586Z","level":"info","event":"📋 TABLE: public.alembic_version","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975666Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975744Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975800Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975851Z","level":"info","event":"  version_num                    character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975919Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.975992Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976283Z","level":"info","event":"📋 TABLE: public.asset","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976357Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976415Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976469Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976550Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976617Z","level":"info","event":"  name                           character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976691Z","level":"info","event":"  uri                            character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976745Z","level":"info","event":"  group                          character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976798Z","level":"info","event":"  extra                          json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.976849Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977009Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977108Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977207Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977281Z","level":"info","event":"📋 TABLE: public.asset_active","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977396Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977466Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977545Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977621Z","level":"info","event":"  name                           character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977682Z","level":"info","event":"  name                           character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977755Z","level":"info","event":"  uri                            character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977807Z","level":"info","event":"  uri                            character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977858Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977910Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.977960Z","level":"info","event":"📋 TABLE: public.asset_alias","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978012Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978078Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978139Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978198Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978290Z","level":"info","event":"  name                           character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978346Z","level":"info","event":"  group                          character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978398Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978465Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978538Z","level":"info","event":"📋 TABLE: public.asset_alias_asset","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978606Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978660Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978814Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.978907Z","level":"info","event":"  alias_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979045Z","level":"info","event":"  alias_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979198Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979330Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979439Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979501Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979609Z","level":"info","event":"📋 TABLE: public.asset_alias_asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979670Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979743Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979815Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979888Z","level":"info","event":"  alias_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.979999Z","level":"info","event":"  alias_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980085Z","level":"info","event":"  event_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980141Z","level":"info","event":"  event_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980192Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980244Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980295Z","level":"info","event":"📋 TABLE: public.asset_dag_run_queue","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980358Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980466Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980585Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980664Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980742Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.980794Z","level":"info","event":"  target_dag_id                  character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981005Z","level":"info","event":"  target_dag_id                  character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981072Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981127Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981181Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981233Z","level":"info","event":"📋 TABLE: public.asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981400Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981802Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.981937Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982017Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982076Z","level":"info","event":"  asset_id                       integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982128Z","level":"info","event":"  extra                          json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982248Z","level":"info","event":"  source_task_id                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982312Z","level":"info","event":"  source_dag_id                  character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982404Z","level":"info","event":"  source_run_id                  character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982500Z","level":"info","event":"  source_map_index               integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982665Z","level":"info","event":"  timestamp                      timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.982953Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983053Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983119Z","level":"info","event":"📋 TABLE: public.asset_trigger","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983190Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983245Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983318Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983436Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983504Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983570Z","level":"info","event":"  trigger_id                     integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983664Z","level":"info","event":"  trigger_id                     integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983816Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.983946Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984051Z","level":"info","event":"📋 TABLE: public.backfill","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984141Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984249Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984368Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984636Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984756Z","level":"info","event":"  dag_id                         character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984842Z","level":"info","event":"  from_date                      timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984909Z","level":"info","event":"  to_date                        timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.984987Z","level":"info","event":"  dag_run_conf                   json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985085Z","level":"info","event":"  is_paused                      boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985147Z","level":"info","event":"  reprocess_behavior             character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985219Z","level":"info","event":"  max_active_runs                integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985271Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985323Z","level":"info","event":"  completed_at                   timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985391Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985450Z","level":"info","event":"  triggering_user_name           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985518Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985617Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985756Z","level":"info","event":"📋 TABLE: public.backfill_dag_run","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.985920Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986030Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986140Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986286Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986431Z","level":"info","event":"  backfill_id                    integer              NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986505Z","level":"info","event":"  backfill_id                    integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986581Z","level":"info","event":"  dag_run_id                     integer              YES        UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986654Z","level":"info","event":"  dag_run_id                     integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.986967Z","level":"info","event":"  exception_reason               character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987278Z","level":"info","event":"  logical_date                   timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987444Z","level":"info","event":"  sort_ordinal                   integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987568Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987712Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987798Z","level":"info","event":"📋 TABLE: public.callback_request","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987880Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987937Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.987994Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988047Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988111Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988184Z","level":"info","event":"  priority_weight                integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988235Z","level":"info","event":"  callback_data                  jsonb                NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988286Z","level":"info","event":"  callback_type                  character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988335Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988407Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988488Z","level":"info","event":"📋 TABLE: public.connection","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988558Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988611Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988680Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988752Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988802Z","level":"info","event":"  conn_id                        character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988875Z","level":"info","event":"  conn_type                      character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988926Z","level":"info","event":"  description                    text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.988998Z","level":"info","event":"  host                           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989047Z","level":"info","event":"  schema                         character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989110Z","level":"info","event":"  login                          text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989158Z","level":"info","event":"  password                       text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989225Z","level":"info","event":"  port                           integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989348Z","level":"info","event":"  is_encrypted                   boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989421Z","level":"info","event":"  is_extra_encrypted             boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989493Z","level":"info","event":"  team_id                        uuid                 YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989546Z","level":"info","event":"  extra                          text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989597Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989675Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989725Z","level":"info","event":"📋 TABLE: public.dag","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989777Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989844Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989912Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.989973Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990032Z","level":"info","event":"  is_paused                      boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990092Z","level":"info","event":"  is_stale                       boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990156Z","level":"info","event":"  last_parsed_time               timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990225Z","level":"info","event":"  last_parse_duration            double precision     YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990278Z","level":"info","event":"  last_expired                   timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990328Z","level":"info","event":"  fileloc                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990491Z","level":"info","event":"  relative_fileloc               character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990661Z","level":"info","event":"  bundle_name                    character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990871Z","level":"info","event":"  bundle_version                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.990963Z","level":"info","event":"  owners                         character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991023Z","level":"info","event":"  dag_display_name               character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991077Z","level":"info","event":"  description                    text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991129Z","level":"info","event":"  timetable_summary              text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991180Z","level":"info","event":"  timetable_description          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991245Z","level":"info","event":"  asset_expression               json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991627Z","level":"info","event":"  deadline                       json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991712Z","level":"info","event":"  max_active_tasks               integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991794Z","level":"info","event":"  max_active_runs                integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991884Z","level":"info","event":"  max_consecutive_failed_dag_runs integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.991942Z","level":"info","event":"  has_task_concurrency_limits    boolean              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992023Z","level":"info","event":"  has_import_errors              boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992076Z","level":"info","event":"  next_dagrun                    timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992139Z","level":"info","event":"  next_dagrun_data_interval_start timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992197Z","level":"info","event":"  next_dagrun_data_interval_end  timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992247Z","level":"info","event":"  next_dagrun_create_after       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992340Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992414Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992470Z","level":"info","event":"📋 TABLE: public.dag_bundle","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992543Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992669Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992779Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992835Z","level":"info","event":"  name                           character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992899Z","level":"info","event":"  active                         boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.992969Z","level":"info","event":"  version                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993019Z","level":"info","event":"  last_refreshed                 timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993091Z","level":"info","event":"  signed_url_template            character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993140Z","level":"info","event":"  template_params                json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993200Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993250Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993318Z","level":"info","event":"📋 TABLE: public.dag_bundle_team","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993382Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993433Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993572Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993692Z","level":"info","event":"  dag_bundle_name                character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993752Z","level":"info","event":"  dag_bundle_name                character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993804Z","level":"info","event":"  team_id                        uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993855Z","level":"info","event":"  team_id                        uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993919Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.993970Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994022Z","level":"info","event":"📋 TABLE: public.dag_code","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994092Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994142Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994192Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994258Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994310Z","level":"info","event":"  dag_id                         character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994377Z","level":"info","event":"  fileloc                        character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994426Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994474Z","level":"info","event":"  last_updated                   timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994540Z","level":"info","event":"  source_code                    text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994631Z","level":"info","event":"  source_code_hash               character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994789Z","level":"info","event":"  dag_version_id                 uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994895Z","level":"info","event":"  dag_version_id                 uuid                 NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.994952Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995006Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995059Z","level":"info","event":"📋 TABLE: public.dag_favorite","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995126Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995177Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995256Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995360Z","level":"info","event":"  user_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995438Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995507Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995575Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995690Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.995748Z","level":"info","event":"📋 TABLE: public.dag_owner_attributes","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996058Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996138Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996197Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996252Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996318Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996388Z","level":"info","event":"  owner                          character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996438Z","level":"info","event":"  link                           character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996488Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996539Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996668Z","level":"info","event":"📋 TABLE: public.dag_priority_parsing_request","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996794Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996912Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.996997Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997060Z","level":"info","event":"  id                             character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997114Z","level":"info","event":"  bundle_name                    character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997181Z","level":"info","event":"  relative_fileloc               character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997231Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997282Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997332Z","level":"info","event":"📋 TABLE: public.dag_run","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997402Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997464Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997630Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997705Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997798Z","level":"info","event":"  dag_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997886Z","level":"info","event":"  dag_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.997980Z","level":"info","event":"  queued_at                      timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998039Z","level":"info","event":"  logical_date                   timestamp with time zone YES        UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998091Z","level":"info","event":"  start_date                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998154Z","level":"info","event":"  end_date                       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998206Z","level":"info","event":"  state                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998274Z","level":"info","event":"  run_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998324Z","level":"info","event":"  creating_job_id                integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998392Z","level":"info","event":"  run_type                       character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998440Z","level":"info","event":"  triggered_by                   character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998489Z","level":"info","event":"  triggering_user_name           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998550Z","level":"info","event":"  conf                           jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998646Z","level":"info","event":"  data_interval_start            timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.998929Z","level":"info","event":"  data_interval_end              timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999018Z","level":"info","event":"  run_after                      timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999077Z","level":"info","event":"  last_scheduling_decision       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999154Z","level":"info","event":"  log_template_id                integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999203Z","level":"info","event":"  updated_at                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999268Z","level":"info","event":"  clear_number                   integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999317Z","level":"info","event":"  backfill_id                    integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999379Z","level":"info","event":"  bundle_version                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:21.999428Z","level":"info","event":"  scheduled_by_job_id            integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000443Z","level":"info","event":"  context_carrier                jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000602Z","level":"info","event":"  span_status                    character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000716Z","level":"info","event":"  created_dag_version_id         uuid                 YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000777Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000834Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000907Z","level":"info","event":"📋 TABLE: public.dag_run_note","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.000964Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001070Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001296Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001370Z","level":"info","event":"  user_id                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001430Z","level":"info","event":"  dag_run_id                     integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001505Z","level":"info","event":"  dag_run_id                     integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001576Z","level":"info","event":"  content                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001627Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001677Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001748Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001808Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001888Z","level":"info","event":"📋 TABLE: public.dag_schedule_asset_alias_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.001963Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002014Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002065Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002117Z","level":"info","event":"  alias_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002169Z","level":"info","event":"  alias_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002248Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002299Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002360Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002424Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.002937Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003080Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003149Z","level":"info","event":"📋 TABLE: public.dag_schedule_asset_name_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003207Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003271Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003352Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003403Z","level":"info","event":"  name                           character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003469Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003544Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003600Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003676Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003727Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003777Z","level":"info","event":"📋 TABLE: public.dag_schedule_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003886Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.003975Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004028Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004123Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004181Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004232Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004281Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004343Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004391Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004456Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004531Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004588Z","level":"info","event":"📋 TABLE: public.dag_schedule_asset_uri_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004674Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004791Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004863Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.004962Z","level":"info","event":"  uri                            character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005093Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005184Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005239Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005293Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005345Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005397Z","level":"info","event":"📋 TABLE: public.dag_tag","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005448Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005499Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005570Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005791Z","level":"info","event":"  name                           character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005890Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.005967Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006023Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006077Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006146Z","level":"info","event":"📋 TABLE: public.dag_version","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006199Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006251Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006302Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006353Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006404Z","level":"info","event":"  version_number                 integer              NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006454Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006515Z","level":"info","event":"  dag_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006573Z","level":"info","event":"  bundle_name                    character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.006676Z","level":"info","event":"  bundle_version                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007005Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007096Z","level":"info","event":"  last_updated                   timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007170Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007257Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007327Z","level":"info","event":"📋 TABLE: public.dag_warning","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007397Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007481Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007561Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007626Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007690Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007824Z","level":"info","event":"  warning_type                   character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007887Z","level":"info","event":"  message                        text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.007941Z","level":"info","event":"  timestamp                      timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008003Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008056Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008109Z","level":"info","event":"📋 TABLE: public.dagrun_asset_event","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008163Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008215Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008266Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008316Z","level":"info","event":"  dag_run_id                     integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008365Z","level":"info","event":"  dag_run_id                     integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008427Z","level":"info","event":"  event_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008477Z","level":"info","event":"  event_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008527Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008585Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008661Z","level":"info","event":"📋 TABLE: public.deadline","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008751Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.008920Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009032Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009097Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009201Z","level":"info","event":"  dagrun_id                      integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009308Z","level":"info","event":"  deadline_time                  timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009446Z","level":"info","event":"  callback                       json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009603Z","level":"info","event":"  callback_state                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009673Z","level":"info","event":"  trigger_id                     integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009779Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009845Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009900Z","level":"info","event":"📋 TABLE: public.hitl_detail","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.009954Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010011Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010064Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010114Z","level":"info","event":"  ti_id                          uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010163Z","level":"info","event":"  ti_id                          uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010211Z","level":"info","event":"  options                        json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010417Z","level":"info","event":"  subject                        text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010485Z","level":"info","event":"  body                           text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010541Z","level":"info","event":"  defaults                       json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010593Z","level":"info","event":"  multiple                       boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010738Z","level":"info","event":"  params                         json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010889Z","level":"info","event":"  assignees                      json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.010961Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011033Z","level":"info","event":"  responded_at                   timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011182Z","level":"info","event":"  responded_by                   json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011261Z","level":"info","event":"  chosen_options                 json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011335Z","level":"info","event":"  params_input                   json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011393Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011446Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011497Z","level":"info","event":"📋 TABLE: public.import_error","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011549Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011618Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011685Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011884Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.011981Z","level":"info","event":"  timestamp                      timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012044Z","level":"info","event":"  filename                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012101Z","level":"info","event":"  bundle_name                    character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012155Z","level":"info","event":"  stacktrace                     text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012225Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012280Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012335Z","level":"info","event":"📋 TABLE: public.job","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012390Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012445Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012519Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012571Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012622Z","level":"info","event":"  dag_id                         character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012677Z","level":"info","event":"  state                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012803Z","level":"info","event":"  job_type                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012903Z","level":"info","event":"  start_date                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.012997Z","level":"info","event":"  end_date                       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013097Z","level":"info","event":"  latest_heartbeat               timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013224Z","level":"info","event":"  executor_class                 character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013316Z","level":"info","event":"  hostname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013408Z","level":"info","event":"  unixname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013484Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013554Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013621Z","level":"info","event":"📋 TABLE: public.log","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013689Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013765Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013834Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013902Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.013984Z","level":"info","event":"  dttm                           timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014050Z","level":"info","event":"  dag_id                         character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014116Z","level":"info","event":"  task_id                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014181Z","level":"info","event":"  map_index                      integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014246Z","level":"info","event":"  event                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014311Z","level":"info","event":"  logical_date                   timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014376Z","level":"info","event":"  run_id                         character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014465Z","level":"info","event":"  owner                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014538Z","level":"info","event":"  owner_display_name             character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.014899Z","level":"info","event":"  extra                          text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015029Z","level":"info","event":"  try_number                     integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015106Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015181Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015272Z","level":"info","event":"📋 TABLE: public.log_template","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015343Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015430Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015497Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015626Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015726Z","level":"info","event":"  filename                       text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015820Z","level":"info","event":"  elasticsearch_id               text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015889Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.015957Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016037Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016105Z","level":"info","event":"📋 TABLE: public.rendered_task_instance_fields","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016175Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016243Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016310Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016386Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016564Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016644Z","level":"info","event":"  task_id                        character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016748Z","level":"info","event":"  task_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016838Z","level":"info","event":"  run_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016911Z","level":"info","event":"  run_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.016980Z","level":"info","event":"  map_index                      integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017054Z","level":"info","event":"  map_index                      integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017120Z","level":"info","event":"  rendered_fields                json                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017186Z","level":"info","event":"  k8s_pod_yaml                   json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017252Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017337Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017404Z","level":"info","event":"📋 TABLE: public.serialized_dag","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017472Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017555Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.017621Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018203Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018380Z","level":"info","event":"  dag_id                         character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018460Z","level":"info","event":"  data                           json                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018610Z","level":"info","event":"  data_compressed                bytea                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018874Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018996Z","level":"info","event":"  last_updated                   timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019122Z","level":"info","event":"  dag_hash                       character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019211Z","level":"info","event":"  dag_version_id                 uuid                 NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019283Z","level":"info","event":"  dag_version_id                 uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019352Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019426Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019495Z","level":"info","event":"📋 TABLE: public.slot_pool","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019626Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019744Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019821Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.019972Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020063Z","level":"info","event":"  pool                           character varying    YES        UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020135Z","level":"info","event":"  slots                          integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020204Z","level":"info","event":"  description                    text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020338Z","level":"info","event":"  include_deferred               boolean              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020426Z","level":"info","event":"  team_id                        uuid                 YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020506Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020574Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020642Z","level":"info","event":"📋 TABLE: public.task_inlet_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020725Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.020974Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021083Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021224Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021313Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021386Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021456Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021523Z","level":"info","event":"  task_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021590Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021657Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021746Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021818Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021887Z","level":"info","event":"📋 TABLE: public.task_instance","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.021958Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022026Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022092Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022160Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022227Z","level":"info","event":"  task_id                        character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022293Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022359Z","level":"info","event":"  dag_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022424Z","level":"info","event":"  run_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022499Z","level":"info","event":"  run_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022566Z","level":"info","event":"  map_index                      integer              NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022633Z","level":"info","event":"  start_date                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.022961Z","level":"info","event":"  end_date                       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.023216Z","level":"info","event":"  duration                       double precision     YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.023327Z","level":"info","event":"  state                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.023566Z","level":"info","event":"  try_number                     integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.023752Z","level":"info","event":"  max_tries                      integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.023902Z","level":"info","event":"  hostname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024035Z","level":"info","event":"  unixname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024116Z","level":"info","event":"  pool                           character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024195Z","level":"info","event":"  pool_slots                     integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024302Z","level":"info","event":"  queue                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024398Z","level":"info","event":"  priority_weight                integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024458Z","level":"info","event":"  operator                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024509Z","level":"info","event":"  custom_operator_name           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024565Z","level":"info","event":"  queued_dttm                    timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024669Z","level":"info","event":"  scheduled_dttm                 timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024782Z","level":"info","event":"  queued_by_job_id               integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.024937Z","level":"info","event":"  last_heartbeat_at              timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025050Z","level":"info","event":"  pid                            integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025196Z","level":"info","event":"  executor                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025299Z","level":"info","event":"  executor_config                bytea                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025364Z","level":"info","event":"  updated_at                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025461Z","level":"info","event":"  rendered_map_index             character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025557Z","level":"info","event":"  context_carrier                jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025681Z","level":"info","event":"  span_status                    character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025814Z","level":"info","event":"  external_executor_id           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.025947Z","level":"info","event":"  trigger_id                     integer              YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.018775Z","level":"info","event":"Done. Returned value was: 50","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2026-01-20T01:13:22.019510Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019bd8d5-8955-7e49-94a6-62429d249044'), task_id='explore_schema_task', dag_id='explore_database_schema', run_id='scheduled__2026-01-20T00:00:00+00:00', try_number=2, dag_version_id=UUID('019bd4ee-af22-70cc-abed-7c42a9555e98'), map_index=-1, hostname='OM-RAFIE.localdomain', context_carrier={}, task=<Task(PythonOperator): explore_schema_task>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=1, start_date=datetime.datetime(2026, 1, 20, 1, 13, 19, 495735, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}
+{"timestamp":"2026-01-20T01:13:22.027916Z","level":"info","event":"  trigger_timeout                timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028011Z","level":"info","event":"  next_method                    character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028095Z","level":"info","event":"  next_kwargs                    jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028154Z","level":"info","event":"  task_display_name              character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028209Z","level":"info","event":"  dag_version_id                 uuid                 YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028264Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028321Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028377Z","level":"info","event":"📋 TABLE: public.task_instance_history","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028448Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028549Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028691Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028766Z","level":"info","event":"  task_instance_id               uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028822Z","level":"info","event":"  task_id                        character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.028921Z","level":"info","event":"  task_id                        character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029027Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029118Z","level":"info","event":"  dag_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029224Z","level":"info","event":"  run_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029294Z","level":"info","event":"  run_id                         character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029349Z","level":"info","event":"  map_index                      integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029402Z","level":"info","event":"  map_index                      integer              NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029483Z","level":"info","event":"  try_number                     integer              NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029549Z","level":"info","event":"  start_date                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029638Z","level":"info","event":"  end_date                       timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029754Z","level":"info","event":"  duration                       double precision     YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029849Z","level":"info","event":"  state                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029908Z","level":"info","event":"  max_tries                      integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.029963Z","level":"info","event":"  hostname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030014Z","level":"info","event":"  unixname                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030065Z","level":"info","event":"  pool                           character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030114Z","level":"info","event":"  pool_slots                     integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030162Z","level":"info","event":"  queue                          character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030212Z","level":"info","event":"  priority_weight                integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030262Z","level":"info","event":"  operator                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030311Z","level":"info","event":"  custom_operator_name           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030375Z","level":"info","event":"  queued_dttm                    timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030424Z","level":"info","event":"  scheduled_dttm                 timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030472Z","level":"info","event":"  queued_by_job_id               integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030520Z","level":"info","event":"  pid                            integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030568Z","level":"info","event":"  executor                       character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030617Z","level":"info","event":"  executor_config                bytea                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030665Z","level":"info","event":"  updated_at                     timestamp with time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030843Z","level":"info","event":"  rendered_map_index             character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.030928Z","level":"info","event":"  context_carrier                jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031007Z","level":"info","event":"  span_status                    character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031060Z","level":"info","event":"  external_executor_id           character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031111Z","level":"info","event":"  trigger_id                     integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031163Z","level":"info","event":"  trigger_timeout                timestamp without time zone YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031213Z","level":"info","event":"  next_method                    character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.031263Z","level":"info","event":"  next_kwargs                    jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.032607Z","level":"info","event":"  task_display_name              character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110288Z","level":"info","event":"  dag_version_id                 uuid                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110488Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110590Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110665Z","level":"info","event":"📋 TABLE: public.task_instance_note","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110827Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110905Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.110964Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111029Z","level":"info","event":"  ti_id                          uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111176Z","level":"info","event":"  ti_id                          uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111242Z","level":"info","event":"  user_id                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111306Z","level":"info","event":"  content                        character varying    YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111384Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111449Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111501Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111553Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111604Z","level":"info","event":"📋 TABLE: public.task_map","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111669Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111720Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111784Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111834Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111883Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111933Z","level":"info","event":"  task_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.111982Z","level":"info","event":"  task_id                        character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112049Z","level":"info","event":"  run_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112106Z","level":"info","event":"  run_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112290Z","level":"info","event":"  map_index                      integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112369Z","level":"info","event":"  map_index                      integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112437Z","level":"info","event":"  length                         integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112490Z","level":"info","event":"  keys                           jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112543Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112667Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112832Z","level":"info","event":"📋 TABLE: public.task_outlet_asset_reference","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.112997Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113156Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113278Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113359Z","level":"info","event":"  asset_id                       integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113524Z","level":"info","event":"  asset_id                       integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113599Z","level":"info","event":"  dag_id                         character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113657Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113709Z","level":"info","event":"  task_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113759Z","level":"info","event":"  created_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113809Z","level":"info","event":"  updated_at                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113874Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113925Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.113976Z","level":"info","event":"📋 TABLE: public.task_reschedule","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114029Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114134Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114209Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114265Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114316Z","level":"info","event":"  ti_id                          uuid                 NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114376Z","level":"info","event":"  start_date                     timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114475Z","level":"info","event":"  end_date                       timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114553Z","level":"info","event":"  duration                       integer              NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114608Z","level":"info","event":"  reschedule_date                timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.114752Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115003Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115155Z","level":"info","event":"📋 TABLE: public.team","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115279Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115638Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115808Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.115967Z","level":"info","event":"  id                             uuid                 NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116061Z","level":"info","event":"  name                           character varying    NO         UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116126Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116185Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116242Z","level":"info","event":"📋 TABLE: public.trigger","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116299Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116354Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116412Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116481Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116557Z","level":"info","event":"  classpath                      character varying    NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116658Z","level":"info","event":"  kwargs                         text                 NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116727Z","level":"info","event":"  created_date                   timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116788Z","level":"info","event":"  triggerer_id                   integer              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116842Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116910Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.116964Z","level":"info","event":"📋 TABLE: public.variable","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117017Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117095Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117146Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117267Z","level":"info","event":"  id                             integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117343Z","level":"info","event":"  key                            character varying    YES        UNIQUE","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117402Z","level":"info","event":"  val                            text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117474Z","level":"info","event":"  description                    text                 YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117528Z","level":"info","event":"  is_encrypted                   boolean              YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117581Z","level":"info","event":"  team_id                        uuid                 YES        FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117632Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117717Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117770Z","level":"info","event":"📋 TABLE: public.xcom","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117823Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117882Z","level":"info","event":"  Column Name                    Data Type            Nullable   Constraint","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.117947Z","level":"info","event":"----------------------------------------------------------------------------------------------------","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118001Z","level":"info","event":"  dag_run_id                     integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118066Z","level":"info","event":"  task_id                        character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118132Z","level":"info","event":"  task_id                        character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118182Z","level":"info","event":"  map_index                      integer              NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118231Z","level":"info","event":"  map_index                      integer              NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118280Z","level":"info","event":"  key                            character varying    NO         PRIMARY KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118345Z","level":"info","event":"  dag_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118394Z","level":"info","event":"  run_id                         character varying    NO         FOREIGN KEY","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118457Z","level":"info","event":"  value                          jsonb                YES        -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118512Z","level":"info","event":"  timestamp                      timestamp with time zone NO         -","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118662Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118807Z","level":"info","event":"====================================================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118893Z","level":"info","event":"Total tables found: 50","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.118968Z","level":"info","event":"====================================================================================================","logger":"task.stdout"}
+{"timestamp":"2026-01-20T01:13:22.119449Z","level":"info","event":"","logger":"task.stdout"}

@@ -1,0 +1,914 @@
+Registry store URI not provided. Using backend store URI.
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:49 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/02/06 09:05:50 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/02/06 09:05:50 INFO mlflow.store.db.utils: Updating database tables
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Will assume transactional DDL.
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade  -> 451aebb31d03, add metric step
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 451aebb31d03 -> 90e64c465722, migrate user column to tags
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 90e64c465722 -> 181f10493468, allow nulls for metric values
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 181f10493468 -> df50e92ffc5e, Add Experiment Tags Table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade df50e92ffc5e -> 7ac759974ad8, Update run tags with larger limit
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 7ac759974ad8 -> 89d4b8295536, create latest metrics table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 89d4b8295536 -> 2b4d017a5e9b, add model registry tables to db
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 2b4d017a5e9b -> cfd24bdc0731, Update run status constraint with killed
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade cfd24bdc0731 -> 0a8213491aaa, drop_duplicate_killed_constraint
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 0a8213491aaa -> 728d730b5ebd, add registered model tags table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 728d730b5ebd -> 27a6a02d2cf1, add model version tags table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 27a6a02d2cf1 -> 84291f40a231, add run_link to model_version
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 84291f40a231 -> a8c4a736bde6, allow nulls for run_id
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade a8c4a736bde6 -> 39d1c3be5f05, add_is_nan_constraint_for_metrics_tables_if_necessary
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 39d1c3be5f05 -> c48cb773bb87, reset_default_value_for_is_nan_in_metrics_table_for_mysql
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade c48cb773bb87 -> bd07f7e963c5, create index on run_uuid
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade bd07f7e963c5 -> 0c779009ac13, add deleted_time field to runs table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 0c779009ac13 -> cc1f77228345, change param value length to 500
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade cc1f77228345 -> 97727af70f4d, Add creation_time and last_update_time to experiments table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 97727af70f4d -> 3500859a5d39, Add Model Aliases table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 3500859a5d39 -> 7f2a7d5fae7d, add datasets inputs input_tags tables
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 7f2a7d5fae7d -> 2d6e25af4d3e, increase max param val length from 500 to 8000
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 2d6e25af4d3e -> acf3f17fdcc7, add storage location field to model versions
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade acf3f17fdcc7 -> 867495a8f9d4, add trace tables
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 867495a8f9d4 -> 5b0e9adcef9c, add cascade deletion to trace tables foreign keys
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 5b0e9adcef9c -> 4465047574b1, increase max dataset schema size
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 4465047574b1 -> f5a4f2784254, increase run tag value limit to 8000
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade f5a4f2784254 -> 0584bdc529eb, add cascading deletion to datasets from experiments
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 0584bdc529eb -> 400f98739977, add logged model tables
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 400f98739977 -> 6953534de441, add step to inputs table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 6953534de441 -> bda7b8c39065, increase_model_version_tag_value_limit
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade bda7b8c39065 -> cbc13b556ace, add V3 trace schema columns
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade cbc13b556ace -> 770bee3ae1dd, add assessments table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade 770bee3ae1dd -> a1b2c3d4e5f6, add spans table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade a1b2c3d4e5f6 -> de4033877273, create entity_associations table
+2026/02/06 09:05:50 INFO alembic.runtime.migration: Running upgrade de4033877273 -> 1a0cddfcaa16, Add webhooks and webhook_events tables
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 1a0cddfcaa16 -> 534353b11cbc, add scorer tables
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 534353b11cbc -> 71994744cf8e, add evaluation datasets
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 71994744cf8e -> 3da73c924c2f, add outputs to dataset record
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 3da73c924c2f -> bf29a5ff90ea, add jobs table
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade bf29a5ff90ea -> 1bd49d398cd23, add secrets tables
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 1bd49d398cd23 -> b7c8d9e0f1a2, add trace metrics table
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade b7c8d9e0f1a2 -> 5d2d30f0abce, update job table
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 5d2d30f0abce -> c9d4e5f6a7b8, add routing strategy to endpoints and linkage type to mappings
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade c9d4e5f6a7b8 -> 2c33131f4dae, add online_scoring_configs table
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Running upgrade 2c33131f4dae -> d3e4f5a6b7c8, add display_name to endpoint_bindings
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:05:51 INFO alembic.runtime.migration: Will assume transactional DDL.
+[MLflow] Security middleware enabled with default settings (localhost-only). To allow connections from other hosts, use --host 0.0.0.0 and configure --allowed-hosts and --cors-allowed-origins.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     Started parent process [295018]
+2026/02/06 09:05:55 INFO mlflow.server.jobs.utils: Starting huey consumer for job function invoke_scorer
+2026/02/06 09:05:55 INFO mlflow.server.jobs.utils: Starting huey consumer for job function run_online_session_scorer
+2026/02/06 09:05:55 INFO mlflow.server.jobs.utils: Starting huey consumer for job function run_online_trace_scorer
+2026/02/06 09:05:55 INFO mlflow.server.jobs.utils: Starting dedicated Huey consumer for periodic tasks
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:56 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+INFO:     Started server process [295024]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [295022]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [295023]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [295021]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2026/02/06 09:05:58 INFO mlflow.server.jobs.utils: Registered online_scoring_scheduler periodic task (runs every 1 minute)
+[2026-02-06 09:05:58,998] INFO:huey.consumer:MainThread:Huey consumer started with 5 thread, PID 295135 at 2026-02-06 02:05:58.998520
+[2026-02-06 09:05:58,998] INFO:huey.consumer:MainThread:Scheduler runs every 1 second(s).
+[2026-02-06 09:05:58,998] INFO:huey.consumer:MainThread:Periodic tasks are enabled.
+[2026-02-06 09:05:58,998] INFO:huey.consumer:MainThread:The following commands are available:
++ mlflow.server.jobs.utils._exec_job
++ mlflow.server.jobs.utils.online_scoring_scheduler
+[2026-02-06 09:05:59,001] INFO:huey.consumer:MainThread:Huey consumer started with 10 thread, PID 295132 at 2026-02-06 02:05:59.001375
+[2026-02-06 09:05:59,001] INFO:huey.consumer:MainThread:Scheduler runs every 1 second(s).
+[2026-02-06 09:05:59,001] INFO:huey.consumer:MainThread:Periodic tasks are enabled.
+[2026-02-06 09:05:59,001] INFO:huey.consumer:MainThread:The following commands are available:
++ mlflow.server.jobs.utils._exec_job
+[2026-02-06 09:05:59,027] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c8db0a30-792b-4acf-b1df-1325202ad81b.
+[2026-02-06 09:05:59,033] INFO:huey.consumer:MainThread:Huey consumer started with 5 thread, PID 295134 at 2026-02-06 02:05:59.033253
+[2026-02-06 09:05:59,033] INFO:huey.consumer:MainThread:Scheduler runs every 1 second(s).
+[2026-02-06 09:05:59,033] INFO:huey.consumer:MainThread:Periodic tasks are enabled.
+[2026-02-06 09:05:59,033] INFO:huey.consumer:MainThread:The following commands are available:
++ mlflow.server.jobs.utils._exec_job
+[2026-02-06 09:05:59,037] INFO:huey.consumer:MainThread:Huey consumer started with 5 thread, PID 295136 at 2026-02-06 02:05:59.036993
+[2026-02-06 09:05:59,037] INFO:huey.consumer:MainThread:Scheduler runs every 1 second(s).
+[2026-02-06 09:05:59,037] INFO:huey.consumer:MainThread:Periodic tasks are enabled.
+[2026-02-06 09:05:59,037] INFO:huey.consumer:MainThread:The following commands are available:
++ mlflow.server.jobs.utils._exec_job
+[2026-02-06 09:05:59,111] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c8db0a30-792b-4acf-b1df-1325202ad81b
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:05:59 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+[2026-02-06 09:05:59,753] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: c8db0a30-792b-4acf-b1df-1325202ad81b executed in 0.641s
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/02/06 09:06:05 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+[2026-02-06 09:06:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f6ddd90c-5ddd-4d4f-bc3f-6c9b0914508e.
+[2026-02-06 09:07:05,523] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f6ddd90c-5ddd-4d4f-bc3f-6c9b0914508e
+[2026-02-06 09:07:05,530] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: f6ddd90c-5ddd-4d4f-bc3f-6c9b0914508e executed in 0.007s
+INFO:     127.0.0.1:52180 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /static-files/static/js/main.9e6a97ae.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48796 - "GET /static-files/static/css/main.280d6c90.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /static-files/TelemetryLogger.telemetry-worker.e586432cbf500042667b.worker.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /static-files/static/js/783.b107ace8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /ajax-api/3.0/mlflow/assistant/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/js/3528.18b15e38.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/css/547.26533251.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/js/3617.f09cade8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/js/547.e6974a2b.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/js/4205.1aba6fbf.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/media/assistant-debug.11458b995f95dedcb985b9e005e084d6.svg HTTP/1.1" 200 OK
+2026/02/06 09:07:40 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:07:40 INFO alembic.runtime.migration: Will assume transactional DDL.
+INFO:     127.0.0.1:48812 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/static/media/assistant-evaluation.9796de8c1bee136dcd1fa1941ed91ae7.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /static-files/static/media/assistant-trends.8783c5e6659d0ad47a6bd3b3ff793585.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48812 - "GET /static-files/manifest.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48822 - "GET /static-files/favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48796 - "GET /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:07:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ee1e671d-65ce-4ec9-bf6c-166aaa3de4a8.
+[2026-02-06 09:08:03,255] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ee1e671d-65ce-4ec9-bf6c-166aaa3de4a8
+[2026-02-06 09:08:03,261] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: ee1e671d-65ce-4ec9-bf6c-166aaa3de4a8 executed in 0.006s
+INFO:     127.0.0.1:48838 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:08:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b502fcf0-fd18-45f0-85f8-980a0eb4965a.
+[2026-02-06 09:09:00,981] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b502fcf0-fd18-45f0-85f8-980a0eb4965a
+[2026-02-06 09:09:00,984] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: b502fcf0-fd18-45f0-85f8-980a0eb4965a executed in 0.003s
+[2026-02-06 09:09:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 2cfee1a6-06bd-4a1e-881f-791d23b6bf96.
+[2026-02-06 09:10:05,558] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 2cfee1a6-06bd-4a1e-881f-791d23b6bf96
+[2026-02-06 09:10:05,561] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 2cfee1a6-06bd-4a1e-881f-791d23b6bf96 executed in 0.003s
+[2026-02-06 09:10:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f89cfbab-f596-468c-bfb4-2d9b4b5b95e4.
+[2026-02-06 09:11:03,280] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f89cfbab-f596-468c-bfb4-2d9b4b5b95e4
+[2026-02-06 09:11:03,283] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: f89cfbab-f596-468c-bfb4-2d9b4b5b95e4 executed in 0.003s
+[2026-02-06 09:11:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 82f12377-2c88-493f-9ce8-7fe2cd7da7bc.
+[2026-02-06 09:12:01,002] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 82f12377-2c88-493f-9ce8-7fe2cd7da7bc
+[2026-02-06 09:12:01,005] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 82f12377-2c88-493f-9ce8-7fe2cd7da7bc executed in 0.003s
+[2026-02-06 09:12:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 164418d4-843d-479a-9912-01c3bf1fce6c.
+[2026-02-06 09:13:05,582] INFO:huey:Worker-1:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 164418d4-843d-479a-9912-01c3bf1fce6c
+[2026-02-06 09:13:05,585] INFO:huey:Worker-1:mlflow.server.jobs.utils.online_scoring_scheduler: 164418d4-843d-479a-9912-01c3bf1fce6c executed in 0.003s
+[2026-02-06 09:13:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: bb04a14b-e552-4db1-8a71-bd4808b8e09f.
+[2026-02-06 09:14:03,305] INFO:huey:Worker-1:Executing mlflow.server.jobs.utils.online_scoring_scheduler: bb04a14b-e552-4db1-8a71-bd4808b8e09f
+[2026-02-06 09:14:03,308] INFO:huey:Worker-1:mlflow.server.jobs.utils.online_scoring_scheduler: bb04a14b-e552-4db1-8a71-bd4808b8e09f executed in 0.003s
+[2026-02-06 09:14:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c728bce1-8888-4886-8414-0ecdb976bdcc.
+[2026-02-06 09:15:01,027] INFO:huey:Worker-1:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c728bce1-8888-4886-8414-0ecdb976bdcc
+[2026-02-06 09:15:01,031] INFO:huey:Worker-1:mlflow.server.jobs.utils.online_scoring_scheduler: c728bce1-8888-4886-8414-0ecdb976bdcc executed in 0.004s
+[2026-02-06 09:15:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 06fc1fc0-c440-49bd-afef-a1118a4d63e2.
+[2026-02-06 09:16:05,604] INFO:huey:Worker-5:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 06fc1fc0-c440-49bd-afef-a1118a4d63e2
+[2026-02-06 09:16:05,609] INFO:huey:Worker-5:mlflow.server.jobs.utils.online_scoring_scheduler: 06fc1fc0-c440-49bd-afef-a1118a4d63e2 executed in 0.004s
+[2026-02-06 09:16:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f94563e6-2b0a-4f52-a113-4fdb057771f9.
+[2026-02-06 09:17:03,328] INFO:huey:Worker-5:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f94563e6-2b0a-4f52-a113-4fdb057771f9
+[2026-02-06 09:17:03,333] INFO:huey:Worker-5:mlflow.server.jobs.utils.online_scoring_scheduler: f94563e6-2b0a-4f52-a113-4fdb057771f9 executed in 0.005s
+[2026-02-06 09:17:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: afd52249-e6d9-4078-8bb5-a9f5665b5bb6.
+[2026-02-06 09:18:01,051] INFO:huey:Worker-5:Executing mlflow.server.jobs.utils.online_scoring_scheduler: afd52249-e6d9-4078-8bb5-a9f5665b5bb6
+[2026-02-06 09:18:01,055] INFO:huey:Worker-5:mlflow.server.jobs.utils.online_scoring_scheduler: afd52249-e6d9-4078-8bb5-a9f5665b5bb6 executed in 0.003s
+[2026-02-06 09:18:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 30c4079f-7944-477f-99e1-d1b25043cee4.
+[2026-02-06 09:19:06,249] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 30c4079f-7944-477f-99e1-d1b25043cee4
+[2026-02-06 09:19:06,253] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 30c4079f-7944-477f-99e1-d1b25043cee4 executed in 0.004s
+2026/02/06 09:19:20 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:19:20 INFO alembic.runtime.migration: Will assume transactional DDL.
+INFO:     127.0.0.1:47194 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47204 - "GET /static-files/static/css/4783.26533251.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47204 - "GET /static-files/static/js/4783.4aec66f2.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47204 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47204 - "GET /static-files/static/js/2820.0a9639b0.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "GET /static-files/static/css/9926.73d820e1.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "GET /static-files/static/js/9926.93fbfe52.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "GET /ajax-api/2.0/mlflow/registered-models/search?filter=&max_results=25&order_by=name+ASC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "GET /static-files/static/js/2156.08cf7355.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "GET /ajax-api/2.0/mlflow/registered-models/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45662 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:19:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 244dbac7-d414-4871-8ac0-d38a9e6260e9.
+INFO:     127.0.0.1:45674 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+[2026-02-06 09:20:03,972] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 244dbac7-d414-4871-8ac0-d38a9e6260e9
+[2026-02-06 09:20:03,976] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 244dbac7-d414-4871-8ac0-d38a9e6260e9 executed in 0.004s
+[2026-02-06 09:20:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 8f2b3dd8-d113-4bd9-8516-bb1657812c5c.
+[2026-02-06 09:21:01,694] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 8f2b3dd8-d113-4bd9-8516-bb1657812c5c
+[2026-02-06 09:21:01,698] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 8f2b3dd8-d113-4bd9-8516-bb1657812c5c executed in 0.003s
+[2026-02-06 09:21:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0cfb22c8-ca63-407c-99c8-4147644accbe.
+[2026-02-06 09:21:59,417] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0cfb22c8-ca63-407c-99c8-4147644accbe
+[2026-02-06 09:21:59,475] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 0cfb22c8-ca63-407c-99c8-4147644accbe executed in 0.057s
+[2026-02-06 09:22:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b62e9c28-000f-40c8-bc58-22428b47dd46.
+[2026-02-06 09:23:05,950] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b62e9c28-000f-40c8-bc58-22428b47dd46
+[2026-02-06 09:23:05,954] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: b62e9c28-000f-40c8-bc58-22428b47dd46 executed in 0.004s
+[2026-02-06 09:23:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 4f03cbb6-ef68-4c2d-9ea1-4880fcc93166.
+[2026-02-06 09:24:03,673] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 4f03cbb6-ef68-4c2d-9ea1-4880fcc93166
+[2026-02-06 09:24:03,676] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 4f03cbb6-ef68-4c2d-9ea1-4880fcc93166 executed in 0.003s
+INFO:     127.0.0.1:41908 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41908 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41908 - "GET /static-files/static/js/8799.5c4e7066.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41914 - "GET /static-files/static/js/2365.07e09cf7.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41914 - "GET /static-files/static/css/6844.fd7db8ca.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41908 - "GET /static-files/static/js/6016.68aefba1.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41914 - "GET /static-files/static/js/6844.ac50e035.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41914 - "GET /server-info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41908 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41914 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=0&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41908 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39588 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+2026/02/06 09:24:32 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:24:32 INFO alembic.runtime.migration: Will assume transactional DDL.
+INFO:     127.0.0.1:39614 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39604 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52076 - "GET /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39604 - "GET /ajax-api/3.0/mlflow/assistant/config HTTP/1.1" 200 OK
+2026/02/06 09:24:39 INFO alembic.runtime.migration: Context impl PostgresqlImpl.
+2026/02/06 09:24:39 INFO alembic.runtime.migration: Will assume transactional DDL.
+INFO:     127.0.0.1:39604 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39604 - "GET /ajax-api/2.0/mlflow/registered-models/search?filter=&max_results=25&order_by=name+ASC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39604 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44450 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44450 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44450 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+[2026-02-06 09:24:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: dd47c362-d3f1-4006-b787-335fba2bd6e6.
+[2026-02-06 09:25:01,395] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: dd47c362-d3f1-4006-b787-335fba2bd6e6
+[2026-02-06 09:25:01,398] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: dd47c362-d3f1-4006-b787-335fba2bd6e6 executed in 0.003s
+INFO:     127.0.0.1:44454 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36654 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36664 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:25:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c9228388-e138-4a01-82ae-b708c73a712b.
+[2026-02-06 09:25:59,117] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c9228388-e138-4a01-82ae-b708c73a712b
+[2026-02-06 09:25:59,122] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: c9228388-e138-4a01-82ae-b708c73a712b executed in 0.005s
+INFO:     127.0.0.1:50586 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50586 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:26:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c70c027c-78a1-4e5a-85dc-fcfa0c194864.
+INFO:     127.0.0.1:50602 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+[2026-02-06 09:27:05,598] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c70c027c-78a1-4e5a-85dc-fcfa0c194864
+[2026-02-06 09:27:05,602] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: c70c027c-78a1-4e5a-85dc-fcfa0c194864 executed in 0.003s
+[2026-02-06 09:27:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f352c581-dc8b-4089-af42-75a1065fd613.
+[2026-02-06 09:28:03,320] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f352c581-dc8b-4089-af42-75a1065fd613
+[2026-02-06 09:28:03,324] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: f352c581-dc8b-4089-af42-75a1065fd613 executed in 0.004s
+INFO:     127.0.0.1:55222 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55222 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55224 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:28:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 4cdd8efc-ee15-445a-98d0-ef6fafed75a6.
+[2026-02-06 09:29:01,043] INFO:huey:Worker-2:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 4cdd8efc-ee15-445a-98d0-ef6fafed75a6
+[2026-02-06 09:29:01,049] INFO:huey:Worker-2:mlflow.server.jobs.utils.online_scoring_scheduler: 4cdd8efc-ee15-445a-98d0-ef6fafed75a6 executed in 0.005s
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/experiments/create HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "GET /api/2.0/mlflow/experiments/get-by-name?experiment_name=weather_data_fetch HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/create HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "GET /api/2.0/mlflow/runs/get?run_uuid=45d7f56e22de49788d4e3e984f99cd67&run_id=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "GET /api/2.0/mlflow/runs/get?run_uuid=45d7f56e22de49788d4e3e984f99cd67&run_id=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50394 - "POST /api/2.0/mlflow/runs/update HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/experiments/create HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:57162 - "GET /api/2.0/mlflow/experiments/get-by-name?experiment_name=weather_data_fetch HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/create HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-parameter HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/log-metric HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "GET /api/2.0/mlflow/runs/get?run_uuid=27f6ba2f3e8c4997b45c080666be9bc4&run_id=27f6ba2f3e8c4997b45c080666be9bc4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "GET /api/2.0/mlflow/runs/get?run_uuid=27f6ba2f3e8c4997b45c080666be9bc4&run_id=27f6ba2f3e8c4997b45c080666be9bc4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57162 - "POST /api/2.0/mlflow/runs/update HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44492 - "GET /?id=1d6fac5b-68c1-46a8-8693-d923c2733fde&vscodeBrowserReqId=1770344968281 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=5&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /server-info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=1&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/4266.22041e7b.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/8813.ace4e4fc.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/css/9563.3a1ae3b9.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/683.3a1461a5.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/4499.994fae84.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/6360.0f91997c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/7913.519d3aaf.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/2763.b4138d32.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/5532.b1e5a8e4.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/5641.e03eeeda.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/6478.44078de0.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /static-files/static/js/4139.195847b8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/2354.a425cb01.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60722 - "GET /static-files/static/js/8664.7ec14180.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60728 - "GET /static-files/static/js/9042.5a1e98a9.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60722 - "GET /static-files/static/js/1241.1d9f1d6c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60728 - "GET /static-files/static/js/1573.1309c53b.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60738 - "GET /static-files/static/js/4802.bf5d0f64.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/9563.941d9737.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60730 - "GET /static-files/static/js/4395.8dc882e6.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60728 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60728 - "GET /static-files/static/css/1575.05d081e5.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /static-files/static/js/1575.c083428a.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60722 - "GET /static-files/static/js/5964.dd9e117c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60730 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60722 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39086 - "GET /static-files/static/css/1172.b80374b9.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39094 - "GET /static-files/static/js/6831.c13e3357.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39110 - "GET /static-files/static/js/1876.078219d8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /static-files/static/js/1352.370969cc.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39118 - "GET /static-files/static/js/1009.1c9b622f.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39086 - "GET /static-files/static/js/3702.526c85d9.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39132 - "GET /static-files/static/js/6301.62669e82.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /static-files/static/js/1172.2c68c87c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39086 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=run_id%3D%2727f6ba2f3e8c4997b45c080666be9bc4%27 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39086 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2527f6ba2f3e8c4997b45c080666be9bc4%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /static-files/static/js/5839.e1f179e1.chunk.js HTTP/1.1" 200 OK
+[2026-02-06 09:29:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 4a771c31-6036-4530-ae91-41d243a9d971.
+INFO:     127.0.0.1:39142 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2527f6ba2f3e8c4997b45c080666be9bc4%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=1&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=run_id%3D%2745d7f56e22de49788d4e3e984f99cd67%27 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2545d7f56e22de49788d4e3e984f99cd67%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:30:07,502] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 4a771c31-6036-4530-ae91-41d243a9d971
+[2026-02-06 09:30:07,507] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 4a771c31-6036-4530-ae91-41d243a9d971 executed in 0.004s
+INFO:     127.0.0.1:58808 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "GET /static-files/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67&path=summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "GET /get-artifact?path=summary%2Fweather_fetch_summary.json&run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67&path=metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "GET /get-artifact?path=metrics%2Fweather_metrics.json&run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+[2026-02-06 09:30:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 08e18001-079c-4d75-9971-e8accea22cf0.
+[2026-02-06 09:31:05,225] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 08e18001-079c-4d75-9971-e8accea22cf0
+[2026-02-06 09:31:05,237] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 08e18001-079c-4d75-9971-e8accea22cf0 executed in 0.011s
+[2026-02-06 09:31:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 34622edf-06d4-4fc2-8de9-fb08339bcc2c.
+[2026-02-06 09:32:02,956] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 34622edf-06d4-4fc2-8de9-fb08339bcc2c
+[2026-02-06 09:32:02,964] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 34622edf-06d4-4fc2-8de9-fb08339bcc2c executed in 0.008s
+[2026-02-06 09:32:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f4e1aff0-75de-413b-a9d9-50e35fd85907.
+[2026-02-06 09:33:00,684] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f4e1aff0-75de-413b-a9d9-50e35fd85907
+[2026-02-06 09:33:00,690] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: f4e1aff0-75de-413b-a9d9-50e35fd85907 executed in 0.006s
+[2026-02-06 09:33:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 83997f10-d4c5-4112-a484-ce309fe8348b.
+[2026-02-06 09:34:07,166] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 83997f10-d4c5-4112-a484-ce309fe8348b
+[2026-02-06 09:34:07,170] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 83997f10-d4c5-4112-a484-ce309fe8348b executed in 0.003s
+[2026-02-06 09:34:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c0baa1fc-0702-412e-ae47-828929b8d8bf.
+[2026-02-06 09:35:04,889] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c0baa1fc-0702-412e-ae47-828929b8d8bf
+[2026-02-06 09:35:04,894] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: c0baa1fc-0702-412e-ae47-828929b8d8bf executed in 0.005s
+INFO:     127.0.0.1:47052 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2545d7f56e22de49788d4e3e984f99cd67%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47044 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /server-info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=1&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56290 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:35:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f8045fcf-40d2-4d76-82a5-c1284b6c1982.
+INFO:     127.0.0.1:56300 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:36:02,613] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f8045fcf-40d2-4d76-82a5-c1284b6c1982
+[2026-02-06 09:36:02,616] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: f8045fcf-40d2-4d76-82a5-c1284b6c1982 executed in 0.003s
+INFO:     127.0.0.1:37610 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37620 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37620 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2545d7f56e22de49788d4e3e984f99cd67%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37620 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=run_id%3D%2745d7f56e22de49788d4e3e984f99cd67%27 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37194 - "POST /ajax-api/3.0/mlflow/traces/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37620 - "POST /ajax-api/3.0/mlflow/traces/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37620 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37194 - "POST /ajax-api/3.0/mlflow/datasets/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37194 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37194 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67&path=summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37194 - "GET /get-artifact?path=summary%2Fweather_fetch_summary.json&run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37200 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67&path=metrics HTTP/1.1" 200 OK
+[2026-02-06 09:36:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 898be895-a495-483d-a5b6-326289a6db59.
+[2026-02-06 09:37:00,335] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 898be895-a495-483d-a5b6-326289a6db59
+[2026-02-06 09:37:00,340] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 898be895-a495-483d-a5b6-326289a6db59 executed in 0.005s
+INFO:     127.0.0.1:37200 - "GET /get-artifact?path=metrics%2Fweather_metrics.json&run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37200 - "GET /get-artifact?path=summary%2Fweather_fetch_summary.json&run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37200 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 09:37:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 81f4799a-bef1-4c91-bc71-501adf14ca04.
+[2026-02-06 09:38:06,815] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 81f4799a-bef1-4c91-bc71-501adf14ca04
+[2026-02-06 09:38:07,117] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 81f4799a-bef1-4c91-bc71-501adf14ca04 executed in 0.301s
+[2026-02-06 09:38:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: e2d148b0-0382-4249-a478-040d45f1bb08.
+[2026-02-06 09:39:04,844] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: e2d148b0-0382-4249-a478-040d45f1bb08
+[2026-02-06 09:39:04,848] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: e2d148b0-0382-4249-a478-040d45f1bb08 executed in 0.004s
+[2026-02-06 09:39:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 56ee63c9-d3a7-47dc-ac1a-aa7e0b7539b4.
+[2026-02-06 09:40:02,571] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 56ee63c9-d3a7-47dc-ac1a-aa7e0b7539b4
+[2026-02-06 09:40:02,575] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 56ee63c9-d3a7-47dc-ac1a-aa7e0b7539b4 executed in 0.005s
+[2026-02-06 09:40:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 07540dc0-d267-4420-9eb7-8d29fe143f06.
+[2026-02-06 09:41:00,294] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 07540dc0-d267-4420-9eb7-8d29fe143f06
+[2026-02-06 09:41:00,298] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 07540dc0-d267-4420-9eb7-8d29fe143f06 executed in 0.004s
+[2026-02-06 09:41:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 57e038f7-b54f-4415-91c6-30fac6698896.
+[2026-02-06 09:42:06,774] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 57e038f7-b54f-4415-91c6-30fac6698896
+[2026-02-06 09:42:06,778] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 57e038f7-b54f-4415-91c6-30fac6698896 executed in 0.004s
+[2026-02-06 09:42:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9eef1ff9-d42c-4e96-abc7-782e1437fc00.
+[2026-02-06 09:43:04,497] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9eef1ff9-d42c-4e96-abc7-782e1437fc00
+[2026-02-06 09:43:04,500] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 9eef1ff9-d42c-4e96-abc7-782e1437fc00 executed in 0.004s
+[2026-02-06 09:43:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 941c96b4-96c6-49da-a762-98c5e16beb89.
+[2026-02-06 09:44:02,219] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 941c96b4-96c6-49da-a762-98c5e16beb89
+[2026-02-06 09:44:02,223] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 941c96b4-96c6-49da-a762-98c5e16beb89 executed in 0.004s
+[2026-02-06 09:44:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 048cce15-c830-401f-8ad0-c3746e40c749.
+[2026-02-06 09:44:59,942] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 048cce15-c830-401f-8ad0-c3746e40c749
+[2026-02-06 09:44:59,945] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 048cce15-c830-401f-8ad0-c3746e40c749 executed in 0.003s
+[2026-02-06 09:45:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 73c66e61-bf78-4823-abcc-549f8cb9d200.
+[2026-02-06 09:46:06,426] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 73c66e61-bf78-4823-abcc-549f8cb9d200
+[2026-02-06 09:46:06,429] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 73c66e61-bf78-4823-abcc-549f8cb9d200 executed in 0.003s
+[2026-02-06 09:46:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 7ace593b-8d26-4add-ac92-e0f496b7e18e.
+[2026-02-06 09:47:04,148] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 7ace593b-8d26-4add-ac92-e0f496b7e18e
+[2026-02-06 09:47:04,158] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 7ace593b-8d26-4add-ac92-e0f496b7e18e executed in 0.010s
+[2026-02-06 09:47:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a230fce5-c04b-4a9a-82c3-c1b7b498e875.
+[2026-02-06 09:48:01,876] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a230fce5-c04b-4a9a-82c3-c1b7b498e875
+[2026-02-06 09:48:01,880] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: a230fce5-c04b-4a9a-82c3-c1b7b498e875 executed in 0.004s
+[2026-02-06 09:48:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 198b22d2-f0e7-4991-8a81-5149046043c1.
+[2026-02-06 09:48:59,599] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 198b22d2-f0e7-4991-8a81-5149046043c1
+[2026-02-06 09:48:59,603] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 198b22d2-f0e7-4991-8a81-5149046043c1 executed in 0.004s
+[2026-02-06 09:49:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 170d5ca3-a092-413e-a104-962b2250de80.
+[2026-02-06 09:50:06,079] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 170d5ca3-a092-413e-a104-962b2250de80
+[2026-02-06 09:50:06,083] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 170d5ca3-a092-413e-a104-962b2250de80 executed in 0.004s
+[2026-02-06 09:50:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 1d9fb51c-46ec-46a8-a46d-edc21ec1b67f.
+[2026-02-06 09:51:03,802] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 1d9fb51c-46ec-46a8-a46d-edc21ec1b67f
+[2026-02-06 09:51:03,816] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 1d9fb51c-46ec-46a8-a46d-edc21ec1b67f executed in 0.014s
+[2026-02-06 09:51:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 426e6817-a98f-49fd-9349-b77f4c49eb1e.
+[2026-02-06 09:52:01,535] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 426e6817-a98f-49fd-9349-b77f4c49eb1e
+[2026-02-06 09:52:01,539] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 426e6817-a98f-49fd-9349-b77f4c49eb1e executed in 0.004s
+[2026-02-06 09:52:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 353f2a0f-609b-431a-8984-c867b405cbaf.
+[2026-02-06 09:52:59,264] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 353f2a0f-609b-431a-8984-c867b405cbaf
+[2026-02-06 09:52:59,269] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 353f2a0f-609b-431a-8984-c867b405cbaf executed in 0.005s
+[2026-02-06 09:53:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0ddc0dd4-42c9-4eb0-ac0d-f3d91b339d3d.
+[2026-02-06 09:54:05,747] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0ddc0dd4-42c9-4eb0-ac0d-f3d91b339d3d
+[2026-02-06 09:54:05,761] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: 0ddc0dd4-42c9-4eb0-ac0d-f3d91b339d3d executed in 0.014s
+[2026-02-06 09:54:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: bcb75565-842f-43b0-9dee-a51bc0931903.
+[2026-02-06 09:55:03,479] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: bcb75565-842f-43b0-9dee-a51bc0931903
+[2026-02-06 09:55:03,485] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: bcb75565-842f-43b0-9dee-a51bc0931903 executed in 0.006s
+[2026-02-06 09:55:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ac6af627-1e04-45ab-8d97-5d030d60c89c.
+[2026-02-06 09:56:01,205] INFO:huey:Worker-4:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ac6af627-1e04-45ab-8d97-5d030d60c89c
+[2026-02-06 09:56:01,209] INFO:huey:Worker-4:mlflow.server.jobs.utils.online_scoring_scheduler: ac6af627-1e04-45ab-8d97-5d030d60c89c executed in 0.004s
+INFO:     127.0.0.1:41460 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:41460 - "GET /static-files/static/js/8813.ace4e4fc.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/4499.994fae84.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /static-files/static/css/1575.05d081e5.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /static-files/static/css/1172.b80374b9.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /ajax-api/3.0/mlflow/assistant/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /static-files/static/js/1009.1c9b622f.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /static-files/static/js/7913.519d3aaf.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /static-files/static/js/2763.b4138d32.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/5532.b1e5a8e4.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41462 - "GET /static-files/static/js/683.3a1461a5.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /static-files/static/js/2354.a425cb01.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/4139.195847b8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /static-files/static/js/1575.c083428a.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/8664.7ec14180.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41462 - "GET /static-files/static/js/6478.44078de0.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /static-files/static/js/9042.5a1e98a9.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41476 - "GET /static-files/static/js/6360.0f91997c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /static-files/static/js/4395.8dc882e6.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/1876.078219d8.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41462 - "GET /static-files/static/js/1241.1d9f1d6c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41460 - "GET /static-files/static/js/6301.62669e82.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41476 - "GET /static-files/static/js/6831.c13e3357.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41490 - "GET /static-files/static/js/1352.370969cc.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /static-files/static/js/3702.526c85d9.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /static-files/static/js/1172.2c68c87c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /ajax-api/2.0/mlflow/artifacts/list?run_uuid=45d7f56e22de49788d4e3e984f99cd67 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=run_id%3D%2745d7f56e22de49788d4e3e984f99cd67%27 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /static-files/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41472 - "GET /ajax-api/2.0/mlflow/model-versions/search?filter=tags.%60mlflow.prompt.is_prompt%60+%3D+%27true%27+AND+tags.%60mlflow.prompt.run_ids%60+ILIKE+%22%2545d7f56e22de49788d4e3e984f99cd67%25%22 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /server-info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=1&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /static-files/static/js/4266.22041e7b.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /static-files/static/js/5641.e03eeeda.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /static-files/static/css/9563.3a1ae3b9.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /static-files/static/js/4802.bf5d0f64.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /static-files/static/js/1573.1309c53b.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "GET /static-files/static/js/9563.941d9737.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49518 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41484 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49522 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49526 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:56:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 87ee4270-9e95-43ee-a598-f1a30e8e05f5.
+[2026-02-06 09:57:07,548] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 87ee4270-9e95-43ee-a598-f1a30e8e05f5
+[2026-02-06 09:57:07,554] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 87ee4270-9e95-43ee-a598-f1a30e8e05f5 executed in 0.005s
+INFO:     127.0.0.1:54796 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54798 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:57:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 2ec63a15-1cfb-4418-80af-074a6374ae65.
+[2026-02-06 09:58:05,272] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 2ec63a15-1cfb-4418-80af-074a6374ae65
+[2026-02-06 09:58:05,285] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 2ec63a15-1cfb-4418-80af-074a6374ae65 executed in 0.012s
+INFO:     127.0.0.1:39624 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39640 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:58:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9b2b8dfd-8f10-4e4e-a279-72f45343073c.
+[2026-02-06 09:59:03,003] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9b2b8dfd-8f10-4e4e-a279-72f45343073c
+[2026-02-06 09:59:03,007] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 9b2b8dfd-8f10-4e4e-a279-72f45343073c executed in 0.004s
+INFO:     127.0.0.1:37764 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37770 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 09:59:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 2ff76a36-3b78-43e1-8e15-02b95df49ecf.
+[2026-02-06 10:00:00,725] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 2ff76a36-3b78-43e1-8e15-02b95df49ecf
+[2026-02-06 10:00:00,729] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 2ff76a36-3b78-43e1-8e15-02b95df49ecf executed in 0.003s
+INFO:     127.0.0.1:51942 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51952 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:00:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0e0de394-15bb-4239-afb1-e13a1c5faa4e.
+[2026-02-06 10:01:07,204] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0e0de394-15bb-4239-afb1-e13a1c5faa4e
+[2026-02-06 10:01:07,208] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 0e0de394-15bb-4239-afb1-e13a1c5faa4e executed in 0.004s
+INFO:     127.0.0.1:37608 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37614 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:01:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 79044597-59e9-4a38-ad25-38ef0943a911.
+[2026-02-06 10:02:04,928] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 79044597-59e9-4a38-ad25-38ef0943a911
+[2026-02-06 10:02:04,933] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 79044597-59e9-4a38-ad25-38ef0943a911 executed in 0.005s
+INFO:     127.0.0.1:40308 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51350 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:02:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 3c27eefe-e73b-4e66-9223-d9e9a8abc2ac.
+[2026-02-06 10:03:02,652] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 3c27eefe-e73b-4e66-9223-d9e9a8abc2ac
+[2026-02-06 10:03:02,657] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 3c27eefe-e73b-4e66-9223-d9e9a8abc2ac executed in 0.004s
+INFO:     127.0.0.1:54612 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:03:58,999] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 049c9096-0493-4b91-aec6-08e7e4204d0f.
+INFO:     127.0.0.1:54618 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:04:00,376] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 049c9096-0493-4b91-aec6-08e7e4204d0f
+[2026-02-06 10:04:00,381] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 049c9096-0493-4b91-aec6-08e7e4204d0f executed in 0.005s
+INFO:     127.0.0.1:39844 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:04:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 03825078-e940-477d-b987-b91fa8badb2c.
+INFO:     127.0.0.1:39858 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:05:06,858] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 03825078-e940-477d-b987-b91fa8badb2c
+[2026-02-06 10:05:06,863] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 03825078-e940-477d-b987-b91fa8badb2c executed in 0.004s
+INFO:     127.0.0.1:46826 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:05:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 357412ae-3d9e-46a1-afc3-585623e3493e.
+INFO:     127.0.0.1:46836 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:06:04,581] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 357412ae-3d9e-46a1-afc3-585623e3493e
+[2026-02-06 10:06:04,586] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 357412ae-3d9e-46a1-afc3-585623e3493e executed in 0.004s
+INFO:     127.0.0.1:53814 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:06:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a4d5b7c2-79f1-444e-99cb-6a7e844b4c3b.
+[2026-02-06 10:07:02,307] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a4d5b7c2-79f1-444e-99cb-6a7e844b4c3b
+[2026-02-06 10:07:02,312] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: a4d5b7c2-79f1-444e-99cb-6a7e844b4c3b executed in 0.005s
+INFO:     127.0.0.1:53816 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55370 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:07:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 976cc239-6da0-4d97-9851-b1dbf0b32078.
+[2026-02-06 10:08:00,033] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 976cc239-6da0-4d97-9851-b1dbf0b32078
+[2026-02-06 10:08:00,047] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 976cc239-6da0-4d97-9851-b1dbf0b32078 executed in 0.013s
+INFO:     127.0.0.1:60366 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56070 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:08:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 6744abf7-9e00-47cc-9517-9515a84d0265.
+[2026-02-06 10:09:06,523] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 6744abf7-9e00-47cc-9517-9515a84d0265
+[2026-02-06 10:09:06,526] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 6744abf7-9e00-47cc-9517-9515a84d0265 executed in 0.003s
+INFO:     127.0.0.1:56086 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56694 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:09:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a6dee7b6-df93-438c-9abf-441b8e23187d.
+[2026-02-06 10:10:04,245] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a6dee7b6-df93-438c-9abf-441b8e23187d
+[2026-02-06 10:10:04,249] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: a6dee7b6-df93-438c-9abf-441b8e23187d executed in 0.004s
+INFO:     127.0.0.1:56708 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49528 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:10:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b39b9671-6a45-4697-80a1-f3d8186b328a.
+[2026-02-06 10:11:01,968] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b39b9671-6a45-4697-80a1-f3d8186b328a
+[2026-02-06 10:11:01,971] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: b39b9671-6a45-4697-80a1-f3d8186b328a executed in 0.003s
+INFO:     127.0.0.1:49536 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57758 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:11:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 55089476-2c9c-4460-916d-eefed96c26f5.
+[2026-02-06 10:11:59,690] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 55089476-2c9c-4460-916d-eefed96c26f5
+[2026-02-06 10:11:59,695] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 55089476-2c9c-4460-916d-eefed96c26f5 executed in 0.005s
+INFO:     127.0.0.1:57762 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52202 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:12:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 47c74156-226f-4be5-9c47-fa35371e9cdf.
+[2026-02-06 10:13:06,171] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 47c74156-226f-4be5-9c47-fa35371e9cdf
+[2026-02-06 10:13:06,184] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 47c74156-226f-4be5-9c47-fa35371e9cdf executed in 0.013s
+INFO:     127.0.0.1:42774 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:13:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 694a4781-373c-414e-a302-a2fef040c9d6.
+[2026-02-06 10:14:03,903] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 694a4781-373c-414e-a302-a2fef040c9d6
+[2026-02-06 10:14:03,907] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 694a4781-373c-414e-a302-a2fef040c9d6 executed in 0.003s
+INFO:     127.0.0.1:35562 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49692 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:14:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: e8b1d8d4-8a8b-4ef1-a772-64609b048ef2.
+[2026-02-06 10:15:01,626] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: e8b1d8d4-8a8b-4ef1-a772-64609b048ef2
+[2026-02-06 10:15:01,631] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: e8b1d8d4-8a8b-4ef1-a772-64609b048ef2 executed in 0.004s
+INFO:     127.0.0.1:49702 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45070 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:15:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a309300a-8955-4bf0-b62e-73507eec7fa3.
+[2026-02-06 10:15:59,350] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a309300a-8955-4bf0-b62e-73507eec7fa3
+[2026-02-06 10:15:59,353] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: a309300a-8955-4bf0-b62e-73507eec7fa3 executed in 0.003s
+INFO:     127.0.0.1:45074 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48528 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:16:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 478d4dc9-1382-48b6-8a84-db3c744f1a55.
+[2026-02-06 10:17:05,829] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 478d4dc9-1382-48b6-8a84-db3c744f1a55
+[2026-02-06 10:17:05,842] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 478d4dc9-1382-48b6-8a84-db3c744f1a55 executed in 0.013s
+INFO:     127.0.0.1:48536 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40236 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:17:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: fd4c1b20-64d9-4a9f-bff5-3a98fecabc2c.
+[2026-02-06 10:18:03,561] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: fd4c1b20-64d9-4a9f-bff5-3a98fecabc2c
+[2026-02-06 10:18:03,566] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: fd4c1b20-64d9-4a9f-bff5-3a98fecabc2c executed in 0.004s
+INFO:     127.0.0.1:33800 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39622 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:18:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: eb42fde9-9d6f-44e7-a798-8c378d79ceaf.
+[2026-02-06 10:19:01,285] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: eb42fde9-9d6f-44e7-a798-8c378d79ceaf
+[2026-02-06 10:19:01,289] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: eb42fde9-9d6f-44e7-a798-8c378d79ceaf executed in 0.004s
+INFO:     127.0.0.1:39628 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:19:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f7d3fb58-3df1-4f30-b2ec-c252f0659055.
+[2026-02-06 10:19:59,009] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f7d3fb58-3df1-4f30-b2ec-c252f0659055
+[2026-02-06 10:19:59,012] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: f7d3fb58-3df1-4f30-b2ec-c252f0659055 executed in 0.003s
+INFO:     127.0.0.1:38004 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38006 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:20:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a3f3c292-28e4-4cda-87e6-56fb5956f44b.
+INFO:     127.0.0.1:59710 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:21:05,488] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a3f3c292-28e4-4cda-87e6-56fb5956f44b
+[2026-02-06 10:21:05,492] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: a3f3c292-28e4-4cda-87e6-56fb5956f44b executed in 0.004s
+INFO:     127.0.0.1:59720 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:21:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b6deac0e-568f-422f-9de8-6ba28d803103.
+[2026-02-06 10:22:03,210] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b6deac0e-568f-422f-9de8-6ba28d803103
+[2026-02-06 10:22:03,216] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: b6deac0e-568f-422f-9de8-6ba28d803103 executed in 0.006s
+INFO:     127.0.0.1:47142 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47148 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:22:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: be71c7b8-c42a-4ff8-aba6-1462e575a419.
+[2026-02-06 10:23:00,937] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: be71c7b8-c42a-4ff8-aba6-1462e575a419
+[2026-02-06 10:23:00,942] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: be71c7b8-c42a-4ff8-aba6-1462e575a419 executed in 0.005s
+INFO:     127.0.0.1:44916 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58544 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:23:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9b8f2c0f-8ed5-4bbc-97be-4fe56b23b886.
+[2026-02-06 10:24:07,418] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9b8f2c0f-8ed5-4bbc-97be-4fe56b23b886
+[2026-02-06 10:24:07,422] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 9b8f2c0f-8ed5-4bbc-97be-4fe56b23b886 executed in 0.004s
+INFO:     127.0.0.1:36188 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36190 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:24:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 07ca3347-bb73-4deb-b9ed-835db46fd13b.
+[2026-02-06 10:25:05,141] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 07ca3347-bb73-4deb-b9ed-835db46fd13b
+[2026-02-06 10:25:05,146] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 07ca3347-bb73-4deb-b9ed-835db46fd13b executed in 0.004s
+INFO:     127.0.0.1:34990 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34998 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:25:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 6f4c1a29-c518-4f24-a7a7-acd67e5925bb.
+[2026-02-06 10:26:02,864] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 6f4c1a29-c518-4f24-a7a7-acd67e5925bb
+[2026-02-06 10:26:02,868] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 6f4c1a29-c518-4f24-a7a7-acd67e5925bb executed in 0.004s
+INFO:     127.0.0.1:34628 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34640 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:26:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ce2abf29-0408-47ee-a459-e3dddabf10e7.
+[2026-02-06 10:27:00,586] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ce2abf29-0408-47ee-a459-e3dddabf10e7
+[2026-02-06 10:27:00,590] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: ce2abf29-0408-47ee-a459-e3dddabf10e7 executed in 0.004s
+INFO:     127.0.0.1:41448 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41450 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:27:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 7a23be17-1548-4e34-9ada-997dfa7a97a6.
+[2026-02-06 10:28:07,065] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 7a23be17-1548-4e34-9ada-997dfa7a97a6
+[2026-02-06 10:28:07,069] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 7a23be17-1548-4e34-9ada-997dfa7a97a6 executed in 0.003s
+INFO:     127.0.0.1:56680 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42782 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:28:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: d1f11220-d473-42f1-a664-aa262612bcec.
+[2026-02-06 10:29:04,787] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: d1f11220-d473-42f1-a664-aa262612bcec
+[2026-02-06 10:29:04,790] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: d1f11220-d473-42f1-a664-aa262612bcec executed in 0.003s
+INFO:     127.0.0.1:35400 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35416 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:29:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b572cec1-6572-413d-824d-f1fe4b9f48aa.
+[2026-02-06 10:30:02,509] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b572cec1-6572-413d-824d-f1fe4b9f48aa
+[2026-02-06 10:30:02,513] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: b572cec1-6572-413d-824d-f1fe4b9f48aa executed in 0.004s
+INFO:     127.0.0.1:36770 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36772 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:30:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 6b3ac7cc-6b58-4906-8f98-e775bd7ff9e0.
+[2026-02-06 10:31:00,232] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 6b3ac7cc-6b58-4906-8f98-e775bd7ff9e0
+[2026-02-06 10:31:00,236] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 6b3ac7cc-6b58-4906-8f98-e775bd7ff9e0 executed in 0.004s
+INFO:     127.0.0.1:41478 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41492 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:31:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 964a1bd6-1c11-4eab-ade9-2162ef29fb55.
+[2026-02-06 10:32:06,712] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 964a1bd6-1c11-4eab-ade9-2162ef29fb55
+[2026-02-06 10:32:06,725] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 964a1bd6-1c11-4eab-ade9-2162ef29fb55 executed in 0.013s
+INFO:     127.0.0.1:60716 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60732 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:32:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0617c98d-a62e-4ef1-a1f8-33c7314c1e3f.
+[2026-02-06 10:33:04,444] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0617c98d-a62e-4ef1-a1f8-33c7314c1e3f
+[2026-02-06 10:33:04,447] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 0617c98d-a62e-4ef1-a1f8-33c7314c1e3f executed in 0.003s
+INFO:     127.0.0.1:32818 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44844 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:33:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 52981f8a-7ddf-47c3-b626-e5af037a6076.
+[2026-02-06 10:34:02,165] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 52981f8a-7ddf-47c3-b626-e5af037a6076
+[2026-02-06 10:34:02,178] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 52981f8a-7ddf-47c3-b626-e5af037a6076 executed in 0.012s
+INFO:     127.0.0.1:42946 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:34:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 74047274-b19a-47cd-b97e-e8aa4b40921d.
+INFO:     127.0.0.1:42956 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:34:59,896] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 74047274-b19a-47cd-b97e-e8aa4b40921d
+[2026-02-06 10:34:59,899] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 74047274-b19a-47cd-b97e-e8aa4b40921d executed in 0.003s
+INFO:     127.0.0.1:55762 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:35:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c1fc96d4-41d4-4751-bb62-264d8b09293f.
+INFO:     127.0.0.1:33034 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:36:06,375] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c1fc96d4-41d4-4751-bb62-264d8b09293f
+[2026-02-06 10:36:06,378] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: c1fc96d4-41d4-4751-bb62-264d8b09293f executed in 0.003s
+INFO:     127.0.0.1:58102 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:36:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 6d947dab-f477-4336-ba68-f014cf116491.
+[2026-02-06 10:37:04,097] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 6d947dab-f477-4336-ba68-f014cf116491
+[2026-02-06 10:37:04,110] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 6d947dab-f477-4336-ba68-f014cf116491 executed in 0.012s
+INFO:     127.0.0.1:53322 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53798 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:37:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 6c03fa22-8309-4f69-8718-37709b145334.
+[2026-02-06 10:38:01,828] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 6c03fa22-8309-4f69-8718-37709b145334
+[2026-02-06 10:38:01,836] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 6c03fa22-8309-4f69-8718-37709b145334 executed in 0.008s
+INFO:     127.0.0.1:49026 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49032 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:38:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9e49ab2a-128d-4ccc-92d2-7891fc4f79ca.
+[2026-02-06 10:38:59,555] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9e49ab2a-128d-4ccc-92d2-7891fc4f79ca
+[2026-02-06 10:38:59,570] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 9e49ab2a-128d-4ccc-92d2-7891fc4f79ca executed in 0.014s
+INFO:     127.0.0.1:39070 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55018 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:39:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: aeb91e93-7340-405f-9658-d6e0ebd4dffa.
+[2026-02-06 10:40:06,047] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: aeb91e93-7340-405f-9658-d6e0ebd4dffa
+[2026-02-06 10:40:06,050] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: aeb91e93-7340-405f-9658-d6e0ebd4dffa executed in 0.003s
+INFO:     127.0.0.1:55022 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41956 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:40:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 3ad17b6d-8c1f-4563-ae39-493e63eac682.
+[2026-02-06 10:41:03,769] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 3ad17b6d-8c1f-4563-ae39-493e63eac682
+[2026-02-06 10:41:03,772] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 3ad17b6d-8c1f-4563-ae39-493e63eac682 executed in 0.003s
+INFO:     127.0.0.1:41968 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:34162 - "GET /ajax-api/3.0/mlflow/assistant/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34174 - "GET /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /server-info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34174 - "POST /graphql HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34174 - "GET /ajax-api/2.0/mlflow/experiments/get?experiment_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34174 - "GET /ajax-api/2.0/mlflow/traces?experiment_ids=1&order_by=timestamp_ms%20DESC&max_results=1&filter= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "GET /static-files/static/js/5964.dd9e117c.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /static-files/static/js/6036.8c946d12.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "GET /static-files/static/css/6036.f482616c.chunk.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /static-files/static/media/versions-empty.3e2d8bb8c5b8ddd0a19a34890b36ad41.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /static-files/static/js/6877.54b71a54.chunk.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "POST /ajax-api/3.0/mlflow/datasets/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/3.0/mlflow/traces/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/3.0/mlflow/traces/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/2.0/mlflow/experiments/search-datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34162 - "GET /ajax-api/2.0/mlflow/gateway-proxy?gateway_path=api%2F2.0%2Fendpoints%2F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34180 - "POST /ajax-api/2.0/mlflow/logged-models/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34192 - "POST /ajax-api/2.0/mlflow/runs/search HTTP/1.1" 200 OK
+[2026-02-06 10:41:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b301e143-97cb-433c-9949-d1d23a4433f2.
+INFO:     127.0.0.1:34208 - "GET /ajax-api/2.0/mlflow/experiments/search?max_results=25&order_by=last_update_time+DESC HTTP/1.1" 200 OK
+[2026-02-06 10:42:01,491] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b301e143-97cb-433c-9949-d1d23a4433f2
+[2026-02-06 10:42:01,496] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: b301e143-97cb-433c-9949-d1d23a4433f2 executed in 0.005s
+INFO:     127.0.0.1:34214 - "POST /ajax-api/3.0/mlflow/ui-telemetry HTTP/1.1" 200 OK
+[2026-02-06 10:42:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: f6bdb7f6-3ce1-4a71-b0aa-44dd7cb74a77.
+[2026-02-06 10:42:59,215] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: f6bdb7f6-3ce1-4a71-b0aa-44dd7cb74a77
+[2026-02-06 10:42:59,229] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: f6bdb7f6-3ce1-4a71-b0aa-44dd7cb74a77 executed in 0.013s
+[2026-02-06 10:43:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 8180fce7-ed27-48b2-834b-1cdca2387dfd.
+[2026-02-06 10:44:05,704] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 8180fce7-ed27-48b2-834b-1cdca2387dfd
+[2026-02-06 10:44:05,708] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 8180fce7-ed27-48b2-834b-1cdca2387dfd executed in 0.003s
+[2026-02-06 10:44:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 052ba254-4a29-4959-b4d4-477b832d7d2a.
+[2026-02-06 10:45:03,426] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 052ba254-4a29-4959-b4d4-477b832d7d2a
+[2026-02-06 10:45:03,433] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 052ba254-4a29-4959-b4d4-477b832d7d2a executed in 0.006s
+[2026-02-06 10:45:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: d7aa30e0-5814-4763-8561-4c5cac4a111f.
+[2026-02-06 10:46:01,152] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: d7aa30e0-5814-4763-8561-4c5cac4a111f
+[2026-02-06 10:46:01,158] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: d7aa30e0-5814-4763-8561-4c5cac4a111f executed in 0.006s
+[2026-02-06 10:46:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: c29b5e14-e859-42f2-8b0f-7a95206dbf28.
+[2026-02-06 10:47:07,635] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: c29b5e14-e859-42f2-8b0f-7a95206dbf28
+[2026-02-06 10:47:07,640] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: c29b5e14-e859-42f2-8b0f-7a95206dbf28 executed in 0.005s
+[2026-02-06 10:47:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 7811ca04-a454-4259-a34d-dfb7c2e2c19a.
+[2026-02-06 10:48:05,360] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 7811ca04-a454-4259-a34d-dfb7c2e2c19a
+[2026-02-06 10:48:05,365] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 7811ca04-a454-4259-a34d-dfb7c2e2c19a executed in 0.005s
+[2026-02-06 10:48:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 87a20eff-acac-47ec-82e1-c25c52f65381.
+[2026-02-06 10:49:03,094] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 87a20eff-acac-47ec-82e1-c25c52f65381
+[2026-02-06 10:49:03,098] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 87a20eff-acac-47ec-82e1-c25c52f65381 executed in 0.005s
+[2026-02-06 10:49:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 2bf511e5-0d06-4697-b8ae-760798af0e77.
+[2026-02-06 10:50:00,818] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 2bf511e5-0d06-4697-b8ae-760798af0e77
+[2026-02-06 10:50:00,833] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 2bf511e5-0d06-4697-b8ae-760798af0e77 executed in 0.015s
+[2026-02-06 10:50:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 58f5bf6a-d7cc-4bec-b531-b85d74ff4464.
+[2026-02-06 10:51:07,308] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 58f5bf6a-d7cc-4bec-b531-b85d74ff4464
+[2026-02-06 10:51:07,312] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 58f5bf6a-d7cc-4bec-b531-b85d74ff4464 executed in 0.004s
+[2026-02-06 10:51:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: bf891f63-86f3-4fa1-bff6-d60b300fe9a0.
+[2026-02-06 10:52:05,031] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: bf891f63-86f3-4fa1-bff6-d60b300fe9a0
+[2026-02-06 10:52:05,035] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: bf891f63-86f3-4fa1-bff6-d60b300fe9a0 executed in 0.004s
+[2026-02-06 10:52:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ef7aff97-71bf-4db4-9e5c-641772e1d720.
+[2026-02-06 10:53:02,755] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ef7aff97-71bf-4db4-9e5c-641772e1d720
+[2026-02-06 10:53:02,759] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: ef7aff97-71bf-4db4-9e5c-641772e1d720 executed in 0.004s
+[2026-02-06 10:53:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: a749d9ef-f6c1-481c-8ff6-1c934494e717.
+[2026-02-06 10:54:00,477] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: a749d9ef-f6c1-481c-8ff6-1c934494e717
+[2026-02-06 10:54:00,481] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: a749d9ef-f6c1-481c-8ff6-1c934494e717 executed in 0.004s
+[2026-02-06 10:54:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 30112aab-13ff-4fdd-8571-fd01631194cb.
+[2026-02-06 10:55:06,956] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 30112aab-13ff-4fdd-8571-fd01631194cb
+[2026-02-06 10:55:06,962] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 30112aab-13ff-4fdd-8571-fd01631194cb executed in 0.005s
+[2026-02-06 10:55:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: e5cfdf09-018c-45fe-9d62-1fca60fd78cc.
+[2026-02-06 10:56:04,681] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: e5cfdf09-018c-45fe-9d62-1fca60fd78cc
+[2026-02-06 10:56:04,692] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: e5cfdf09-018c-45fe-9d62-1fca60fd78cc executed in 0.010s
+[2026-02-06 10:56:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ee75e037-885c-4fcf-bd18-2195235d0404.
+[2026-02-06 10:57:02,417] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ee75e037-885c-4fcf-bd18-2195235d0404
+[2026-02-06 10:57:02,423] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: ee75e037-885c-4fcf-bd18-2195235d0404 executed in 0.006s
+[2026-02-06 10:57:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 5baff1b5-5abb-4a23-95c1-fa51390b8e86.
+[2026-02-06 10:58:00,142] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 5baff1b5-5abb-4a23-95c1-fa51390b8e86
+[2026-02-06 10:58:00,145] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 5baff1b5-5abb-4a23-95c1-fa51390b8e86 executed in 0.003s
+[2026-02-06 10:58:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 1302bb39-2499-41d8-8a1a-ed09da3c4a9f.
+[2026-02-06 10:59:06,621] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 1302bb39-2499-41d8-8a1a-ed09da3c4a9f
+[2026-02-06 10:59:06,626] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 1302bb39-2499-41d8-8a1a-ed09da3c4a9f executed in 0.005s
+[2026-02-06 10:59:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9f68dfa9-e946-4227-a56d-a6d028284a34.
+[2026-02-06 11:00:04,345] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9f68dfa9-e946-4227-a56d-a6d028284a34
+[2026-02-06 11:00:04,349] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 9f68dfa9-e946-4227-a56d-a6d028284a34 executed in 0.004s
+[2026-02-06 11:00:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: e28d1b4f-5e70-48a6-85a7-8fd8e51d115b.
+[2026-02-06 11:01:02,068] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: e28d1b4f-5e70-48a6-85a7-8fd8e51d115b
+[2026-02-06 11:01:02,081] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: e28d1b4f-5e70-48a6-85a7-8fd8e51d115b executed in 0.013s
+[2026-02-06 11:01:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: d7ad9415-07d8-4394-b429-2ef98b79f38f.
+[2026-02-06 11:01:59,800] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: d7ad9415-07d8-4394-b429-2ef98b79f38f
+[2026-02-06 11:01:59,804] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: d7ad9415-07d8-4394-b429-2ef98b79f38f executed in 0.004s
+[2026-02-06 11:02:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 07fa3b74-8bad-4b1b-8e59-7ece33673c6d.
+[2026-02-06 11:03:06,280] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 07fa3b74-8bad-4b1b-8e59-7ece33673c6d
+[2026-02-06 11:03:06,283] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 07fa3b74-8bad-4b1b-8e59-7ece33673c6d executed in 0.003s
+[2026-02-06 11:03:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 17070669-4735-40aa-b472-e459a545e628.
+[2026-02-06 11:04:04,002] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 17070669-4735-40aa-b472-e459a545e628
+[2026-02-06 11:04:04,006] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 17070669-4735-40aa-b472-e459a545e628 executed in 0.004s
+[2026-02-06 11:04:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 63774950-fbe4-493b-ae74-243d58521f8d.
+[2026-02-06 11:05:01,725] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 63774950-fbe4-493b-ae74-243d58521f8d
+[2026-02-06 11:05:01,737] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 63774950-fbe4-493b-ae74-243d58521f8d executed in 0.004s
+[2026-02-06 11:05:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: d521ea7c-e2ba-42a4-a045-68c922ac1aa7.
+[2026-02-06 11:05:59,456] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: d521ea7c-e2ba-42a4-a045-68c922ac1aa7
+[2026-02-06 11:05:59,461] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: d521ea7c-e2ba-42a4-a045-68c922ac1aa7 executed in 0.004s
+[2026-02-06 11:06:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: b75e3852-131e-46cb-962e-197dbf75c71e.
+[2026-02-06 11:07:05,937] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: b75e3852-131e-46cb-962e-197dbf75c71e
+[2026-02-06 11:07:05,942] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: b75e3852-131e-46cb-962e-197dbf75c71e executed in 0.005s
+[2026-02-06 11:07:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 4dc2e3e3-1e07-4cae-bdf8-ae1bde2c312d.
+[2026-02-06 11:08:03,661] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 4dc2e3e3-1e07-4cae-bdf8-ae1bde2c312d
+[2026-02-06 11:08:03,665] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 4dc2e3e3-1e07-4cae-bdf8-ae1bde2c312d executed in 0.004s
+[2026-02-06 11:08:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0899a627-c2d2-4d8f-b794-5ac35b55936c.
+[2026-02-06 11:09:01,393] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0899a627-c2d2-4d8f-b794-5ac35b55936c
+[2026-02-06 11:09:01,396] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 0899a627-c2d2-4d8f-b794-5ac35b55936c executed in 0.003s
+[2026-02-06 11:09:58,998] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 4a776fbd-f78a-497c-92fb-4e6a7f22bff6.
+[2026-02-06 11:09:59,114] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 4a776fbd-f78a-497c-92fb-4e6a7f22bff6
+[2026-02-06 11:09:59,128] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 4a776fbd-f78a-497c-92fb-4e6a7f22bff6 executed in 0.014s
+[2026-02-06 12:34:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 1c35e49d-c7ac-4e2a-adcc-8b64851f358e.
+[2026-02-06 12:34:52,269] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 1c35e49d-c7ac-4e2a-adcc-8b64851f358e
+[2026-02-06 12:34:52,281] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 1c35e49d-c7ac-4e2a-adcc-8b64851f358e executed in 0.012s
+[2026-02-06 12:35:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 92021c6d-c4a3-4f93-b22a-e0ee179b0cb6.
+[2026-02-06 12:35:50,000] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 92021c6d-c4a3-4f93-b22a-e0ee179b0cb6
+[2026-02-06 12:35:50,006] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 92021c6d-c4a3-4f93-b22a-e0ee179b0cb6 executed in 0.005s
+[2026-02-06 12:36:45,547] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 156a6c41-3dbb-4820-b8af-3c659e7b47f9.
+[2026-02-06 12:36:47,736] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 156a6c41-3dbb-4820-b8af-3c659e7b47f9
+[2026-02-06 12:36:47,749] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 156a6c41-3dbb-4820-b8af-3c659e7b47f9 executed in 0.012s
+[2026-02-06 12:37:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 01942272-8f05-45f3-bfc1-ef2367174ee2.
+[2026-02-06 12:37:54,237] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 01942272-8f05-45f3-bfc1-ef2367174ee2
+[2026-02-06 12:37:54,242] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 01942272-8f05-45f3-bfc1-ef2367174ee2 executed in 0.005s
+[2026-02-06 12:38:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 40bb54ac-0161-4f84-afff-e26c14d35d6e.
+[2026-02-06 12:38:51,964] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 40bb54ac-0161-4f84-afff-e26c14d35d6e
+[2026-02-06 12:38:51,968] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 40bb54ac-0161-4f84-afff-e26c14d35d6e executed in 0.005s
+[2026-02-06 12:39:45,545] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 1afd8907-bb75-4d8c-a00f-e2803705db0b.
+[2026-02-06 12:39:49,688] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 1afd8907-bb75-4d8c-a00f-e2803705db0b
+[2026-02-06 12:39:49,692] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 1afd8907-bb75-4d8c-a00f-e2803705db0b executed in 0.004s
+[2026-02-06 12:40:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 9681d2ca-9608-480b-8700-6edf668c6d53.
+[2026-02-06 12:40:47,413] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 9681d2ca-9608-480b-8700-6edf668c6d53
+[2026-02-06 12:40:47,427] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 9681d2ca-9608-480b-8700-6edf668c6d53 executed in 0.014s
+[2026-02-06 12:41:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 2e493844-ea89-40a5-aa89-d035a2add337.
+[2026-02-06 12:41:53,904] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 2e493844-ea89-40a5-aa89-d035a2add337
+[2026-02-06 12:41:53,910] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 2e493844-ea89-40a5-aa89-d035a2add337 executed in 0.005s
+[2026-02-06 12:42:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ca1d3d43-9aa5-4ef5-9bda-7f470e87b3af.
+[2026-02-06 12:42:51,634] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ca1d3d43-9aa5-4ef5-9bda-7f470e87b3af
+[2026-02-06 12:42:51,639] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: ca1d3d43-9aa5-4ef5-9bda-7f470e87b3af executed in 0.005s
+[2026-02-06 12:43:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: ff8545b9-a24f-4254-803b-4b5195ce0422.
+[2026-02-06 12:43:49,367] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: ff8545b9-a24f-4254-803b-4b5195ce0422
+[2026-02-06 12:43:49,373] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: ff8545b9-a24f-4254-803b-4b5195ce0422 executed in 0.005s
+[2026-02-06 12:44:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 0d33e3b1-545b-4de2-a352-9faf0e972a5b.
+[2026-02-06 12:44:47,094] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 0d33e3b1-545b-4de2-a352-9faf0e972a5b
+[2026-02-06 12:44:47,098] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 0d33e3b1-545b-4de2-a352-9faf0e972a5b executed in 0.004s
+[2026-02-06 12:45:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 85f78115-5efc-46ac-bcc4-690d1e6c5278.
+[2026-02-06 12:45:53,574] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 85f78115-5efc-46ac-bcc4-690d1e6c5278
+[2026-02-06 12:45:53,579] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 85f78115-5efc-46ac-bcc4-690d1e6c5278 executed in 0.005s
+[2026-02-06 12:46:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 685a128c-afb0-4a18-93c4-dc41f1e40e6c.
+[2026-02-06 12:46:51,300] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 685a128c-afb0-4a18-93c4-dc41f1e40e6c
+[2026-02-06 12:46:51,307] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 685a128c-afb0-4a18-93c4-dc41f1e40e6c executed in 0.007s
+[2026-02-06 12:47:45,544] INFO:huey.consumer.Scheduler:Scheduler:Enqueueing periodic task mlflow.server.jobs.utils.online_scoring_scheduler: 8c69f70b-e3d6-4433-b7dd-616e1ab88d94.
+[2026-02-06 12:47:49,027] INFO:huey:Worker-3:Executing mlflow.server.jobs.utils.online_scoring_scheduler: 8c69f70b-e3d6-4433-b7dd-616e1ab88d94
+[2026-02-06 12:47:49,031] INFO:huey:Worker-3:mlflow.server.jobs.utils.online_scoring_scheduler: 8c69f70b-e3d6-4433-b7dd-616e1ab88d94 executed in 0.004s

@@ -1,0 +1,32 @@
+{"timestamp":"2026-02-05T16:07:43.251674Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-05T16:07:43.258937Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-05T16:07:43.501020Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-05T16:07:43.501843Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-05T16:07:44.687313Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:44.687613Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:44.687755Z","level":"info","event":"🌦️ Fetching BMKG Weather Data","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:44.687994Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:44.997000Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:44.997310Z","level":"info","event":"📍 Fetching weather for ADM4: 35.78.21.1004","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.090058Z","level":"info","event":"   Parsed 17 weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.148878Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.149336Z","level":"info","event":"⚠️  Found 2 expired weather records to delete","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.150859Z","level":"info","event":"   Time range: 2026-02-05 23:00:00 to 2026-02-05 23:00:00","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.151240Z","level":"info","event":"   (waktu < NOW at 2026-02-05 23:07:47 WIB)","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.155430Z","level":"info","event":"✅ Deleted 2 expired weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.191227Z","level":"info","event":"✓ Inserted 17 weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.191608Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.191759Z","level":"info","event":"📍 Fetching weather for ADM4: 35.25.14.1010","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.636734Z","level":"info","event":"   Parsed 17 weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.690772Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.691072Z","level":"info","event":"⚠️  Found 3 expired weather records to delete","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.691198Z","level":"info","event":"   Time range: 2026-02-05 16:00:00 to 2026-02-05 22:00:00","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.691392Z","level":"info","event":"   (waktu < NOW at 2026-02-05 23:07:47 WIB)","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.691788Z","level":"info","event":"✅ Deleted 3 expired weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.708270Z","level":"info","event":"✓ Inserted 17 weather records","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.708652Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.708782Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.708908Z","level":"info","event":"✓ Total records inserted: 34","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.709004Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-05T16:07:47.710835Z","level":"info","event":"Done. Returned value was: 34","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2026-02-05T16:07:47.729531Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019c2e8f-31d7-7fbd-92a9-14f6f88cc046'), task_id='fetch_bmkg_weather', dag_id='weather_data_fetch', run_id='scheduled__2026-02-05T16:00:00+00:00', try_number=1, dag_version_id=UUID('019c0dd4-58cf-774a-9f83-a68201e36c2d'), map_index=-1, hostname='OM-RAFIE.localdomain', context_carrier={}, task=<Task(PythonOperator): fetch_bmkg_weather>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=2, start_date=datetime.datetime(2026, 2, 5, 16, 7, 42, 901535, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

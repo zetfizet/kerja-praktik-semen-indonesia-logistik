@@ -1,0 +1,16 @@
+{"timestamp":"2026-02-06T04:00:04.455560Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-06T04:00:04.457348Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-06T04:00:04.482550Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-06T04:00:04.482714Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-06T04:00:04.521529Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.521701Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.521754Z","level":"info","event":"🔄 Updating weather data freshness metrics...","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.521795Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527140Z","level":"info","event":"✓ Updated 109 records with freshness metrics","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527294Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527347Z","level":"info","event":"Freshness Summary:","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527388Z","level":"info","event":"  ✅ FRESH: 39 records","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527425Z","level":"info","event":"  ⚠️ WARNING: 10 records","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527459Z","level":"info","event":"  ❌ STALE: 60 records","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.527493Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-06T04:00:04.528287Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}

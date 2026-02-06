@@ -1,0 +1,14 @@
+{"timestamp":"2026-02-03T22:17:36.666548Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2026-02-03T22:17:36.692376Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/weather_data_fetch.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2026-02-03T22:17:37.416280Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-02-03T22:17:37.416776Z","level":"warning","event":"The `airflow.operators.bash.BashOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.bash.BashOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/weather_data_fetch.py","lineno":9,"logger":"py.warnings"}
+{"timestamp":"2026-02-03T22:17:39.335682Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-03T22:17:39.335822Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-03T22:17:39.335926Z","level":"info","event":"🌦️ Fetching BMKG Weather Data","logger":"task.stdout"}
+{"timestamp":"2026-02-03T22:17:39.336085Z","level":"info","event":"============================================================","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:09.027209Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:09.027616Z","level":"info","event":"📍 Fetching weather for ADM4: 35.78.21.1004","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:25.697165Z","level":"info","event":"❌ Error fetching from BMKG API: HTTPSConnectionPool(host='api.bmkg.go.id', port=443): Read timed out. (read timeout=10)","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:25.716216Z","level":"info","event":"⚠️ Skipping 35.78.21.1004 - no data","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:25.716688Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-02-04T04:02:25.716896Z","level":"info","event":"📍 Fetching weather for ADM4: 35.25.14.1010","logger":"task.stdout"}
