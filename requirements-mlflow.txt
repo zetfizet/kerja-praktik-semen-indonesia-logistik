@@ -1,0 +1,8 @@
+# MLflow integration untuk Airflow
+mlflow==2.19.0
+psycopg2-binary==2.9.9
+
+# Optional: Untuk ML libraries umum
+scikit-learn==1.6.1
+pandas==2.2.3
+numpy==2.2.1
