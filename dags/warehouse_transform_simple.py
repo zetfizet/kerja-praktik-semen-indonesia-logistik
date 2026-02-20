@@ -139,9 +139,16 @@ def transform_orders_daily_summary():
         
         if not date_column:
             print(f"  ⚠ No date column found in orders, creating simple count only")
-            cursor.execute("DROP TABLE IF EXISTS analytics.orders_daily_summary")
             cursor.execute("""
-                CREATE TABLE analytics.orders_daily_summary AS
+                CREATE TABLE IF NOT EXISTS analytics.orders_daily_summary (
+                    order_date DATE PRIMARY KEY,
+                    total_orders BIGINT,
+                    transformed_at TIMESTAMP
+                )
+            """)
+            cursor.execute("DELETE FROM analytics.orders_daily_summary WHERE order_date = CURRENT_DATE")
+            cursor.execute("""
+                INSERT INTO analytics.orders_daily_summary
                 SELECT 
                     CURRENT_DATE as order_date,
                     COUNT(*) as total_orders,
@@ -151,21 +158,38 @@ def transform_orders_daily_summary():
         else:
             has_deleted_at = 'deleted_at' in columns
             
-            cursor.execute("DROP TABLE IF EXISTS analytics.orders_daily_summary")
+            # Create table structure if not exists
+            deleted_cols = "active_orders BIGINT, deleted_orders BIGINT," if has_deleted_at else ""
+            cursor.execute(f"""
+                CREATE TABLE IF NOT EXISTS analytics.orders_daily_summary (
+                    order_date DATE PRIMARY KEY,
+                    total_orders BIGINT,
+                    {deleted_cols}
+                    transformed_at TIMESTAMP
+                )
+            """)
+            
+            # Delete last 7 days (reprocess untuk catch updates & late data)
+            cursor.execute(f"""
+                DELETE FROM analytics.orders_daily_summary 
+                WHERE order_date >= CURRENT_DATE - INTERVAL '7 days'
+            """)
             
             deleted_counts = """
                 COUNT(CASE WHEN deleted_at IS NULL THEN 1 END) as active_orders,
                 COUNT(CASE WHEN deleted_at IS NOT NULL THEN 1 END) as deleted_orders,
             """ if has_deleted_at else ""
             
+            # Insert only last 7 days
             cursor.execute(f"""
-                CREATE TABLE analytics.orders_daily_summary AS
+                INSERT INTO analytics.orders_daily_summary
                 SELECT 
                     DATE({date_column}) as order_date,
                     COUNT(*) as total_orders,
                     {deleted_counts}
                     CURRENT_TIMESTAMP as transformed_at
                 FROM public.orders
+                WHERE DATE({date_column}) >= CURRENT_DATE - INTERVAL '7 days'
                 GROUP BY DATE({date_column})
                 ORDER BY order_date DESC
             """)
@@ -288,9 +312,16 @@ def transform_delivery_daily_summary():
         
         if not date_column:
             print(f"  ⚠ No date column found, creating simple count")
-            cursor.execute("DROP TABLE IF EXISTS analytics.delivery_daily_summary")
             cursor.execute("""
-                CREATE TABLE analytics.delivery_daily_summary AS
+                CREATE TABLE IF NOT EXISTS analytics.delivery_daily_summary (
+                    delivery_date DATE PRIMARY KEY,
+                    total_deliveries BIGINT,
+                    transformed_at TIMESTAMP
+                )
+            """)
+            cursor.execute("DELETE FROM analytics.delivery_daily_summary WHERE delivery_date = CURRENT_DATE")
+            cursor.execute("""
+                INSERT INTO analytics.delivery_daily_summary
                 SELECT 
                     CURRENT_DATE as delivery_date,
                     COUNT(*) as total_deliveries,
@@ -300,18 +331,35 @@ def transform_delivery_daily_summary():
         else:
             has_deleted_at = 'deleted_at' in columns
             
-            cursor.execute("DROP TABLE IF EXISTS analytics.delivery_daily_summary")
+            # Create table structure if not exists
+            deleted_col = "active_deliveries BIGINT," if has_deleted_at else ""
+            cursor.execute(f"""
+                CREATE TABLE IF NOT EXISTS analytics.delivery_daily_summary (
+                    delivery_date DATE PRIMARY KEY,
+                    total_deliveries BIGINT,
+                    {deleted_col}
+                    transformed_at TIMESTAMP
+                )
+            """)
+            
+            # Delete last 7 days (reprocess untuk catch updates)
+            cursor.execute(f"""
+                DELETE FROM analytics.delivery_daily_summary 
+                WHERE delivery_date >= CURRENT_DATE - INTERVAL '7 days'
+            """)
             
             deleted_count = "COUNT(CASE WHEN deleted_at IS NULL THEN 1 END) as active_deliveries," if has_deleted_at else ""
             
+            # Insert only last 7 days
             cursor.execute(f"""
-                CREATE TABLE analytics.delivery_daily_summary AS
+                INSERT INTO analytics.delivery_daily_summary
                 SELECT 
                     DATE({date_column}) as delivery_date,
                     COUNT(*) as total_deliveries,
                     {deleted_count}
                     CURRENT_TIMESTAMP as transformed_at
                 FROM public.delivery_order
+                WHERE DATE({date_column}) >= CURRENT_DATE - INTERVAL '7 days'
                 GROUP BY DATE({date_column})
                 ORDER BY delivery_date DESC
             """)
