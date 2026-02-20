@@ -94,21 +94,6 @@ Dockerfile                     # Custom Airflow image
 compose.yml                    # Docker compose (DO NOT commit with secrets!)
 ```
 
-## Security Notes
-
-⚠️ **NEVER commit**:
-- `.env` file (contains real credentials)
-- `compose.yml` dengan hardcoded passwords
-- `logs/` folder
-- `__pycache__/` folders
-
-✅ **Safe to commit**:
-- `.env.example` (template without real values)
-- `compose.example.yml` (template using env vars)
-- DAG files
-- Documentation
-- SQL scripts
-
 ## Contributing
 
 1. Clone repo
