@@ -1,1 +1,510 @@
-# 📖 Troubleshooting & Common Issues\n\n**Solutions for common problems and error messages**\n\n---\n\n## 📑 Quick Index by Error Type\n\n- [Connection Issues](#connection-issues)\n- [Database Problems](#database-problems)\n- [DAG & Airflow Issues](#dag--airflow-issues)\n- [Dashboard Tool Issues](#dashboard-tool-issues)\n- [Performance Problems](#performance-problems)\n- [Data Quality Issues](#data-quality-issues)\n\n---\n\n## Connection Issues\n\n### \"Could not connect to server: Connection refused\"\n\n**Symptoms:**\n- DAG tasks failing with connection error\n- Cannot connect to PostgreSQL from terminal\n- Airflow logs show \"psycopg2.OperationalError\"\n\n**Root causes:**\n- PostgreSQL not running\n- Wrong host/port specified\n- Firewall blocking connection\n- Network isolation\n\n**Solutions:**\n\n```bash\n# 1. Check if PostgreSQL container is running\ndocker ps | grep postgres\n\n# 2. If not running, start it\nbash scripts/utils/quick_start.sh\n\n# 3. Test connection from host\npsql -h localhost -U postgres -d warehouse -p 5433\n# (If prompted for password, enter: postgres123)\n\n# 4. If still fails, check container logs\ndocker-compose logs postgres\n\n# 5. Verify port is correct (should be 5433 for warehouse)\n# Check compose.yml for port mapping\ngrep -A 5 'port' compose.yml | grep -E 'ports:|5433'\n```\n\n**Prevention:**\n- Always start with `quick_start.sh` first\n- Verify `docker ps` shows postgres running before running DAGs\n- Use correct port: 5433 for warehouse, 5432 for airflow metadata\n\n---\n\n### \"Could not connect to DEVOM (devom.silog.co.id)\"\n\n**Symptoms:**\n- daily_warehouse_sync DAG fails at first task\n- \"Name or service not known\" or \"Connection timed out\"\n- Tests from local machine work, but container fails\n\n**Root causes:**\n- Network/VPN not connected\n- DNS resolution failing\n- Firewall blocking port 5432 to devom\n- Container can't resolve hostname\n\n**Solutions:**\n\n```bash\n# 1. Test connectivity from localhost\nping devom.silog.co.id\n\n# 2. If fails, check VPN/network\n# (VPN might be required - check with team)\n\n# 3. Test from inside container\ndocker-compose exec airflow-scheduler bash\nping devom.silog.co.id\n\n# 4. Check DNS resolution\ndig devom.silog.co.id\n\n# 5. If ping works but psql fails, try with explicit port\npsql -h devom.silog.co.id -U om -d om -p 5432\n```\n\n**Prevention:**\n- Ensure VPN/network is set up before running DAGs\n- Test connectivity before triggering warehouse sync\n- Verify credentials (om/om) are correct\n\n---\n\n### \"Connection timeout after 30 seconds\"\n\n**Symptoms:**\n- Tasks fail with timeout\n- Works sometimes, fails other times\n- Network is intermittent\n\n**Root causes:**\n- Slow network connection\n- Database under heavy load\n- Network congestion\n- DNS lookup slow\n\n**Solutions:**\n\n```bash\n# 1. Increase timeout in DAG (not recommended for production)\n# Edit airflow/dags/daily_warehouse_sync.py\n# Change: timeout=30 → timeout=60\n\n# 2. Check network latency\nping -c 5 devom.silog.co.id\n# Look for times > 100ms (might indicate slow network)\n\n# 3. Check if database is heavy loaded\npsql -h devom.silog.co.id -U om -d om\n> SELECT count(*) FROM pg_stat_activity;\n\n# 4. Check connection pool settings\n# In compose.yml, verify pool_size & max_overflow\n```\n\n---\n\n## Database Problems\n\n### \"Relation 'public.drivers' does not exist\"\n\n**Symptoms:**\n- DAG fails when querying tables\n- Tables visible in pgAdmin but not in queries\n- Schema issue\n\n**Root causes:**\n- Tables not created yet (haven't run copy_devom_structure.sh)\n- Wrong schema name\n- Tables in different schema than expected\n- Case sensitivity issue\n\n**Solutions:**\n\n```bash\n# 1. Check if tables exist\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT * FROM information_schema.tables \n      WHERE table_schema='public' LIMIT 10;\n\n# 2. If no tables, run setup\nbash scripts/setup/setup_warehouse_db.sh\nbash scripts/etl/copy_devom_structure.sh\n\n# 3. Check case sensitivity\npsql\\> SELECT * FROM public.\"DRIVERS\";  # Try uppercase\npsql\\> SELECT * FROM public.drivers;    # Try lowercase\n\n# 4. List all schemas and tables\npsql\\> \\dn\npsql\\> \\dt\n```\n\n**Prevention:**\n- Always run scripts in order: quick_start → setup_warehouse_db → copy_devom_structure\n- Verify tables before running DAGs\n\n---\n\n### \"Unique constraint violation\"\n\n**Symptoms:**\n- Duplicate data errors\n- INSERT fails with constraint violation\n- Second sync run fails\n\n**Root causes:**\n- Duplicate records in source\n- Deduplication not working\n- Multiple DAG runs overlapping\n\n**Solutions:**\n\n```bash\n# 1. Check for duplicates in table\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT column_name, COUNT(*) FROM public.drivers \n      GROUP BY column_name HAVING COUNT(*) > 1;\n\n# 2. Remove duplicates (careful!)\npsql\\> DELETE FROM public.drivers WHERE id IN (\n      SELECT id FROM(\n        SELECT id, ROW_NUMBER() OVER (PARTITION BY column_name) as rn \n        FROM public.drivers) t \n      WHERE rn > 1);\n\n# 3. Check DAG max_active_runs (should be 1)\n# In airflow/dags/daily_warehouse_sync.py\n# max_active_runs=1  # Prevents overlapping runs\n\n# 4. Clear failed DAG run and retry\n# Airflow UI → DAG Runs → [failed run] → Clear\n```\n\n---\n\n### \"Disk space full / out of memory\"\n\n**Symptoms:**\n- DAG fails unexpectedly\n- \"No space left on device\" error\n- Performance suddenly degrades\n\n**Root causes:**\n- Warehouse database grown too large\n- Logs accumulating\n- Docker images/containers taking space\n- Weather data not being cleaned up\n\n**Solutions:**\n\n```bash\n# 1. Check disk space\ndf -h\n\n# 2. Check warehouse database size\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT pg_size_pretty(pg_database_size('warehouse'));\n\n# 3. Check Airflow logs size\ndu -sh airflow/logs/\n\n# 4. Clean up old logs\nrm -rf airflow/logs/*\n\n# 5. Clean up weather data (keep last 30 days)\n# This should auto-run in weather_data_fetch DAG\npsql\\> DELETE FROM weather.fact_weather_hourly \n      WHERE created_at < NOW() - INTERVAL '30 days';\n\n# 6. Archive old business data (manual)\npsql\\> -- Move tables > 1 year to archive\n\n# 7. Clean Docker resources\ndocker system prune -a --volumes\n```\n\n---\n\n## DAG & Airflow Issues\n\n### \"DAG 'daily_warehouse_sync' not found\"\n\n**Symptoms:**\n- Airflow UI shows \"No DAGs matched your filter\"\n- DAG list is empty\n- DAG was previously working\n\n**Root causes:**\n- DAG file deleted\n- DAG file not in dags/ directory\n- Python syntax error in DAG\n- Scheduler hasn't parsed DAGs yet\n\n**Solutions:**\n\n```bash\n# 1. Check if DAG file exists\nls -la airflow/dags/daily_warehouse_sync.py\n\n# 2. Check for Python syntax errors\npython3 -m py_compile airflow/dags/daily_warehouse_sync.py\n\n# 3. Restart scheduler (force DAG reload)\ndocker-compose restart airflow-scheduler\n\n# 4. Wait 2-3 minutes for DAG parsing\n# Check Airflow logs\ndocker-compose logs airflow-scheduler | tail -20\n\n# 5. Force DAG parse\nairflow dags list\n```\n\n---\n\n### \"Task failed with 'out of memory'\"\n\n**Symptoms:**\n- Random task failures\n- Worker crashes\n- No clear error message\n\n**Root causes:**\n- Large batch causing memory spike\n- Memory limit too low\n- Memory leak in code\n\n**Solutions:**\n\n```bash\n# 1. Reduce batch size in DAG\n# In airflow/dags/daily_warehouse_sync.py\n# Change: BATCH_SIZE = 5000 → BATCH_SIZE = 1000\n\n# 2. Increase Docker memory allocation\n# Edit compose.yml\nservices:\n  airflow-worker:\n    mem_limit: 4g  # Increase from 2g\n\n# 3. Monitor memory usage\ndocker stats airflow-worker\n\n# 4. Check system memory\nfree -h\n```\n\n---\n\n### \"DAG run stuck / not progressing\"\n\n**Symptoms:**\n- DAG started but tasks not running\n- Status shows \"running\" for hours\n- No new logs\n\n**Root causes:**\n- Scheduler issue\n- Worker not responding\n- Task waiting for resource\n- Task queue stuck\n\n**Solutions:**\n\n```bash\n# 1. Check if scheduler is running\ndocker ps | grep airflow-scheduler\n\n# 2. Check if worker is running\ndocker ps | grep airflow-worker\n\n# 3. Restart scheduler\ndocker-compose restart airflow-scheduler\n\n# 4. Restart worker\ndocker-compose restart airflow-worker\n\n# 5. Clear task instance\n# Airflow UI → DAG Runs → [stuck run] → Task → Clear\n\n# 6. Kill zombie processes\n# In container terminal\ndocker-compose exec airflow-worker ps aux | grep python\nkill -9 <PID>  # Kill stuck process\n```\n\n---\n\n## Dashboard Tool Issues\n\n### Metabase \"Cannot connect to database\"\n\n**Symptoms:**\n- Metabase UI accessible, but queries fail\n- Connection test fails\n\n**Solutions:**\n\n```bash\n# 1. Verify connection parameters in Metabase UI\n# Settings → Databases → Click Warehouse → Test connection\n\n# 2. Test from command line\npsql -h localhost -U postgres -d warehouse -p 5433\n\n# 3. Check Metabase logs\ndocker-compose logs metabase | tail -30\n\n# 4. Verify warehouse is accessible from Metabase container\ndocker-compose exec metabase bash\npsql -h localhost -U postgres -d warehouse -p 5433\n```\n\n---\n\n### Grafana \"No panels / empty dashboard\"\n\n**Symptoms:**\n- Dashboard loads but no data\n- Panels show \"No data\"\n\n**Solutions:**\n\n```bash\n# 1. Check data source connection\n# Settings → Data Sources → PostgreSQL → Test\n\n# 2. Verify query in panel\n# Click panel → Edit → Check query syntax\n\n# 3. Test query manually\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT * FROM weather.fact_weather_hourly LIMIT 1;\n\n# 4. Check for recent data\npsql\\> SELECT MAX(created_at) FROM weather.fact_weather_hourly;\n```\n\n---\n\n### Superset \"Dataset not found\"\n\n**Symptoms:**\n- Can't see tables when creating chart\n- \"No tables available\" message\n\n**Solutions:**\n\n```bash\n# 1. Refresh database connection\n# Admin → Data Sources → Click database → Refresh metadata\n\n# 2. Verify connection\n# Admin → Data Sources → Test connection\n\n# 3. Check if tables have granted permissions\n# SQL Lab → Tables should list available tables\n```\n\n---\n\n## Performance Problems\n\n### \"DAG running slower than usual\"\n\n**Symptoms:**\n- daily_warehouse_sync taking 20+ minutes (vs normal 10 min)\n- Queries respond slowly\n- High CPU/memory usage\n\n**Root causes:**\n- Database autovacuum not running\n- Missing indexes\n- Large dataset growth\n- Other heavy queries running\n\n**Solutions:**\n\n```bash\n# 1. Check running queries\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT * FROM pg_stat_activity WHERE state != 'idle';\n\n# 2. Run VACUUM (cleanup)\npsql\\> VACUUM ANALYZE warehouse;\n\n# 3. Add missing indexes\npsql\\> CREATE INDEX idx_perjalanan_date \n      ON public.perjalanan (DATE(start_time));\n\n# 4. Check table sizes\npsql\\> SELECT schemaname, tablename, \n             pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))\n      FROM pg_tables ORDER BY pg_total_relation_size DESC LIMIT 10;\n\n# 5. Monitor slow queries\n# Enable pg_stat_statements extension\npsql\\> CREATE EXTENSION IF NOT EXISTS pg_stat_statements;\npsql\\> SELECT query, calls, total_time FROM pg_stat_statements \n      ORDER BY total_time DESC LIMIT 10;\n```\n\n---\n\n## Data Quality Issues\n\n### \"Weather data not updating / stuck on old timestamp\"\n\n**Symptoms:**\n- Weather data shows hours-old values\n- No new records in fact_weather_hourly table\n- Metrics show STALE status\n\n**Root causes:**\n- BMKG API down/slow\n- DAG not running (check schedule)\n- Deduplication preventing new data\n- Data freshness check failing\n\n**Solutions:**\n\n```bash\n# 1. Check if weather_data_fetch DAG is running\n# Airflow UI → weather_data_fetch → see recent runs\n\n# 2. Check latest data timestamp\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT MAX(data_timestamp), \n             MAX(created_at),\n             COUNT(*) as count\n      FROM weather.fact_weather_hourly;\n\n# 3. Check freshness status\npsql\\> SELECT freshness_status, COUNT(*) \n      FROM weather.fact_weather_hourly \n      GROUP BY freshness_status;\n\n# 4. Manually trigger DAG\n# Airflow UI → weather_data_fetch → Trigger DAG\n\n# 5. If BMKG API is down, wait and retry\n# Check BMKG status: https://api.bmkg.go.id/\n```\n\n---\n\n### \"Missing tables or incomplete data after sync\"\n\n**Symptoms:**\n- Some tables missing after daily_warehouse_sync\n- Row counts don't match source\n- Random tables not syncing\n\n**Root causes:**\n- Network interruption during sync\n- Source database has new tables\n- Table-level permission issues\n- Sync process killed prematurely\n\n**Solutions:**\n\n```bash\n# 1. Check sync logs\n# Airflow UI → daily_warehouse_sync → Logs\n\n# 2. List tables and compare with source\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT tablename FROM information_schema.tables \n      WHERE table_schema='public' ORDER BY tablename;\n\n# 3. Compare row counts\npsql\\> SELECT tablename, n_live_tup FROM pg_stat_user_tables \n      WHERE schemaname='public' ORDER BY tablename;\n\n# 4. Re-run full sync\nbash scripts/etl/sync_tables_from_devom.sh\n\n# 5. If new tables added to source, re-run copy_devom_structure.sh\nbash scripts/etl/copy_devom_structure.sh\n```\n\n---\n\n## Getting Help\n\n### Where to find logs\n\n```bash\n# Airflow webserver logs\ndocker-compose logs airflow-webserver | tail -100\n\n# Airflow scheduler logs\ndocker-compose logs airflow-scheduler | tail -100\n\n# Airflow worker logs  \ndocker-compose logs airflow-worker | tail -100\n\n# PostgreSQL logs\ndocker-compose logs postgres | tail -50\n\n# Specific DAG task logs (in Airflow UI)\n# DAG → Grid → Task Instance → Logs\n\n# Or in filesystem\ncat airflow/logs/dag_id=daily_warehouse_sync/run_id=*/task_id=*/\n```\n\n### Diagnostic commands\n\n```bash\n# System status\ndocker ps -a                           # All containers\ndocker-compose ps                      # Compose services\ndf -h                                  # Disk space\nfree -h                                # Memory\n\n# Network\nping devom.silog.co.id                # Test connectivity\nnc -zv devom.silog.co.id 5432         # Port test\n\n# Database\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT version();              # DB version\npsql\\> \\du                            # Users\npsql\\> \\dn                            # Schemas\n```\n\n---\n\n📖 **Previous:** [Helper Scripts](SCRIPTS.md)  \n👈 **Back to:** [Main README](../README.md)\n
+# 📋 Troubleshooting & Common Issues
+
+**Common problems in Airflow Stack and their solutions**
+
+---
+
+## 📑 Quick Index
+
+- [Connection Issues](#connection-issues)
+- [Database Problems](#database-problems)
+- [DAG & Airflow Issues](#dag--airflow-issues)
+- [Dashboard Tool Issues](#dashboard-tool-issues)
+- [Data Quality Issues](#data-quality-issues)
+- [Performance Issues](#performance-issues)
+- [Getting Help](#getting-help)
+
+---
+
+## Connection Issues
+
+### Cannot Connect to DEVOM (devom.silog.co.id)
+
+**Symptoms:**
+- daily_warehouse_sync fails at first task
+- "Name or service not known" or "Connection timed out"
+
+**Solutions:**
+
+```bash
+# 1. Test connectivity from localhost
+ping devom.silog.co.id
+
+# 2. If fails, check VPN/network (ask team)
+
+# 3. Test PostgreSQL connection
+psql -h devom.silog.co.id -U om -d om -p 5432
+
+# 4. Check from inside Airflow container
+docker-compose exec airflow-scheduler bash
+ping devom.silog.co.id
+psql -h devom.silog.co.id -U om -d om -p 5432
+```
+
+**Prevention:**
+- Ensure VPN/network is set up before running DAGs
+- Verify credentials (om/om) are correct
+- Test connectivity before triggering sync
+
+---
+
+### Cannot Connect to Warehouse (localhost:5433)
+
+**Symptoms:**
+- DAG fails with "Could not connect to server"
+- Metabase/Grafana can't reach database
+- Poetry install fails psycopg2 connection
+
+**Solutions:**
+
+```bash
+# 1. Check if PostgreSQL is running
+docker ps | grep postgres
+
+# 2. If not running, start it
+bash scripts/utils/quick_start.sh
+
+# 3. Test connection
+psql -h localhost -U postgres -d warehouse -p 5433
+# Password: postgres123
+
+# 4. If connection timeout, check logs
+docker-compose logs postgres | tail -20
+
+# 5. Check if port is correct
+grep -E 'ports:|5433' compose.yml
+```
+
+**Prevention:**
+- Always start with `quick_start.sh` first
+- Verify `docker ps` shows postgres running before running DAGs
+- Use correct ports: 5433 (warehouse), 5432 (Airflow metadata)
+
+---
+
+### Connection Timeout After 30 Seconds
+
+**Symptoms:**
+- Tasks fail with timeout
+- Works sometimes, fails other times
+- Network becomes intermittent
+
+**Solutions:**
+
+```bash
+# 1. Check network latency
+ping -c 5 devom.silog.co.id
+# If times > 100ms, network might be slow
+
+# 2. Check if database is under heavy load
+psql -h devom.silog.co.id -U om -d om
+> SELECT count(*) FROM pg_stat_activity;
+
+# 3. Increase timeout in DAG (not recommended for production)
+# Edit: airflow/dags/daily_warehouse_sync.py
+# Change: timeout=30 → timeout=60
+
+# 4. Increase pool size in compose.yml
+```
+
+---
+
+## Database Problems
+
+### Tables Don't Exist After Setup
+
+**Symptoms:**
+- DAG fails: "relation 'public.drivers' does not exist"
+- Tables visible in pgAdmin but not in queries
+- Schema issues
+
+**Solutions:**
+
+```bash
+# 1. Check if tables were created
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT COUNT(*) FROM information_schema.tables 
+      WHERE table_schema='public';
+
+# 2. If 0 tables, run setup in order:
+bash scripts/setup/setup_warehouse_db.sh
+bash scripts/etl/copy_devom_structure.sh
+
+# 3. Verify tables were created
+psql> \dt  # List all tables in public schema
+
+# 4. List all 90 tables
+psql> SELECT tablename FROM information_schema.tables 
+      WHERE table_schema='public' ORDER BY tablename;
+```
+
+**Prevention:**
+- Always run scripts in order: quick_start → setup_warehouse_db → copy_devom_structure
+- Verify tables before running DAGs: `SELECT COUNT(*) FROM public.drivers;`
+
+---
+
+### Unique Constraint Violation / Duplicate Data
+
+**Symptoms:**
+- INSERT fails with "duplicate key value violates"
+- Second sync run fails
+- Duplicate records in table
+
+**Solutions:**
+
+```bash
+# 1. Check for duplicates
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT column_name, COUNT(*) FROM public.table_name 
+      GROUP BY column_name HAVING COUNT(*) > 1;
+
+# 2. Find which records are duplicates
+psql> SELECT id, COUNT(*) FROM public.table_name GROUP BY id HAVING COUNT(*) > 1;
+
+# 3. Clean up duplicates (CAREFUL!)
+psql> DELETE FROM public.table_name WHERE id IN (
+      SELECT id FROM (
+        SELECT id, ROW_NUMBER() OVER (PARTITION BY key_column ORDER BY id) as rn 
+        FROM public.table_name) t 
+      WHERE rn > 1);
+
+# 4. Check DAG config (max_active_runs should be 1)
+# In airflow/dags/daily_warehouse_sync.py:
+# max_active_runs=1
+
+# 5. Clear failed DAG run in Airflow UI
+# DAG Runs → [failed run] → Clear → Confirm
+```
+
+---
+
+### "Disk Space Full" / Out of Memory
+
+**Symptoms:**
+- DAG fails: "No space left on device"
+- Performance suddenly degrades
+- Docker stops responding
+
+**Solutions:**
+
+```bash
+# 1. Check disk space
+df -h
+
+# 2. Check warehouse database size
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT pg_size_pretty(pg_database_size('warehouse'));
+
+# 3. Check Airflow logs size
+du -sh airflow/logs/
+
+# 4. Clean up old logs (BACKUP FIRST!)
+rm -rf airflow/logs/*
+
+# 5. Clean up weather data (keep last 30 days)
+psql> DELETE FROM weather.fact_weather_hourly 
+      WHERE created_at < NOW() - INTERVAL '30 days';
+
+# 6. Run VACUUM to reclaim space
+psql> VACUUM FULL ANALYZE warehouse;
+
+# 7. Clean Docker resources
+docker system prune -a --volumes  # WARNING: removes all unused resources
+```
+
+---
+
+## DAG & Airflow Issues
+
+### DAG Not Found / Doesn't Appear in Airflow UI
+
+**Symptoms:**
+- Airflow UI shows "No DAGs matched your filter"
+- DAG was working before
+- DAG list is empty
+
+**Solutions:**
+
+```bash
+# 1. Check if DAG file exists
+ls -la airflow/dags/daily_warehouse_sync.py
+
+# 2. Check for Python syntax errors
+python3 -m py_compile airflow/dags/daily_warehouse_sync.py
+
+# 3. Verify DAG directory is correct
+ls -la airflow/dags/
+
+# 4. Restart Airflow scheduler (force DAG reload)
+docker-compose restart airflow-scheduler
+
+# 5. Wait 2-3 minutes for DAG parsing
+docker-compose logs airflow-scheduler | grep -i "dag" | tail -10
+
+# 6. Force DAG list update
+docker-compose exec airflow-scheduler airflow dags list
+```
+
+---
+
+### DAG Task Failed / Task Stuck
+
+**Symptoms:**
+- Task shows "failed" in Airflow UI
+- Task stuck on "running" for hours
+- No new logs
+
+**Solutions:**
+
+```bash
+# 1. Check task logs in Airflow UI
+# DAG → Grid → Task Instance → Logs
+
+# 2. Or check in filesystem
+cat airflow/logs/dag_id=daily_warehouse_sync/run_id=*/task_id=*/
+
+# 3. Check if scheduler is running
+docker ps | grep airflow-scheduler
+
+# 4. Check if worker is running
+docker ps | grep airflow-worker
+
+# 5. Restart scheduler
+docker-compose restart airflow-scheduler
+
+# 6. Restart worker
+docker-compose restart airflow-worker
+
+# 7. Clear task instance and retry
+# Airflow UI → DAG Runs → [failed run] → Task → Clear
+
+# 8. Check for zombie processes
+docker-compose exec airflow-worker ps aux | grep python
+kill -9 <PID>  # Kill stuck process
+```
+
+---
+
+### Out of Memory / Task Killed
+
+**Symptoms:**
+- Random task failures
+- Worker crashes silently
+- Logs show memory issues
+
+**Solutions:**
+
+```bash
+# 1. Check memory usage
+docker stats airflow-worker
+
+# 2. Check system memory
+free -h
+
+# 3. Reduce batch size in DAG
+# Edit: airflow/dags/daily_warehouse_sync.py
+# Change: BATCH_SIZE = 5000 → BATCH_SIZE = 1000
+
+# 4. Increase Docker memory allocation
+# Edit: compose.yml
+# services:
+#   airflow-worker:
+#     mem_limit: 4g  # Increase from 2g
+
+# 5. Apply changes
+docker-compose up -d airflow-worker --force-recreate
+```
+
+---
+
+## Dashboard Tool Issues
+
+### Metabase Can't Connect to Database
+
+```bash
+# 1. Verify connection parameters in Metabase UI
+# Settings → Databases → Warehouse → Test connection
+# Should use: postgres://postgres:postgres123@localhost:5433/warehouse
+
+# 2. Test from command line
+psql -h localhost -U postgres -d warehouse -p 5433
+
+# 3. Check Metabase container logs
+docker-compose logs metabase | tail -30
+
+# 4. Verify warehouse container is running
+docker ps | grep postgres
+```
+
+---
+
+### Grafana / Superset Shows No Data
+
+**Symptoms:**
+- Dashboard loads but panels are empty
+- "No data" message
+
+**Solutions:**
+
+```bash
+# 1. Check data source connection in tool UI
+# Settings → Data Sources → PostgreSQL → Test
+
+# 2. Test query manually
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT * FROM weather.fact_weather_hourly LIMIT 1;
+
+# 3. Verify data exists
+psql> SELECT COUNT(*) FROM weather.fact_weather_hourly;
+
+# 4. Check if weather_data_fetch DAG has run
+# Airflow UI → weather_data_fetch → see recent task runs
+```
+
+---
+
+## Data Quality Issues
+
+### Weather Data Not Updating
+
+**Symptoms:**
+- Weather data shows hours-old timestamp
+- No new records in fact_weather_hourly
+- Metrics show "STALE" status
+
+**Solutions:**
+
+```bash
+# 1. Check if weather_data_fetch DAG is running
+# Airflow UI → weather_data_fetch → check recent runs
+
+# 2. Check latest weather data timestamp
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT MAX(data_timestamp), MAX(created_at), COUNT(*) 
+      FROM weather.fact_weather_hourly;
+
+# 3. Check freshness status
+psql> SELECT freshness_status, COUNT(*) FROM weather.fact_weather_hourly 
+      GROUP BY freshness_status;
+
+# 4. Manually trigger DAG in Airflow UI
+# weather_data_fetch → Trigger DAG
+
+# 5. Check if BMKG API is down
+# Try: curl https://api.bmkg.go.id/publik/prakiraan-cuaca
+
+# 6. Check DAG logs for API errors
+# Airflow UI → weather_data_fetch → Logs
+```
+
+---
+
+### Tables Missing After Sync
+
+**Symptoms:**
+- Some tables missing after daily_warehouse_sync
+- Row counts different from source
+- Random tables not syncing
+
+**Solutions:**
+
+```bash
+# 1. Check sync logs
+# Airflow UI → daily_warehouse_sync → Logs
+
+# 2. Compare table counts
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT COUNT(*) FROM information_schema.tables 
+      WHERE table_schema='public';
+# Should be 90+ tables
+
+# 3. Re-run full sync
+bash scripts/etl/sync_tables_from_devom.sh
+
+# 4. If new tables added to source, run copy structure
+bash scripts/etl/copy_devom_structure.sh
+```
+
+---
+
+## Performance Issues
+
+### DAG Running Slower Than Usual
+
+**Symptoms:**
+- daily_warehouse_sync taking 20+ minutes (vs normal 10 min)
+- Queries respond slowly
+- High CPU/memory usage
+
+**Solutions:**
+
+```bash
+# 1. Check running queries
+psql -h localhost -U postgres -d warehouse -p 5433
+psql> SELECT * FROM pg_stat_activity WHERE state != 'idle';
+
+# 2. Run VACUUM (cleanup)
+psql> VACUUM ANALYZE warehouse;
+
+# 3. Check table sizes
+psql> SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))
+      FROM pg_tables ORDER BY pg_total_relation_size DESC LIMIT 10;
+
+# 4. Enable slow query logging
+psql> CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+psql> SELECT query, calls, total_time FROM pg_stat_statements 
+      ORDER BY total_time DESC LIMIT 10;
+
+# 5. Add missing indexes (if needed)
+psql> CREATE INDEX idx_table_column ON table_name(column_name);
+```
+
+---
+
+## Getting Help
+
+### Diagnostic Commands
+
+```bash
+# System status
+docker ps -a                    # All containers
+docker-compose ps               # Compose services
+df -h                          # Disk space
+free -h                        # Memory
+
+# Network connectivity
+ping devom.silog.co.id         # Test DEVOM
+nc -zv devom.silog.co.id 5432  # Port test
+
+# Database connection
+psql -h localhost -U postgres -d warehouse -p 5433
+
+# View main logs
+docker-compose logs airflow-scheduler | tail -50
+docker-compose logs postgres | tail -30
+docker-compose logs metabase | tail -20
+```
+
+### Check Logs
+
+```bash
+# Airflow webserver
+docker-compose logs airflow-webserver | tail -50
+
+# Airflow scheduler
+docker-compose logs airflow-scheduler | tail -50
+
+# Airflow worker
+docker-compose logs airflow-worker | tail -50
+
+# PostgreSQL
+docker-compose logs postgres | tail -30
+
+# In Airflow UI: DAG → Grid → Task → Logs
+```
+
+---
+
+📖 **Related:** [DAGs Reference](DAGS.md) | [Database Schema](DATABASE_SCHEMA.md)  
+👈 **Back to:** [Main README](../README.md) | [Documentation Index](INDEX.md)

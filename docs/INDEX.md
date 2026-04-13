@@ -1,1 +1,321 @@
-# 📚 Documentation Index\n\n**Complete navigation guide for all Airflow Stack documentation**\n\n---\n\n## 🎯 Quick Start\n\n**New to Airflow Stack?** Start here:\n\n1. **[Main README](../README.md)** - Project overview & 5-minute quick start\n2. **[Installation Guide](INSTALLATION.md)** - Step-by-step setup instructions\n3. **[DAGs Reference](DAGS.md)** - Understand the data pipelines\n\n---\n\n## 📖 Complete Documentation\n\n### Getting Started\n\n| Document | Purpose | Read Time |\n|----------|---------|----------|\n| [Main README](../README.md) | Project overview, architecture, quick start | 5-10 min |\n| [Installation Guide](INSTALLATION.md) | Complete setup from scratch | 15-20 min |\n| [Architecture Guide](ARCHITECTURE.md) | System components & data flow | 10-15 min |\n\n### Understanding the System\n\n| Document | Purpose | Read Time |\n|----------|---------|----------|\n| [DAGs Reference](DAGS.md) | All 3 DAGs explained in detail | 15-20 min |\n| [Database Schema](DATABASE_SCHEMA.md) | Table structures & relationships | 10-15 min |\n| [Architecture Guide](ARCHITECTURE.md) | How components work together | 10-15 min |\n\n### Using the System\n\n| Document | Purpose | Read Time |\n|----------|---------|----------|\n| [Dashboard Setup](DASHBOARDS.md) | Metabase, Grafana, Superset config | 15-20 min |\n| [Helper Scripts](SCRIPTS.md) | Shell script reference & usage | 10-15 min |\n| [Troubleshooting](TROUBLESHOOTING.md) | Common issues & solutions | Reference |\n\n---\n\n## 🎓 Learning Paths\n\n### Path 1: Administrator/DevOps\n\n```\n1. Installation Guide\n   ├─ Set up infrastructure\n   ├─ Verify all services running\n   └─ Test DAG execution\n\n2. Architecture Guide\n   ├─ Understand system design\n   ├─ Learn data flows\n   └─ Know component interactions\n\n3. Troubleshooting Guide\n   ├─ Common issues\n   ├─ Debugging techniques\n   └─ Performance optimization\n```\n\n### Path 2: Data Analyst\n\n```\n1. Main README\n   ├─ Understand project scope\n   └─ See data sources\n\n2. DAGs Reference\n   ├─ Learn about data pipelines\n   ├─ Understand update schedules\n   └─ Know data freshness\n\n3. Database Schema\n   ├─ Understand table structures\n   ├─ Learn about available data\n   └─ Find right tables for queries\n\n4. Dashboard Setup\n   ├─ Set up Metabase\n   ├─ Create first dashboard\n   └─ Write SQL queries\n```\n\n### Path 3: Developer/Data Engineer\n\n```\n1. Installation Guide\n   ├─ Complete setup\n   └─ Verify all systems\n\n2. Architecture Guide\n   ├─ Deep dive into design\n   ├─ Understand integrations\n   └─ Learn extension points\n\n3. DAGs Reference\n   ├─ Understand DAG structure\n   ├─ Learn task dependencies\n   └─ See error handling\n\n4. Database Schema\n   ├─ Understand data model\n   ├─ Learn relationships\n   └─ Plan modifications\n\n5. Troubleshooting Guide\n   ├─ Debug issues\n   ├─ Performance tuning\n   └─ Optimization strategies\n```\n\n---\n\n## 🔍 Find Answer By Topic\n\n### Installation & Setup\n- Q: How do I set up the stack for the first time?\n  **→** [Installation Guide](INSTALLATION.md#step-by-step-installation)\n\n- Q: What ports are used?\n  **→** [Main README](../README.md#️-system-requirements)\n\n- Q: Where do I start?\n  **→** [Main README](../README.md#-quick-start-5-minutes)\n\n### Understanding Data\n- Q: What DAGs exist and what do they do?\n  **→** [DAGs Reference](DAGS.md)\n\n- Q: What tables contain what data?\n  **→** [Database Schema](DATABASE_SCHEMA.md)\n\n- Q: How often is data updated?\n  **→** [DAGs Reference](DAGS.md#-dags--data-pipelines)\n\n### Creating Dashboards\n- Q: How do I create a Metabase dashboard?\n  **→** [Dashboard Setup](DASHBOARDS.md#metabase-port-3000)\n\n- Q: Which tool should I use for analytics?\n  **→** [Dashboard Setup](DASHBOARDS.md#dashboard-tool-comparison)\n\n- Q: How do I write SQL queries?\n  **→** [Database Schema](DATABASE_SCHEMA.md#sample-queries)\n\n### Troubleshooting\n- Q: The DAG is not running. What's wrong?\n  **→** [Troubleshooting - DAG Issues](TROUBLESHOOTING.md#dag--airflow-issues)\n\n- Q: Connection to database failed.\n  **→** [Troubleshooting - Connection Issues](TROUBLESHOOTING.md#connection-issues)\n\n- Q: Performance is slow. What can I do?\n  **→** [Troubleshooting - Performance](TROUBLESHOOTING.md#performance-problems)\n\n### Using Helper Scripts\n- Q: I need to start the system. Which script?\n  **→** [Scripts Reference - quick_start.sh](SCRIPTS.md#quick_startsh)\n\n- Q: How do I set up the Metabase connection?\n  **→** [Scripts Reference - setup_metabase_db.sh](SCRIPTS.md#setup_metabase_dbsh)\n\n- Q: How do I sync data from DEVOM?\n  **→** [Scripts Reference - copy_devom_structure.sh](SCRIPTS.md#copy_devom_structursh)\n\n---\n\n## 📚 Document Details\n\n### README.md (Main Homepage)\n**Location:** `README.md`  \n**Size:** ~3,000 words  \n**Covers:** Project overview, quick start, system architecture, DAG overview, dashboard tools\n\n### INSTALLATION.md\n**Location:** `docs/INSTALLATION.md`  \n**Size:** ~2,500 words  \n**Covers:** Prerequisites, step-by-step setup, database configuration, first DAG run, troubleshooting\n\n### DAGS.md\n**Location:** `docs/DAGS.md`  \n**Size:** ~4,000 words  \n**Covers:** All 3 DAGs in detail, task explanations, scheduling, monitoring, error handling\n\n### ARCHITECTURE.md\n**Location:** `docs/ARCHITECTURE.md`  \n**Size:** ~3,000 words  \n**Covers:** System components, data flow, integration points, technology stack, security\n\n### DATABASE_SCHEMA.md\n**Location:** `docs/DATABASE_SCHEMA.md`  \n**Size:** ~2,500 words  \n**Covers:** Database structure, schemas, tables, relationships, sample queries\n\n### DASHBOARDS.md\n**Location:** `docs/DASHBOARDS.md`  \n**Size:** ~3,000 words  \n**Covers:** Metabase, Grafana, Superset setup, sample queries, tool comparison\n\n### SCRIPTS.md\n**Location:** `docs/SCRIPTS.md`  \n**Size:** ~2,000 words  \n**Covers:** All shell scripts, usage, dependencies, troubleshooting\n\n### TROUBLESHOOTING.md\n**Location:** `docs/TROUBLESHOOTING.md`  \n**Size:** ~3,500 words  \n**Covers:** Common issues, error messages, solutions, diagnostic commands\n\n---\n\n## 🔗 Cross-References\n\n### From Main README\n- **Quick Start** → [Installation Guide](INSTALLATION.md)\n- **DAGs Overview** → [DAGs Reference](DAGS.md)\n- **System Architecture** → [Architecture Guide](ARCHITECTURE.md)\n- **Dashboard Tools** → [Dashboards Setup](DASHBOARDS.md)\n- **Helper Scripts** → [Scripts Reference](SCRIPTS.md)\n\n### From Each Documentation Page\n- **Bottom of page:** Links to related documents\n- **Troubleshooting section:** Links to [Troubleshooting Guide](TROUBLESHOOTING.md)\n- **Scripts mentioned:** Links to [Scripts Reference](SCRIPTS.md)\n- **Database queries:** Links to [Database Schema](DATABASE_SCHEMA.md)\n\n---\n\n## 💡 Tips for Using Documentation\n\n### Reading Efficiently\n- **Skim headers first** - Get overview\n- **Use table of contents** - Jump to relevant section\n- **Search for keywords** - Browser Ctrl+F\n- **Follow \"Next\" links** - Suggested reading order\n\n### Finding Information\n- **Use this index** - Find document by topic\n- **Check troubleshooting first** - Often has answer\n- **Look at examples** - Often clearer than explanations\n- **Read related documents** - For complete picture\n\n### Getting Help\n1. Check [Main README FAQ section](../README.md#-important-notes)\n2. Search [Troubleshooting Guide](TROUBLESHOOTING.md)\n3. Review relevant document (e.g., DAGs for DAG issues)\n4. Check script output logs\n5. Review Docker container logs\n\n---\n\n## 📋 Checklist for Common Tasks\n\n### First-Time Setup\n- [ ] Read [Installation Guide](INSTALLATION.md) introduction\n- [ ] Install Docker & Docker Compose\n- [ ] Run `bash scripts/utils/quick_start.sh`\n- [ ] Run `bash scripts/setup/setup_warehouse_db.sh`\n- [ ] Run `bash scripts/etl/copy_devom_structure.sh`\n- [ ] Verify in Airflow UI (http://localhost:8080)\n- [ ] Read [DAGs Reference](DAGS.md) to understand pipeline\n\n### Starting Each Day\n- [ ] Check [Main README](../README.md) - is system running?\n- [ ] Access Airflow UI - are DAGs scheduled?\n- [ ] Check for failed DAG runs\n- [ ] If issues, check [Troubleshooting Guide](TROUBLESHOOTING.md)\n\n### Creating Analytics\n- [ ] Check [Database Schema](DATABASE_SCHEMA.md) to understand data\n- [ ] Follow [Dashboard Setup](DASHBOARDS.md) for your tool\n- [ ] Use sample queries from relevant documentation\n- [ ] Test query first before creating dashboard\n\n### Troubleshooting Problems\n- [ ] Note exact error message\n- [ ] Search [Troubleshooting Guide](TROUBLESHOOTING.md)\n- [ ] Follow suggested solutions\n- [ ] Check logs: `docker-compose logs <service>`\n- [ ] Verify prerequisites are met\n\n---\n\n## 📞 Support\n\nIf documentation doesn't answer your question:\n\n1. **Review related documents** - Often in nearby section\n2. **Check example code** - May clarify concept\n3. **Review logs** - Logs often contain clues\n   ```bash\n   docker-compose logs airflow-scheduler | tail -50\n   ```\n4. **Test connectivity** - Many issues are connection-related\n   ```bash\n   ping devom.silog.co.id\n   psql -h localhost -U postgres -d warehouse -p 5433\n   ```\n\n---\n\n**Last Updated:** April 2026  \n**Documentation Version:** 1.0  \n**Total Pages:** 8 documents  \n**Total Words:** ~25,000\n\n👈 **Back to:** [Main README](../README.md)\n
+# 📚 Documentation Index
+
+**Quick navigation guide for all Airflow Stack documentation**
+
+---
+
+## 🎯 Where To Start?
+
+| Your Role | Start Here | Then Read |
+|-----------|-----------|-----------|
+| **New User** | [Main README](../README.md) | [Installation Guide](INSTALLATION.md) |
+| **Admin/DevOps** | [Installation Guide](INSTALLATION.md) | [Architecture](ARCHITECTURE.md) → [Troubleshooting](TROUBLESHOOTING.md) |
+| **Data Analyst** | [Main README](../README.md) | [DAGs Reference](DAGS.md) → [Database Schema](DATABASE_SCHEMA.md) |
+| **Developer** | [Architecture](ARCHITECTURE.md) | [DAGs Reference](DAGS.md) → [Database Schema](DATABASE_SCHEMA.md) |
+
+---
+
+## 📖 All Documents
+
+| Document | Purpose | Read Time |
+|----------|---------|-----------|
+| [README.md](../README.md) | Project overview & 5-min quick start | 5-10 min |
+| [INSTALLATION.md](INSTALLATION.md) | Step-by-step setup guide | 15-20 min |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System design & data flows | 10-15 min |
+| [DAGS.md](DAGS.md) | All 3 DAGs explained | 15-20 min |
+| [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) | Tables & relationships | 10-15 min |
+| [DASHBOARDS.md](DASHBOARDS.md) | Analytics tools (Metabase, Grafana, Superset) | 15-20 min |
+| [SCRIPTS.md](SCRIPTS.md) | Helper scripts reference | 10-15 min |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common issues & solutions | Reference |
+
+---
+
+## 🔍 Find Answer By Topic
+
+### Getting Started
+- **Q: How do I set up Airflow Stack?**  
+  → [Installation Guide](INSTALLATION.md)
+
+- **Q: What's included and how does it work?**  
+  → [Main README](../README.md) + [Architecture](ARCHITECTURE.md)
+
+- **Q: What are the system requirements?**  
+  → [Main README - Requirements](../README.md#-system-requirements)
+
+### Understanding The Data
+
+- **Q: What DAGs do we have and what do they do?**  
+  → [DAGs Reference](DAGS.md)
+
+- **Q: What tables exist and what data do they contain?**  
+  → [Database Schema](DATABASE_SCHEMA.md)
+
+- **Q: How often is data updated?**  
+  → [DAGs Reference - Schedules](DAGS.md#-schedules)
+
+- **Q: Where does data come from?**  
+  → [Architecture - Data Sources](ARCHITECTURE.md)
+
+### Analytics & Dashboards
+
+- **Q: How do I create a Metabase dashboard?**  
+  → [Dashboards - Metabase](DASHBOARDS.md#metabase-port-3000)
+
+- **Q: Which tool should I use for analytics?**  
+  → [Dashboards - Tool Comparison](DASHBOARDS.md#tool-comparison)
+
+- **Q: How do I write SQL queries?**  
+  → [Database Schema - Sample Queries](DATABASE_SCHEMA.md)
+
+### Troubleshooting
+
+- **Q: The DAG is not running. What's wrong?**  
+  → [Troubleshooting - DAG Issues](TROUBLESHOOTING.md#dag--airflow-issues)
+
+- **Q: I can't connect to the database.**  
+  → [Troubleshooting - Connection Issues](TROUBLESHOOTING.md#connection-issues)
+
+- **Q: Weather data is not updating.**  
+  → [Troubleshooting - Data Quality Issues](TROUBLESHOOTING.md#data-quality-issues)
+
+- **Q: Performance is slow. What can I do?**  
+  → [Troubleshooting - Performance](TROUBLESHOOTING.md#performance-issues)
+
+### Using Helper Scripts
+
+- **Q: How do I start the system?**  
+  → [SCRIPTS - quick_start.sh](SCRIPTS.md)
+
+- **Q: How do I update tables from DEVOM?**  
+  → [SCRIPTS - sync_tables_from_devom.sh](SCRIPTS.md)
+
+- **Q: How do I set up Metabase?**  
+  → [SCRIPTS - start_metabase.sh](SCRIPTS.md) or [DASHBOARDS](DASHBOARDS.md)
+
+---
+
+## 📚 Learning Paths
+
+### Path 1: System Administrator
+
+```
+1. Installation Guide
+   └─ Set up infrastructure
+2. Architecture Guide
+   └─ Understand system design
+3. DAGs Reference
+   └─ Learn about data pipelines
+4. Troubleshooting
+   └─ Know how to debug issues
+5. Scripts Reference
+   └─ Know utility scripts
+```
+
+**Estimated Time:** 60 minutes
+
+### Path 2: Data Analyst
+
+```
+1. Main README
+   └─ Understand project scope
+2. DAGs Reference
+   └─ Learn data update schedules
+3. Database Schema
+   └─ Understand available tables
+4. Dashboards Setup
+   └─ Set up Metabase/Grafana
+5. Troubleshooting
+   └─ Reference when needed
+```
+
+**Estimated Time:** 45 minutes
+
+### Path 3: Data Engineer / Developer
+
+```
+1. Installation Guide
+   └─ Complete setup
+2. Architecture Guide
+   └─ Deep dive into design
+3. DAGs Reference
+   └─ Learn DAG structure
+4. Database Schema
+   └─ Understand data model
+5. Scripts Reference
+   └─ Know automation tools
+6. Troubleshooting
+   └─ Debugging techniques
+```
+
+**Estimated Time:** 75 minutes
+
+---
+
+## 🎓 Task Checklists
+
+### First-Time Setup Checklist
+
+- [ ] Read: [Main README](../README.md) - Project overview
+- [ ] Install: Docker & Docker Compose
+- [ ] Run: `bash scripts/utils/quick_start.sh`
+- [ ] Run: `bash scripts/setup/setup_warehouse_db.sh`
+- [ ] Run: `bash scripts/etl/copy_devom_structure.sh`
+- [ ] Verify: Airflow UI shows DAGs (http://localhost:8080)
+- [ ] Read: [DAGs Reference](DAGS.md)
+
+### Daily Operations
+
+- [ ] Check: All containers running - `docker ps`
+- [ ] Check: Airflow UI (http://localhost:8080) - DAGs scheduled?
+- [ ] Check: Any failed DAG runs?
+- [ ] If issues → Check: [Troubleshooting](TROUBLESHOOTING.md)
+
+### Creating Analytics Dashboard
+
+- [ ] Read: [Database Schema](DATABASE_SCHEMA.md) - Find your tables
+- [ ] Read: [Dashboards](DASHBOARDS.md) - Choose tool (Metabase/Grafana/Superset)
+- [ ] Follow: Setup steps for your chosen tool
+- [ ] Test: Write SQL query first
+- [ ] Create: Dashboard using sample queries
+
+### Troubleshooting Problem
+
+- [ ] Search: Find your error in [Troubleshooting Index](TROUBLESHOOTING.md)
+- [ ] Follow: Suggested solution steps
+- [ ] Check: Relevant logs - Airflow/Docker/Database
+- [ ] Test: Fix worked?
+- [ ] If not working → Document issue and ask team
+
+---
+
+## 📋 Document Structure
+
+### README.md
+**Location:** Root  
+**Purpose:** Project entry point with quick start  
+**Contains:** Overview, quick start, 5-minute setup, architecture, FAQ
+
+### INSTALLATION.md
+**Location:** docs/  
+**Purpose:** Complete setup from scratch  
+**Contains:** Prerequisites, step-by-step setup, database config, first DAG run
+
+### ARCHITECTURE.md
+**Location:** docs/  
+**Purpose:** System design & components  
+**Contains:** Architecture diagram, data flows, tech stack, integrations
+
+### DAGS.md
+**Location:** docs/  
+**Purpose:** Data pipeline reference  
+**Contains:** All 3 DAGs explained, tasks, scheduling, monitoring, error handling
+
+### DATABASE_SCHEMA.md
+**Location:** docs/  
+**Purpose:** Database structure reference  
+**Contains:** Schemas, tables (90+), relationships, sample queries
+
+### DASHBOARDS.md
+**Location:** docs/  
+**Purpose:** Analytics tools setup  
+**Contains:** Metabase, Grafana, Superset setup, sample queries, tool comparison
+
+### SCRIPTS.md
+**Location:** docs/  
+**Purpose:** Helper scripts reference  
+**Contains:** 22 scripts, usage, dependencies, troubleshooting
+
+### TROUBLESHOOTING.md
+**Location:** docs/  
+**Purpose:** Common issues & solutions  
+**Contains:** Connection issues, DB problems, DAG issues, performance fixes
+
+---
+
+## 🔗 Cross-Reference Map
+
+```
+README.md (Main Entry)
+├── → Installation Guide (setup)
+├── → Architecture (how it works)
+├── → DAGs Reference (pipelines)
+├── → Database Schema (data)
+└── → Dashboards (analytics)
+
+Each documentation page:
+├── → Related documents (in text)
+├── → Troubleshooting (when stuck)
+├── → Scripts Reference (how-to)
+└── → Back to README or Index
+```
+
+---
+
+## 💡 Tips for Effective Documentation Use
+
+### Reading Efficiently
+- **Skim headers first** - Get overview before reading details
+- **Use table of contents** - Jump directly to your topic
+- **Search with Ctrl+F** - Find keywords quickly
+- **Follow "Related" links** - Navigate between topics
+
+### Finding Information Fast
+1. **Use this index first** - Find document by problem
+2. **Check Troubleshooting** - Most common answers are there
+3. **Look for examples** - Often clearer than explanations
+4. **Review related documents** - For complete picture
+
+### When Stuck
+1. Search [Troubleshooting](TROUBLESHOOTING.md)
+2. Check relevant document (e.g., DAGs for DAG issues)
+3. Review script logs: `docker-compose logs <service>`
+4. Check database logs: `psql` + sample queries
+5. Ask team with log excerpts
+
+---
+
+## 📞 Support Resources
+
+### Quick Diagnostic Commands
+
+```bash
+# System status
+docker-compose ps
+
+# View logs
+docker-compose logs airflow-scheduler | tail -50
+
+# Database query
+psql -h localhost -U postgres -d warehouse -p 5433
+
+# Airflow UI
+# http://localhost:8080
+```
+
+### Documentation Search Tips
+
+- **By Error Message:** Search [Troubleshooting](TROUBLESHOOTING.md)
+- **By Component:** Search specific document (DAGS, Dashboards, etc.)
+- **By Keyword:** Use browser Find (Ctrl+F)
+- **By Topic:** Use this index
+
+---
+
+## 📊 Documentation Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Documents** | 8 pages |
+| **Total Words** | ~25,000 |
+| **Code Examples** | 50+ |
+| **Sample Queries** | 30+ |
+| **Troubleshooting Sections** | 25+ |
+| **Tables Listed** | 90+ |
+
+---
+
+**Last Updated:** April 2026  
+**Current Version:** 1.0  
+**Status:** Complete ✅
+
+👈 **Back to:** [Main README](../README.md)
