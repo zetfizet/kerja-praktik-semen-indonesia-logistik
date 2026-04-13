@@ -96,4 +96,3 @@ compose.example.yml Template compose aman tanpa secret
 - [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
 - [docs/PIPELINE_SETUP.md](docs/PIPELINE_SETUP.md)
 - [docs/SOFT_DELETE_IMPLEMENTATION.md](docs/SOFT_DELETE_IMPLEMENTATION.md)
-- [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
