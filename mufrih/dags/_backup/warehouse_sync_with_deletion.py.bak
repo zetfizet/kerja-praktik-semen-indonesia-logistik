@@ -1,0 +1,698 @@
+"""
+Warehouse Sync DAG with DELETION TRACKING - Enhanced Version
+==============================================================
+
+NEW FEATURES:
+✅ #1: Soft Delete Support - Auto-sync deleted_at column
+✅ #2: Hard Delete Detection - Find orphaned records in warehouse
+✅ #3: Deletion Strategy - Mark as deleted or remove from warehouse
+
+Supports BOTH:
+- Soft Delete (deleted_at column in source)
+- Hard Delete (record removed from source)
+
+Total: 88 tables + deletion tracking
+Schedule: 2 AM daily
+"""
+
+from airflow import DAG
+from airflow.providers.standard.operators.python import PythonOperator
+from airflow.providers.standard.operators.bash import BashOperator
+from datetime import datetime, timedelta
+import psycopg2
+import json
+from pathlib import Path
+
+# Default DAG arguments
+default_args = {
+    'owner': 'data_team',
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+    'start_date': datetime(2026, 2, 6),
+}
+
+# DAG definition
+dag = DAG(
+    'warehouse_sync_with_deletion',
+    default_args=default_args,
+    description='🗑️ Warehouse sync with soft/hard deletion tracking',
+    schedule='0 2 * * *',
+    catchup=False,
+    tags=['warehouse', 'analytics', 'deletion', 'optimized'],
+)
+
+# Source database credentials
+SOURCE_DB_CONFIG = {
+    'host': 'devom.silog.co.id',
+    'database': 'om',
+    'user': 'om',
+    'password': 'om',
+}
+
+# Target (warehouse) database credentials
+TARGET_DB_CONFIG = {
+    'host': 'postgres',
+    'database': 'warehouse',
+    'user': 'airflow',
+    'password': 'airflow',
+    'port': 5432,
+}
+
+CACHE_FILE = Path('/opt/airflow/dags/.warehouse_metadata_cache.json')
+
+# ============================================================================
+# DELETION TRACKING CONFIG
+# ============================================================================
+
+# Tables yang support SOFT DELETE (punya kolom deleted_at di source)
+SOFT_DELETE_TABLES = {
+    'customers',
+    'orders', 
+    'produk',
+    'sales_order',
+    'delivery_order',
+    'daftar_user',
+    # Add more tables yang punya deleted_at column
+}
+
+# Strategy untuk handle HARD DELETE (data benar-benar hilang dari source)
+# Options: 'mark_deleted', 'physical_delete', or 'ignore'
+HARD_DELETE_STRATEGY = 'mark_deleted'  # Recommended
+
+# Tables yang mau di-track untuk hard deletion
+# Biasanya: tables penting untuk analytics/ML
+TRACK_HARD_DELETE_TABLES = {
+    'customers',
+    'orders',
+    'produk',
+    'sales_order',
+    # Add more critical tables
+}
+
+
+# Table mappings (sama seperti sebelumnya)
+TABLE_MAPPINGS = {
+    'alert_geofence': ('public', 'alert_geofence', 'diubah_pada'),
+    'armada_perangkat': ('public', 'armada_perangkat', None),
+    'armada_tms': ('public', 'armada_tms', 'diubah_pada'),
+    'atribut': ('public', 'atribut', None),
+    'atribut_produk': ('public', 'atribut_produk', None),
+    'attachment': ('public', 'attachment', 'diubah_pada'),
+    'attachment_armada': ('public', 'attachment_armada', None),
+    'attachment_chat': ('public', 'attachment_chat', None),
+    'attachment_driver': ('public', 'attachment_driver', None),
+    'attachment_gudang': ('public', 'attachment_gudang', None),
+    'attachment_pengembalian': ('public', 'attachment_pengembalian', None),
+    'attachment_perangkat': ('public', 'attachment_perangkat', None),
+    'attachment_qc': ('public', 'attachment_qc', None),
+    'bank': ('public', 'bank', 'diubah_pada'),
+    'chat_room': ('public', 'chat_room', 'dibuat_pada'),
+    'customers': ('public', 'customers', 'created_at'),
+    'daftar_user': ('public', 'daftar_user', 'diubah_pada'),
+    'delivery_order': ('public', 'delivery_order', None),
+    'detail_do': ('public', 'detail_do', None),
+    'detail_po': ('public', 'detail_po', None),
+    'detail_qc': ('public', 'detail_qc', 'diubah_pada'),
+    'detail_sm': ('public', 'detail_sm', None),
+    'detail_so': ('public', 'detail_so', 'diubah_pada'),
+    'driver_armada': ('public', 'driver_armada', None),
+    'geofence': ('public', 'geofence', 'diubah_pada'),
+    'gudang': ('public', 'gudang', 'diubah_pada'),
+    'jenis_armada': ('public', 'jenis_armada', 'diubah_pada'),
+    'jenis_file': ('public', 'jenis_file', 'diubah_pada'),
+    'jenis_insiden': ('public', 'jenis_insiden', 'diubah_pada'),
+    'jenis_notifikasi': ('public', 'jenis_notifikasi', 'diubah_pada'),
+    'jenis_order': ('public', 'jenis_order', None),
+    'jenis_satuan': ('public', 'jenis_satuan', 'diubah_pada'),
+    'jenis_transaksi': ('public', 'jenis_transaksi', 'diubah_pada'),
+    'kategori_produk': ('public', 'kategori_produk', 'diubah_pada'),
+    'kontak_darurat': ('public', 'kontak_darurat', 'diubah_pada'),
+    'konversi': ('public', 'konversi', None),
+    'kriteria_produk': ('public', 'kriteria_produk', 'diubah_pada'),
+    'language': ('public', 'language', None),
+    'language_text': ('public', 'language_text', None),
+    'laporan_darurat': ('public', 'laporan_darurat', 'diubah_pada'),
+    'laporan_pengemudi': ('public', 'laporan_pengemudi', 'diubah_pada'),
+    'locations': ('public', 'locations', 'created_at'),
+    'log_aktifitas_driver': ('public', 'log_aktifitas_driver', 'diubah_pada'),
+    'log_chat': ('public', 'log_chat', 'diubah_pada'),
+    'log_panggilan': ('public', 'log_panggilan', 'diubah_pada'),
+    'log_perangkat': ('public', 'log_perangkat', 'diubah_pada'),
+    'log_perjalanan_armada': ('public', 'log_perjalanan_armada', 'diubah_pada'),
+    'log_sensor': ('public', 'log_sensor', 'diubah_pada'),
+    'log_service': ('public', 'log_service', 'diubah_pada'),
+    'lokasi_rak': ('public', 'lokasi_rak', 'diubah_pada'),
+    'mata_uang': ('public', 'mata_uang', 'diubah_pada'),
+    'metode_pembayaran': ('public', 'metode_pembayaran', 'diubah_pada'),
+    'notifikasi': ('public', 'notifikasi', 'diubah_pada'),
+    'order_tms': ('public', 'order_tms', 'dibuat_pada'),
+    'orders': ('public', 'orders', 'diubah_pada'),
+    'parent_armada': ('public', 'parent_armada', 'diubah_pada'),
+    'pembayaran_fee': ('public', 'pembayaran_fee', 'diubah_pada'),
+    'pengembalian': ('public', 'pengembalian', None),
+    'pengingat_pemeliharaan_armada': ('public', 'pengingat_pemeliharaan_armada', 'diubah_pada'),
+    'perangkat': ('public', 'perangkat', None),
+    'perangkat_gps_driver': ('public', 'perangkat_gps_driver', 'diubah_pada'),
+    'produk': ('public', 'produk', 'diubah_pada'),
+    'produk_gudang': ('public', 'produk_gudang', None),
+    'purchase_order': ('public', 'purchase_order', None),
+    'quality_control': ('public', 'quality_control', 'diubah_pada'),
+    'rating': ('public', 'rating', 'diubah_pada'),
+    'rekening_driver': ('public', 'rekening_driver', 'diubah_pada'),
+    'role': ('public', 'role', 'diubah_pada'),
+    'room_last_read': ('public', 'room_last_read', None),
+    'room_members': ('public', 'room_members', None),
+    'rute': ('public', 'rute', None),
+    'rute_perangkat': ('public', 'rute_perangkat', 'diubah_pada'),
+    'sales_order': ('public', 'sales_order', None),
+    'satuan': ('public', 'satuan', 'diubah_pada'),
+    'status_armada': ('public', 'status_armada', 'diubah_pada'),
+    'status_gudang': ('public', 'status_gudang', None),
+    'status_order': ('public', 'status_order', None),
+    'status_qc': ('public', 'status_qc', None),
+    'status_user': ('public', 'status_user', 'diubah_pada'),
+    'stok': ('public', 'stok', 'diubah_pada'),
+    'stok_movement': ('public', 'stok_movement', 'diubah_pada'),
+    'suppliers': ('public', 'suppliers', 'created_at'),
+    'tempat_istirahat_driver': ('public', 'tempat_istirahat_driver', 'diubah_pada'),
+    'tenant': ('public', 'tenant', 'diubah_pada'),
+    'units': ('public', 'units', 'created_at'),
+    'user_role': ('public', 'user_role', None),
+    'user_tenant': ('public', 'user_tenant', None),
+    'z_test': ('public', 'z_test', None),
+}
+
+
+# ============================================================================
+# Helper Functions (Metadata caching - reuse from optimized version)
+# ============================================================================
+
+def load_metadata_cache():
+    """Load cached metadata if available"""
+    if CACHE_FILE.exists():
+        try:
+            with open(CACHE_FILE, 'r') as f:
+                cache = json.load(f)
+                print(f"✓ Loaded metadata cache ({len(cache.get('primary_keys', {}))} tables)")
+                return cache
+        except Exception as e:
+            print(f"⚠ Failed to load cache: {e}")
+    return None
+
+def save_metadata_cache(metadata):
+    """Save metadata to cache file"""
+    try:
+        CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(CACHE_FILE, 'w') as f:
+            json.dump(metadata, f, indent=2, default=str)
+        print(f"✓ Metadata cached for next run")
+    except Exception as e:
+        print(f"⚠ Failed to save cache: {e}")
+
+def get_all_primary_keys(source_conn):
+    """Get primary keys for ALL tables in one query"""
+    cursor = source_conn.cursor()
+    cursor.execute("""
+        SELECT 
+            t.relname as table_name,
+            a.attname as pk_column
+        FROM pg_index i
+        JOIN pg_class t ON t.oid = i.indrelid
+        JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+        WHERE i.indisprimary 
+        AND t.relnamespace = 'public'::regnamespace
+    """)
+    
+    pk_map = {}
+    for row in cursor.fetchall():
+        table_name, pk_col = row
+        pk_map[table_name] = pk_col
+    
+    cursor.close()
+    return pk_map
+
+def get_all_columns_info(source_conn, table_list):
+    """Get column info for multiple tables in one query"""
+    cursor = source_conn.cursor()
+    table_names = ','.join([f"'{t}'" for t in table_list])
+    
+    cursor.execute(f"""
+        SELECT 
+            table_name,
+            array_agg(column_name::text ORDER BY ordinal_position) as columns,
+            array_agg(data_type::text ORDER BY ordinal_position) as types,
+            array_agg(COALESCE(character_maximum_length, 0) ORDER BY ordinal_position) as lengths,
+            array_agg((is_nullable = 'NO')::text ORDER BY ordinal_position) as not_nulls
+        FROM information_schema.columns
+        WHERE table_name IN ({table_names})
+        AND table_schema = 'public'
+        GROUP BY table_name
+    """)
+    
+    cols_map = {}
+    for row in cursor.fetchall():
+        cols_map[row[0]] = {
+            'columns': row[1],
+            'types': row[2],
+            'lengths': row[3],
+            'not_nulls': row[4]
+        }
+    
+    cursor.close()
+    return cols_map
+
+def check_existing_tables(target_conn, target_schema):
+    """Check which tables exist in target"""
+    cursor = target_conn.cursor()
+    cursor.execute(f"""
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = '{target_schema}'
+        AND table_type = 'BASE TABLE'
+    """)
+    existing = {row[0] for row in cursor.fetchall()}
+    cursor.close()
+    return existing
+
+
+# ============================================================================
+# NEW: Deletion Tracking Functions
+# ============================================================================
+
+def ensure_deleted_at_column(target_conn, target_schema, target_table):
+    """
+    Ensure warehouse table has deleted_at column for tracking deletions
+    Only add if table tracks hard deletes
+    """
+    if target_table not in TRACK_HARD_DELETE_TABLES:
+        return
+    
+    cursor = target_conn.cursor()
+    try:
+        # Check if column exists
+        cursor.execute(f"""
+            SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_schema = '{target_schema}' 
+            AND table_name = '{target_table}'
+            AND column_name = 'deleted_at'
+        """)
+        
+        if cursor.fetchone() is None:
+            # Add deleted_at column
+            cursor.execute(f"""
+                ALTER TABLE {target_schema}.{target_table} 
+                ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL
+            """)
+            target_conn.commit()
+            print(f"  ✓ Added deleted_at column to {target_table}")
+    except Exception as e:
+        print(f"  ⚠ Could not add deleted_at to {target_table}: {e}")
+    finally:
+        cursor.close()
+
+
+def detect_hard_deletes(source_conn, target_conn, source_table, target_schema, target_table, primary_key):
+    """
+    Detect records that exist in warehouse but missing from source (hard deleted)
+    Returns list of PKs that were deleted
+    """
+    if not primary_key or target_table not in TRACK_HARD_DELETE_TABLES:
+        return []
+    
+    source_cursor = source_conn.cursor()
+    target_cursor = target_conn.cursor()
+    
+    try:
+        # Get all PKs from source
+        source_cursor.execute(f"SELECT {primary_key} FROM {source_table}")
+        source_pks = {row[0] for row in source_cursor.fetchall()}
+        
+        # Get all PKs from warehouse (exclude already soft-deleted)
+        if target_table in SOFT_DELETE_TABLES:
+            target_cursor.execute(f"""
+                SELECT {primary_key} 
+                FROM {target_schema}.{target_table}
+                WHERE deleted_at IS NULL
+            """)
+        else:
+            target_cursor.execute(f"SELECT {primary_key} FROM {target_schema}.{target_table}")
+        
+        target_pks = {row[0] for row in target_cursor.fetchall()}
+        
+        # Find missing PKs (exist in warehouse but not in source)
+        deleted_pks = target_pks - source_pks
+        
+        return list(deleted_pks)
+    
+    except Exception as e:
+        print(f"  ⚠ Error detecting deletes for {target_table}: {e}")
+        return []
+    finally:
+        source_cursor.close()
+        target_cursor.close()
+
+
+def handle_hard_deletes(target_conn, target_schema, target_table, primary_key, deleted_pks):
+    """
+    Handle hard-deleted records based on strategy
+    """
+    if not deleted_pks:
+        return 0
+    
+    cursor = target_conn.cursor()
+    
+    try:
+        pks_str = ','.join([f"'{pk}'" if isinstance(pk, str) else str(pk) for pk in deleted_pks])
+        
+        if HARD_DELETE_STRATEGY == 'mark_deleted':
+            # Mark as deleted (soft delete in warehouse)
+            cursor.execute(f"""
+                UPDATE {target_schema}.{target_table}
+                SET deleted_at = NOW()
+                WHERE {primary_key} IN ({pks_str})
+                AND deleted_at IS NULL
+            """)
+            
+        elif HARD_DELETE_STRATEGY == 'physical_delete':
+            # Actually delete from warehouse
+            cursor.execute(f"""
+                DELETE FROM {target_schema}.{target_table}
+                WHERE {primary_key} IN ({pks_str})
+            """)
+        
+        target_conn.commit()
+        affected = cursor.rowcount
+        
+        if affected > 0:
+            print(f"  🗑️ {target_table}: Handled {affected} deletions [{HARD_DELETE_STRATEGY}]")
+        
+        return affected
+    
+    except Exception as e:
+        print(f"  ✗ Error handling deletes for {target_table}: {e}")
+        target_conn.rollback()
+        return 0
+    finally:
+        cursor.close()
+
+
+# ============================================================================
+# Enhanced Sync Function with Deletion Support
+# ============================================================================
+
+def sync_table_with_deletion(source_conn, target_conn, source_table, target_schema, 
+                             target_table, sync_column, metadata):
+    """
+    Enhanced sync function that handles:
+    1. Regular INSERT/UPDATE (existing logic)
+    2. Soft deletes (auto-synced via deleted_at column)
+    3. Hard deletes (detect missing records)
+    """
+    try:
+        source_cursor = source_conn.cursor()
+        target_cursor = target_conn.cursor()
+        
+        # Get column info from source
+        source_cursor.execute(f"SELECT * FROM {source_table} LIMIT 0")
+        columns = [desc[0] for desc in source_cursor.description]
+        
+        # Get primary key from cached metadata
+        primary_key = metadata['primary_keys'].get(source_table)
+        
+        # Check if table exists
+        table_exists = target_table in metadata['existing_tables']
+        
+        # Create table if doesn't exist (same logic as before)
+        if not table_exists:
+            cols_info = metadata['columns_info'].get(source_table)
+            
+            if cols_info:
+                col_defs = []
+                for i, col_name in enumerate(cols_info['columns']):
+                    data_type = cols_info['types'][i]
+                    max_len = cols_info['lengths'][i]
+                    is_not_null = cols_info['not_nulls'][i] == 'true'
+                    
+                    col_def = f"{col_name} {data_type}"
+                    if max_len > 0 and data_type in ('character varying', 'character'):
+                        col_def += f"({max_len})"
+                    if is_not_null:
+                        col_def += " NOT NULL"
+                    col_defs.append(col_def)
+                
+                create_sql = f"CREATE TABLE {target_schema}.{target_table} ({', '.join(col_defs)})"
+                target_cursor.execute(create_sql)
+                
+                # Add primary key
+                if primary_key:
+                    try:
+                        target_cursor.execute(f"""
+                            ALTER TABLE {target_schema}.{target_table} 
+                            ADD PRIMARY KEY ({primary_key})
+                        """)
+                    except Exception:
+                        pass
+                
+                target_conn.commit()
+                metadata['existing_tables'].add(target_table)
+        
+        # Ensure deleted_at column exists for hard delete tracking
+        ensure_deleted_at_column(target_conn, target_schema, target_table)
+        
+        # Regular sync logic (INSERT/UPDATE)
+        if sync_column is None or primary_key is None:
+            # FULL SYNC
+            target_cursor.execute(f"TRUNCATE TABLE {target_schema}.{target_table}")
+            source_cursor.execute(f"SELECT * FROM {source_table}")
+            rows = source_cursor.fetchall()
+            sync_type = "FULL"
+        else:
+            # INCREMENTAL SYNC
+            target_cursor.execute(f"""
+                SELECT MAX({sync_column}) FROM {target_schema}.{target_table}
+            """)
+            max_value = target_cursor.fetchone()[0]
+            
+            if max_value is None:
+                source_cursor.execute(f"SELECT * FROM {source_table}")
+                sync_type = "INITIAL"
+            else:
+                source_cursor.execute(f"""
+                    SELECT * FROM {source_table} 
+                    WHERE {sync_column} > %s
+                    ORDER BY {sync_column}
+                """, (max_value,))
+                sync_type = "INCREMENTAL"
+            
+            rows = source_cursor.fetchall()
+        
+        # Insert/Update data
+        inserted_count = 0
+        if rows:
+            col_names = ', '.join(columns)
+            placeholders = ', '.join(['%s'] * len(columns))
+            
+            if sync_column is None or primary_key is None:
+                insert_query = f"INSERT INTO {target_schema}.{target_table} ({col_names}) VALUES ({placeholders})"
+                target_cursor.executemany(insert_query, rows)
+            else:
+                update_cols = ', '.join([f"{col} = EXCLUDED.{col}" for col in columns if col != primary_key])
+                insert_query = f"""
+                    INSERT INTO {target_schema}.{target_table} ({col_names}) 
+                    VALUES ({placeholders})
+                    ON CONFLICT ({primary_key}) DO UPDATE SET {update_cols}
+                """
+                target_cursor.executemany(insert_query, rows)
+            
+            target_conn.commit()
+            inserted_count = len(rows)
+        
+        # Detect and handle hard deletes (only for incremental tables with PKs)
+        deleted_count = 0
+        if table_exists and primary_key and sync_column and target_table in TRACK_HARD_DELETE_TABLES:
+            deleted_pks = detect_hard_deletes(
+                source_conn, target_conn, 
+                source_table, target_schema, target_table, primary_key
+            )
+            
+            if deleted_pks:
+                deleted_count = handle_hard_deletes(
+                    target_conn, target_schema, target_table, primary_key, deleted_pks
+                )
+        
+        # Print summary
+        msg = f"{target_table}: +{inserted_count} rows"
+        if deleted_count > 0:
+            msg += f", -{deleted_count} deleted"
+        msg += f" [{sync_type}]"
+        
+        print(f"  ✓ {msg}")
+        
+        source_cursor.close()
+        target_cursor.close()
+        
+        return True, msg
+    
+    except Exception as e:
+        error_msg = f"ERROR {target_table}: {str(e)}"
+        print(f"  ✗ {error_msg}")
+        return False, error_msg
+
+
+# ============================================================================
+# Main Sync Function
+# ============================================================================
+
+def sync_all_tables_with_deletion():
+    """
+    Main sync function with deletion tracking
+    """
+    import time
+    start_time = time.time()
+    
+    print("=" * 70)
+    print("🗑️ Warehouse Sync with Deletion Tracking - Starting...")
+    print("=" * 70)
+    print(f"Soft delete tables: {len(SOFT_DELETE_TABLES)}")
+    print(f"Hard delete tracking: {len(TRACK_HARD_DELETE_TABLES)}")
+    print(f"Delete strategy: {HARD_DELETE_STRATEGY}")
+    
+    # Load cached metadata
+    cached_metadata = load_metadata_cache()
+    
+    # Establish connections
+    print("\n🔗 Establishing connections...")
+    source_conn = psycopg2.connect(**SOURCE_DB_CONFIG)
+    target_conn = psycopg2.connect(**TARGET_DB_CONFIG)
+    print("✓ Connected to source & target")
+    
+    # Fetch or use cached metadata
+    if cached_metadata and cached_metadata.get('version') == '1.0':
+        print("\n📦 Using cached metadata...")
+        metadata = cached_metadata
+        metadata['existing_tables'] = check_existing_tables(target_conn, 'public')
+    else:
+        print("\n📊 Fetching metadata...")
+        metadata = {
+            'version': '1.0',
+            'primary_keys': get_all_primary_keys(source_conn),
+            'columns_info': get_all_columns_info(source_conn, list(TABLE_MAPPINGS.keys())),
+            'existing_tables': check_existing_tables(target_conn, 'public'),
+        }
+        save_metadata_cache(metadata)
+    
+    # Sync all tables
+    results = {
+        'success': [],
+        'failed': [],
+    }
+    
+    print(f"\n📊 Syncing {len(TABLE_MAPPINGS)} tables...")
+    processed = 0
+    
+    for source_table, (target_schema, target_table, sync_column) in TABLE_MAPPINGS.items():
+        processed += 1
+        
+        if processed % 10 == 1:
+            print(f"\n[{processed}/{len(TABLE_MAPPINGS)}] Processing...")
+        
+        success, msg = sync_table_with_deletion(
+            source_conn, target_conn, 
+            source_table, target_schema, target_table, sync_column,
+            metadata
+        )
+        
+        if success:
+            results['success'].append(msg)
+        else:
+            results['failed'].append(msg)
+    
+    # Close connections
+    source_conn.close()
+    target_conn.close()
+    
+    elapsed = time.time() - start_time
+    
+    # Summary
+    incremental_count = sum(1 for msg in results['success'] if '[INCREMENTAL]' in msg)
+    full_sync_count = sum(1 for msg in results['success'] if '[FULL]' in msg)
+    deletion_count = sum(1 for msg in results['success'] if 'deleted' in msg.lower())
+    
+    print("\n" + "=" * 70)
+    print("🗑️ SYNC COMPLETE WITH DELETION TRACKING!")
+    print("=" * 70)
+    print(f"⏱️  Total time: {elapsed:.1f} seconds")
+    print(f"✅ Success: {len(results['success'])} tables")
+    print(f"❌ Failed: {len(results['failed'])} tables")
+    print(f"🔄 Incremental: {incremental_count} tables")
+    print(f"📦 Full sync: {full_sync_count} tables")
+    print(f"🗑️ Deletions tracked: {deletion_count} tables")
+    
+    if results['failed']:
+        print("\n❌ Failed tables:")
+        for msg in results['failed']:
+            print(f"  - {msg}")
+    
+    return {
+        'success_count': len(results['success']),
+        'failed_count': len(results['failed']),
+        'incremental_count': incremental_count,
+        'full_sync_count': full_sync_count,
+        'deletion_count': deletion_count,
+        'elapsed_seconds': round(elapsed, 1),
+    }
+
+
+# ============================================================================
+# Airflow Tasks
+# ============================================================================
+
+sync_task = PythonOperator(
+    task_id='sync_warehouse_with_deletion',
+    python_callable=sync_all_tables_with_deletion,
+    dag=dag,
+)
+
+verify_task = BashOperator(
+    task_id='verify_warehouse_data',
+    bash_command='''
+    export PGPASSWORD='airflow'
+    echo "=== Warehouse Verification ==="
+    psql -h postgres -U airflow -d warehouse -c "
+    SELECT 
+        COUNT(*) as total_tables,
+        pg_size_pretty(SUM(pg_total_relation_size(quote_ident('public')||'.'||quote_ident(table_name)))) as total_size
+    FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    AND table_type = 'BASE TABLE';
+    "
+    
+    echo ""
+    echo "=== Deletion Tracking Summary ==="
+    psql -h postgres -U airflow -d warehouse -c "
+    SELECT 
+        'customers' as table_name,
+        COUNT(*) as total,
+        COUNT(*) FILTER (WHERE deleted_at IS NULL) as active,
+        COUNT(*) FILTER (WHERE deleted_at IS NOT NULL) as deleted
+    FROM customers
+    UNION ALL
+    SELECT 
+        'orders',
+        COUNT(*),
+        COUNT(*) FILTER (WHERE deleted_at IS NULL),
+        COUNT(*) FILTER (WHERE deleted_at IS NOT NULL)
+    FROM orders
+    WHERE EXISTS (SELECT 1 FROM information_schema.columns 
+                  WHERE table_name = 'orders' AND column_name = 'deleted_at');
+    " 2>/dev/null || echo "No deletion tracking columns found yet"
+    
+    echo ""
+    echo "✓ Warehouse verification complete!"
+    ''',
+    dag=dag,
+)
+
+# Set task dependencies
+sync_task >> verify_task

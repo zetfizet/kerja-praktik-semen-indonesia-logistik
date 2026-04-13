@@ -1,0 +1,23 @@
+"""
+Config package for ETL DAGs
+"""
+
+from .tables_config import (
+    TABLES_TO_SYNC,
+    ETL_CONFIG,
+    ALERT_CONFIG,
+    CONNECTION_IDS,
+    WAREHOUSE_SCHEMAS,
+    TRANSFORMATION_QUERIES,
+    DATA_QUALITY_THRESHOLDS,
+)
+
+__all__ = [
+    "TABLES_TO_SYNC",
+    "ETL_CONFIG",
+    "ALERT_CONFIG",
+    "CONNECTION_IDS",
+    "WAREHOUSE_SCHEMAS",
+    "TRANSFORMATION_QUERIES",
+    "DATA_QUALITY_THRESHOLDS",
+]

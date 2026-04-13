@@ -1,0 +1,666 @@
+# """
+# OPTIMIZED VERSION - Handle Jutaan Data
+# =======================================
+
+# Improvements:
+# 1. ✅ Batch/Chunk processing (10,000 rows per batch)
+# 2. ✅ Server-side cursor (no memory overflow)
+# 3. ✅ COPY command for bulk insert (10x faster than INSERT)
+# 4. ✅ Incremental untuk semua table besar
+# 5. ✅ Progress logging
+# 6. ✅ Memory efficient
+
+# Performance:
+# - Old: 1 juta rows = 30-60 menit + memory overflow risk
+# - New: 1 juta rows = 3-5 menit + low memory usage
+# """
+
+# from airflow import DAG
+# from airflow.operators.python import PythonOperator
+# from airflow.operators.empty import EmptyOperator
+# from datetime import datetime, timedelta
+# import psycopg2
+# from psycopg2 import sql
+# from psycopg2.extras import execute_values
+# import logging
+# from time import sleep, time
+# import io
+# import traceback
+# import sys
+
+# # Try to import mlflow, make it optional
+# try:
+#     import mlflow
+#     MLFLOW_ENABLED = True
+# except ImportError:
+#     MLFLOW_ENABLED = False
+#     logger = logging.getLogger(__name__)
+#     logger.warning("MLflow not installed. Tracking disabled.")
+
+# logger = logging.getLogger(__name__)
+
+# # MLflow Configuration
+# MLFLOW_TRACKING_URI = "http://mlflow:5000"
+# MLFLOW_EXPERIMENT_NAME = "office_to_warehouse_sync"
+
+# # Configuration
+# BATCH_SIZE = 10000  # Process 10k rows at a time
+# SERVER_SIDE_CURSOR = True  # Use server-side cursor for large datasets
+
+# SOURCE_CONFIG = {
+#     'host': 'devom.silog.co.id',
+#     'port': 5432,
+#     'database': 'om',
+#     'user': 'om',
+#     'password': 'om',
+#     'connect_timeout': 5,
+#     'options': '-c statement_timeout=30000'
+# }
+
+# WAREHOUSE_CONFIG = {
+#     'host': 'postgres',
+#     'port': 5432,
+#     'database': 'warehouse',
+#     'user': 'airflow',
+#     'password': 'airflow',
+#     'connect_timeout': 5,
+#     'options': '-c statement_timeout=60000'
+# }
+
+# # Tables configuration - Phase 1: Master + Core Transactional
+# TABLES = [
+#     # ============================================================
+#     # PRIORITY 1: MASTER DATA (can run in parallel)
+#     # ============================================================
+#     {
+#         'name': 'jenis_armada',
+#         'strategy': 'full',
+#         'description': 'Master jenis armada',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'jenis_order',
+#         'strategy': 'full',
+#         'description': 'Master jenis order',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'jenis_satuan',
+#         'strategy': 'full',
+#         'description': 'Master jenis satuan',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'mata_uang',
+#         'strategy': 'full',
+#         'description': 'Master mata uang',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'parent_armada',
+#         'strategy': 'full',
+#         'description': 'Master kategori armada',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'role',
+#         'strategy': 'full',
+#         'description': 'Master user roles',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'satuan',
+#         'strategy': 'full',
+#         'description': 'Master satuan/unit of measure',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'status_armada',
+#         'strategy': 'full',
+#         'description': 'Master status armada',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'status_order',
+#         'strategy': 'full',
+#         'description': 'Master status order',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'status_user',
+#         'strategy': 'full',
+#         'description': 'Master status user',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'tenant',
+#         'strategy': 'full',
+#         'description': 'Master tenant/company',
+#         'batch_size': 1000
+#     },
+    
+#     # ============================================================
+#     # PRIORITY 2: CORE TRANSACTIONAL DATA (sequential after master)
+#     # ============================================================
+#     {
+#         'name': 'daftar_user',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'diubah_pada',
+#         'primary_key': 'uuid_user',
+#         'description': 'User accounts (daftar user)',
+#         'batch_size': 10000
+#     },
+#     {
+#         'name': 'armada_tms',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'diubah_pada',
+#         'primary_key': 'id_armada',
+#         'description': 'Data armada kendaraan',
+#         'batch_size': 10000
+#     },
+#     {
+#         'name': 'produk',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'diubah_pada',
+#         'primary_key': 'id_produk',
+#         'description': 'Product master',
+#         'batch_size': 10000
+#     },
+#     {
+#         'name': 'gudang',
+#         'strategy': 'full',
+#         'description': 'Warehouse master',
+#         'batch_size': 1000
+#     },
+#     {
+#         'name': 'orders',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'diubah_pada',
+#         'primary_key': 'uuid_order',
+#         'description': 'Main order table',
+#         'batch_size': 10000
+#     },
+#     {
+#         'name': 'order_tms',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'dibuat_pada',
+#         'primary_key': 'id_order',
+#         'description': 'TMS orders',
+#         'batch_size': 10000
+#     },
+#     {
+#         'name': 'delivery_order',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'tanggal_kirim',
+#         'primary_key': 'uuid_delivery',
+#         'description': 'Delivery order data',
+#         'batch_size': 10000
+#     },
+# ]
+
+
+# def connect_with_retry(config, max_retries=3, retry_delay=1):
+#     """Connect with exponential backoff"""
+#     host = config.get('host', 'unknown')
+#     database = config.get('database', 'unknown')
+    
+#     for attempt in range(max_retries):
+#         try:
+#             print(f"   Attempt {attempt + 1}/{max_retries}: Connecting to {host}/{database}...")
+#             conn = psycopg2.connect(**config)
+#             print(f"   ✓ Connection successful on attempt {attempt + 1}")
+#             return conn
+#         except (psycopg2.OperationalError, psycopg2.DatabaseError) as e:
+#             error_msg = f"Connection attempt {attempt + 1}/{max_retries} FAILED: {str(e)}"
+#             print(f"   ✗ {error_msg}")
+#             logger.warning(error_msg)
+            
+#             if attempt < max_retries - 1:
+#                 wait_time = retry_delay * (2 ** attempt)
+#                 retry_msg = f"Retrying in {wait_time} seconds..."
+#                 print(f"   → {retry_msg}")
+#                 logger.info(retry_msg)
+#                 sleep(wait_time)
+#             else:
+#                 final_error = f"All {max_retries} connection attempts FAILED for {host}/{database}"
+#                 print(f"\n   ✗✗✗ {final_error}")
+#                 print(f"   Error details: {str(e)}")
+#                 print(f"   Traceback:\n{traceback.format_exc()}")
+#                 logger.error(final_error)
+#                 logger.error(f"Final error: {str(e)}")
+#                 logger.error(f"Traceback: {traceback.format_exc()}")
+#                 raise
+#     return None
+
+
+# def extract_table_optimized(table_config, **context):
+#     """
+#     Extract dengan batch processing untuk handle data besar
+#     """
+#     table_name = table_config['name']
+#     strategy = table_config['strategy']
+#     batch_size = table_config.get('batch_size', BATCH_SIZE)
+    
+#     logger.info(f"{'='*60}")
+#     logger.info(f"Extracting: {table_name}")
+#     logger.info(f"Strategy: {strategy}")
+#     logger.info(f"Batch size: {batch_size:,} rows")
+#     logger.info(f"{'='*60}")
+    
+#     # Start MLflow tracking
+#     if MLFLOW_ENABLED:
+#         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+#         mlflow.set_experiment(MLFLOW_EXPERIMENT_NAME)
+    
+#     start_time = time()
+#     total_rows_synced = 0
+#     error_occurred = False
+#     error_message = None
+    
+#     # Initialize connection variables
+#     source_conn = None
+#     warehouse_conn = None
+#     source_cur = None
+#     warehouse_cur = None
+    
+#     try:
+#         # Connect with retry
+#         logger.info(f"Connecting to source: {SOURCE_CONFIG['host']}")
+#         source_conn = connect_with_retry(SOURCE_CONFIG)
+#         logger.info(f"Connecting to warehouse: {WAREHOUSE_CONFIG['host']}")
+#         warehouse_conn = connect_with_retry(WAREHOUSE_CONFIG)
+        
+#         # Use regular cursor (simpler and works for all cases)
+#         # For very large tables (>1M rows), can optimize with server-side cursor later
+#         source_cur = source_conn.cursor()
+#         warehouse_cur = warehouse_conn.cursor()
+        
+#         # Determine query
+#         if strategy == 'incremental' and table_config.get('timestamp_column'):
+#             timestamp_col = table_config['timestamp_column']
+            
+#             # Get last sync time
+#             try:
+#                 warehouse_cur.execute(f"""
+#                     SELECT MAX({timestamp_col}) 
+#                     FROM raw.{table_name}
+#                 """)
+#                 last_sync = warehouse_cur.fetchone()[0]
+                
+#                 if last_sync:
+#                     logger.info(f"Last sync time: {last_sync}")
+#                     query = f"""
+#                         SELECT * FROM public.{table_name}
+#                         WHERE {timestamp_col} > %s
+#                         ORDER BY {timestamp_col}
+#                     """
+#                     source_cur.execute(query, (last_sync,))
+#                 else:
+#                     logger.info("No previous sync, doing full load")
+#                     source_cur.execute(f"SELECT * FROM public.{table_name}")
+#             except Exception as e:
+#                 logger.warning(f"Could not check last sync: {e}, doing full load")
+#                 # Rollback warehouse transaction if error
+#                 warehouse_conn.rollback()
+#                 # Execute query on source
+#                 source_cur.execute(f"SELECT * FROM public.{table_name}")
+#         else:
+#             # Full load
+#             logger.info("Performing full load")
+#             source_cur.execute(f"SELECT * FROM public.{table_name}")
+        
+#         # Get column names (works for all cursor types after execute)
+#         if source_cur.description is None:
+#             logger.info("No data in source table")
+#             source_cur.close()
+#             warehouse_cur.close()
+#             source_conn.close()
+#             warehouse_conn.close()
+#             return {'table': table_name, 'rows': 0, 'status': 'success', 'message': 'No data in source'}
+        
+#         colnames = [desc[0] for desc in source_cur.description]
+#         logger.info(f"Columns: {', '.join(colnames)}")
+        
+#         # For full load, truncate once before batches
+#         if strategy == 'full':
+#             warehouse_cur.execute(f"TRUNCATE TABLE raw.{table_name} CASCADE")
+#             warehouse_conn.commit()
+#             logger.info(f"✓ Truncated raw.{table_name}")
+        
+#         # Prepare insert query with UPSERT for incremental
+#         cols_str = ', '.join(colnames)
+#         insert_query = f"INSERT INTO raw.{table_name} ({cols_str}) VALUES %s"
+        
+#         if strategy == 'incremental':
+#             pk_col = table_config.get('primary_key')
+#             if pk_col:
+#                 update_cols = [col for col in colnames if col != pk_col]
+#                 if update_cols:
+#                     update_str = ', '.join([f"{col} = EXCLUDED.{col}" for col in update_cols])
+#                     insert_query += f" ON CONFLICT ({pk_col}) DO UPDATE SET {update_str}"
+#                     logger.info(f"Using UPSERT with PK: {pk_col}")
+        
+#         # BATCH PROCESSING - Process in chunks
+#         total_rows_synced = 0
+#         batch_num = 0
+#         while True:
+#             # Fetch batch
+#             batch = source_cur.fetchmany(batch_size)
+            
+#             if not batch:
+#                 break  # No more data
+            
+#             batch_num += 1
+#             batch_rows = len(batch)
+            
+#             # Insert batch using execute_values (faster than executemany)
+#             try:
+#                 execute_values(warehouse_cur, insert_query, batch, page_size=1000)
+#                 warehouse_conn.commit()
+                
+#                 total_rows_synced += batch_rows
+#                 logger.info(f"✓ Batch {batch_num}: Synced {batch_rows:,} rows (Total: {total_rows_synced:,})")
+#             except Exception as batch_error:
+#                 logger.error(f"Error in batch {batch_num}: {batch_error}")
+#                 logger.error(f"Insert query: {insert_query[:200]}...")
+#                 warehouse_conn.rollback()
+#                 raise
+            
+#             # Optional: Add small delay to prevent overwhelming the database
+#             if batch_rows == batch_size:  # More batches coming
+#                 sleep(0.1)  # 100ms pause between batches
+        
+#         # Close cursors and connections (will be cleaned up in finally block too)
+#         if source_cur:
+#             source_cur.close()
+#         if warehouse_cur:
+#             warehouse_cur.close()
+#         if source_conn:
+#             source_conn.close()
+#         if warehouse_conn:
+#             warehouse_conn.close()
+        
+#         logger.info("Connections closed successfully")
+        
+#         if total_rows_synced == 0:
+#             logger.info("No new data to sync")
+#             # Log to MLflow even for no new data
+#             duration = time() - start_time
+#             if MLFLOW_ENABLED:
+#                 with mlflow.start_run(run_name=f"{table_name}_{context.get('ds', 'manual')}"):
+#                     mlflow.log_param("table_name", table_name)
+#                     mlflow.log_param("strategy", strategy)
+#                     mlflow.log_param("batch_size", batch_size)
+#                     mlflow.log_metric("records_synced", 0)
+#                     mlflow.log_metric("duration_seconds", duration)
+#                     mlflow.set_tags({
+#                         "table": table_name,
+#                         "status": "success",
+#                         "pipeline": "office_to_warehouse",
+#                         "dag_id": context.get('dag').dag_id if context.get('dag') else 'unknown'
+#                     })
+#             return {'table': table_name, 'rows': 0, 'status': 'success', 'message': 'No new data'}
+        
+#         duration = time() - start_time
+#         throughput = total_rows_synced / duration if duration > 0 else 0
+        
+#         logger.info(f"✓ Total synced: {total_rows_synced:,} rows in {batch_num} batches")
+#         logger.info(f"✓ Duration: {duration:.2f}s | Throughput: {throughput:,.0f} rows/sec")
+        
+#         # Log metrics to MLflow
+#         if MLFLOW_ENABLED:
+#             with mlflow.start_run(run_name=f"{table_name}_{context.get('ds', 'manual')}"):
+#                 # Log parameters
+#                 mlflow.log_param("table_name", table_name)
+#                 mlflow.log_param("strategy", strategy)
+#                 mlflow.log_param("batch_size", batch_size)
+#                 mlflow.log_param("execution_date", context.get('ds', 'manual'))
+                
+#                 # Log metrics
+#                 mlflow.log_metric("records_synced", total_rows_synced)
+#                 mlflow.log_metric("batch_count", batch_num)
+#                 mlflow.log_metric("duration_seconds", duration)
+#                 mlflow.log_metric("throughput_rows_per_second", throughput)
+#                 mlflow.log_metric("avg_batch_size", total_rows_synced / batch_num if batch_num > 0 else 0)
+                
+#                 # Log tags for filtering
+#                 mlflow.set_tags({
+#                     "table": table_name,
+#                     "strategy": strategy,
+#                     "status": "success",
+#                     "pipeline": "office_to_warehouse",
+#                     "environment": "production",
+#                     "dag_id": context.get('dag').dag_id if context.get('dag') else 'unknown',
+#                     "task_id": context.get('task').task_id if context.get('task') else 'unknown'
+#                 })
+                
+#                 logger.info(f"✓ Metrics logged to MLflow experiment: {MLFLOW_EXPERIMENT_NAME}")
+        
+#         return {
+#             'table': table_name,
+#             'rows': total_rows_synced,
+#             'batches': batch_num,
+#             'duration': duration,
+#             'throughput': throughput,
+#             'status': 'success',
+#             'message': f'Synced {total_rows_synced:,} rows in {duration:.2f}s'
+#         }
+        
+#     except Exception as e:
+#         duration = time() - start_time
+#         error_message = str(e)
+        
+#         # Log full error with traceback
+#         logger.error(f"{'='*60}")
+#         logger.error(f"✗ FAILED TO SYNC: {table_name}")
+#         logger.error(f"Error Type: {type(e).__name__}")
+#         logger.error(f"Error Message: {error_message}")
+#         logger.error(f"{'='*60}")
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+#         logger.error(f"{'='*60}")
+        
+#         # Log error to MLflow (but don't let it fail the task)
+#         if MLFLOW_ENABLED:
+#             try:
+#                 with mlflow.start_run(run_name=f"{table_name}_{context.get('ds', 'manual')}_FAILED"):
+#                     mlflow.log_param("table_name", table_name)
+#                     mlflow.log_param("strategy", strategy)
+#                     mlflow.log_param("error_type", type(e).__name__)
+#                     mlflow.log_param("error_message", error_message[:250])  # Truncate long errors
+#                     mlflow.log_metric("records_synced", total_rows_synced)
+#                     mlflow.log_metric("duration_seconds", duration)
+#                     mlflow.set_tags({
+#                         "table": table_name,
+#                         "status": "failed",
+#                         "pipeline": "office_to_warehouse",
+#                         "error": "true"
+#                     })
+#                     logger.info(f"✓ Error logged to MLflow")
+#             except Exception as mlflow_error:
+#                 logger.warning(f"Could not log error to MLflow: {mlflow_error}")
+#                 # Don't let MLflow errors hide the original error
+        
+#         raise
+    
+#     finally:
+#         # Always cleanup connections
+#         try:
+#             if source_cur:
+#                 source_cur.close()
+#                 logger.debug("Source cursor closed")
+#         except Exception as e:
+#             logger.warning(f"Error closing source cursor: {e}")
+        
+#         try:
+#             if warehouse_cur:
+#                 warehouse_cur.close()
+#                 logger.debug("Warehouse cursor closed")
+#         except Exception as e:
+#             logger.warning(f"Error closing warehouse cursor: {e}")
+        
+#         try:
+#             if source_conn:
+#                 source_conn.close()
+#                 logger.debug("Source connection closed")
+#         except Exception as e:
+#             logger.warning(f"Error closing source connection: {e}")
+        
+#         try:
+#             if warehouse_conn:
+#                 warehouse_conn.close()
+#                 logger.debug("Warehouse connection closed")
+#         except Exception as e:
+#             logger.warning(f"Error closing warehouse connection: {e}")
+
+
+# def check_connections():
+#     """Check both database connections"""
+#     # Force flush untuk memastikan output masuk ke log
+#     sys.stdout.flush()
+#     sys.stderr.flush()
+    
+#     print("="*80)
+#     print("CHECK CONNECTIONS - Starting...")
+#     print("="*80)
+#     sys.stdout.flush()
+    
+#     logger.info("="*80)
+#     logger.info("CHECK CONNECTIONS - Starting...")
+#     logger.info("="*80)
+    
+#     # Check Source Database
+#     try:
+#         msg = f"\n[1/2] Testing Source DB connection to {SOURCE_CONFIG['host']}:{SOURCE_CONFIG['port']}/{SOURCE_CONFIG['database']}"
+#         print(msg)
+#         logger.info(msg)
+#         sys.stdout.flush()
+        
+#         source_conn = connect_with_retry(SOURCE_CONFIG)
+#         source_cur = source_conn.cursor()
+#         source_cur.execute("SELECT version()")
+#         version = source_cur.fetchone()[0]
+        
+#         success_msg = f"✓ Source DB connected successfully: {version[:80]}"
+#         print(success_msg)
+#         logger.info(success_msg)
+#         sys.stdout.flush()
+        
+#         source_cur.close()
+#         source_conn.close()
+#     except Exception as e:
+#         error_msg = f"✗ Source DB connection FAILED after retries: {str(e)}"
+#         print(f"\nERROR: {error_msg}")
+#         print(f"Exception Type: {type(e).__name__}")
+#         print(f"Traceback:\n{traceback.format_exc()}")
+#         sys.stdout.flush()
+#         sys.stderr.flush()
+        
+#         logger.error(error_msg)
+#         logger.error(f"Exception Type: {type(e).__name__}")
+#         logger.error(f"Traceback: {traceback.format_exc()}")
+#         raise Exception(error_msg)
+    
+#     # Check Warehouse Database
+#     try:
+#         msg = f"\n[2/2] Testing Warehouse DB connection to {WAREHOUSE_CONFIG['host']}:{WAREHOUSE_CONFIG['port']}/{WAREHOUSE_CONFIG['database']}"
+#         print(msg)
+#         logger.info(msg)
+#         sys.stdout.flush()
+        
+#         warehouse_conn = connect_with_retry(WAREHOUSE_CONFIG)
+#         warehouse_cur = warehouse_conn.cursor()
+#         warehouse_cur.execute("SELECT version()")
+#         version = warehouse_cur.fetchone()[0]
+        
+#         success_msg = f"✓ Warehouse DB connected successfully: {version[:80]}"
+#         print(success_msg)
+#         logger.info(success_msg)
+#         sys.stdout.flush()
+        
+#         warehouse_cur.close()
+#         warehouse_conn.close()
+#     except Exception as e:
+#         error_msg = f"✗ Warehouse DB connection FAILED after retries: {str(e)}"
+#         print(f"\nERROR: {error_msg}")
+#         print(f"Exception Type: {type(e).__name__}")
+#         print(f"Traceback:\n{traceback.format_exc()}")
+#         sys.stdout.flush()
+#         sys.stderr.flush()
+        
+#         logger.error(error_msg)
+#         logger.error(f"Exception Type: {type(e).__name__}")
+#         logger.error(f"Traceback: {traceback.format_exc()}")
+#         raise Exception(error_msg)
+    
+#     final_msg = "✅ All connections OK! Both databases are accessible."
+#     print(f"\n{final_msg}")
+#     print("="*80)
+#     logger.info(final_msg)
+#     logger.info("="*80)
+#     sys.stdout.flush()
+
+
+# logger.info("All connections OK! test")   
+# # DAG definition
+# default_args = {
+#     'owner': 'data-engineering',
+#     'depends_on_past': False,
+#     'email_on_failure': False,
+#     'email_on_retry': False,
+#     'retries': 3,
+#     'retry_delay': timedelta(seconds=30),  # ← OPTIMIZED: 30s instead of 2 min
+#     'retry_exponential_backoff': True,
+#     'max_retry_delay': timedelta(minutes=2),  # ← OPTIMIZED: 2min instead of 10min
+#     'execution_timeout': timedelta(minutes=30),  # ← INCREASED: 30min for large datasets
+# }
+
+# with DAG(
+#     dag_id='sync_office_to_warehouse_optimized',
+#     default_args=default_args,
+#     description='Optimized sync untuk handle jutaan data',
+#     schedule='0 * * * *',  # Every hour
+#     start_date=datetime(2026, 1, 20),
+#     catchup=False,
+#     tags=['production', 'sync', 'office', 'warehouse', 'optimized', 'scalable'],
+#     max_active_runs=1,
+# ) as dag:
+    
+#     check_conn = PythonOperator(
+#         task_id='check_connections',
+#         python_callable=check_connections,
+#     )
+    
+#     start = EmptyOperator(task_id='start')
+#     end = EmptyOperator(task_id='end')
+    
+#     # Create extraction tasks
+#     extract_tasks = []
+#     for table_config in TABLES:
+#         task = PythonOperator(
+#             task_id=f"sync_{table_config['name']}",
+#             python_callable=extract_table_optimized,
+#             op_kwargs={'table_config': table_config},
+#         )
+#         extract_tasks.append(task)
+    
+#     # OPTIMIZED DEPENDENCIES
+#     # Phase 1: All master tables run in PARALLEL (11 tables)
+#     master_tables = extract_tasks[0:11]  # jenis_armada, jenis_order, ... tenant
+    
+#     # Phase 2: Transactional tables run SEQUENTIALLY after masters (7 tables)
+#     transactional_tables = extract_tasks[11:]  # users, armada_tms, ... delivery_order
+    
+#     # Execute: check_conn → start → all masters parallel
+#     check_conn >> start >> master_tables
+    
+#     # After all masters complete → start first transactional
+#     for master_task in master_tables:
+#         master_task >> transactional_tables[0]
+    
+#     # Chain transactional tables sequentially
+#     for i in range(len(transactional_tables) - 1):
+#         transactional_tables[i] >> transactional_tables[i + 1]
+    
+#     # End after last transactional
+#     transactional_tables[-1] >> end

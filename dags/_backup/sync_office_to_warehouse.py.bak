@@ -1,0 +1,322 @@
+# """
+# DAG untuk sync data dari database kantor ke warehouse
+# ==================================================
+
+# Features:
+# - Scheduled sync (setiap 1 jam)
+# - Support full load dan incremental load
+# - Direct psycopg2 connection (reliable untuk Airflow 3)
+# - Automatic conflict resolution untuk incremental load
+# - Foreign key aware (respects table dependencies)
+
+# Data Flow:
+# 1. Source: devom.silog.co.id (PostgreSQL - Office DB)
+# 2. ETL: Airflow (extract, validate, load)
+# 3. Target: postgres:5433/warehouse (Data Warehouse)
+# 4. Visualization: Metabase dashboard
+
+# Tables:
+# - parent_armada, status_armada, jenis_armada (full load daily)
+# - armada_tms (incremental: based on diubah_pada)
+# - delivery_order (incremental: based on updated_at)
+
+# Schedule:
+# - Default: Every 1 hour (hourly sync)
+# - Adjustable via cron expression
+# """
+
+# from airflow import DAG
+# from airflow.operators.python import PythonOperator
+# from airflow.operators.empty import EmptyOperator
+# from datetime import datetime, timedelta
+# import psycopg2
+# import logging
+# from time import sleep
+
+# logger = logging.getLogger(__name__)
+
+
+# def connect_with_retry(config, max_retries=3, retry_delay=2):
+#     """Connect to database with retry mechanism"""
+#     for attempt in range(max_retries):
+#         try:
+#             conn = psycopg2.connect(**config)
+#             return conn
+#         except (psycopg2.OperationalError, psycopg2.DatabaseError) as e:
+#             if attempt < max_retries - 1:
+#                 wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
+#                 logger.warning(f"Connection attempt {attempt + 1} failed: {e}")
+#                 logger.info(f"Retrying in {wait_time} seconds...")
+#                 sleep(wait_time)
+#             else:
+#                 logger.error(f"All {max_retries} connection attempts failed")
+#                 raise
+#     return None
+
+
+# # Configuration
+# SOURCE_CONFIG = {
+#     'host': 'devom.silog.co.id',
+#     'port': 5432,
+#     'database': 'om',
+#     'user': 'om',
+#     'password': 'om',
+#     'connect_timeout': 10,  # 10 seconds timeout
+#     'options': '-c statement_timeout=30000'  # 30 seconds query timeout
+# }
+
+# WAREHOUSE_CONFIG = {
+#     'host': 'postgres',
+#     'port': 5432,
+#     'database': 'warehouse',
+#     'user': 'airflow',
+#     'password': 'airflow',
+#     'connect_timeout': 5,
+#     'options': '-c statement_timeout=60000'  # 60 seconds query timeout
+# }
+
+# # Tables configuration dengan urutan yang benar (respect foreign keys)
+# TABLES = [
+#     {
+#         'name': 'parent_armada',
+#         'strategy': 'full',
+#         'description': 'Master kategori armada'
+#     },
+#     {
+#         'name': 'status_armada',
+#         'strategy': 'full',
+#         'description': 'Master status armada'
+#     },
+#     {
+#         'name': 'jenis_armada',
+#         'strategy': 'full',
+#         'description': 'Master jenis armada'
+#     },
+#     {
+#         'name': 'armada_tms',
+#         'strategy': 'incremental',
+#         'timestamp_column': 'diubah_pada',
+#         'description': 'Data armada kendaraan'
+#     },
+#     {
+#         'name': 'delivery_order',
+#         'strategy': 'incremental',  # Changed to full because of UUID PK complexity
+#         'timestamp_column': 'tanggal_kirim',
+#         'description': 'Data delivery order'
+#     },
+# ]
+
+
+# def extract_table(table_config, **context):
+#     """
+#     Extract data dari source table ke warehouse
+#     """
+#     table_name = table_config['name']
+#     strategy = table_config['strategy']
+    
+#     logger.info(f"{'='*60}")
+#     logger.info(f"Extracting: {table_name}")
+#     logger.info(f"Strategy: {strategy}")
+#     logger.info(f"{'='*60}")
+    
+#     try:
+#         # Connect to source with retry
+#         source_conn = connect_with_retry(SOURCE_CONFIG, max_retries=3, retry_delay=2)
+#         source_cur = source_conn.cursor()
+        
+#         # Connect to warehouse with retry
+#         warehouse_conn = connect_with_retry(WAREHOUSE_CONFIG, max_retries=3, retry_delay=2)
+#         warehouse_cur = warehouse_conn.cursor()
+        
+#         # Determine query based on strategy
+#         if strategy == 'incremental' and table_config.get('timestamp_column'):
+#             timestamp_col = table_config['timestamp_column']
+            
+#             # Get last sync time from warehouse
+#             try:
+#                 warehouse_cur.execute(f"""
+#                     SELECT MAX({timestamp_col}) 
+#                     FROM raw.{table_name}
+#                 """)
+#                 last_sync = warehouse_cur.fetchone()[0]
+                
+#                 if last_sync:
+#                     logger.info(f"Last sync time: {last_sync}")
+#                     query = f"""
+#                         SELECT * FROM public.{table_name}
+#                         WHERE {timestamp_col} > %s
+#                         ORDER BY {timestamp_col}
+#                     """
+#                     source_cur.execute(query, (last_sync,))
+#                 else:
+#                     logger.info("No previous sync, doing full load")
+#                     query = f"SELECT * FROM public.{table_name}"
+#                     source_cur.execute(query)
+#             except Exception as e:
+#                 logger.warning(f"Could not check last sync: {e}, doing full load")
+#                 query = f"SELECT * FROM public.{table_name}"
+#                 source_cur.execute(query)
+#         else:
+#             # Full load
+#             logger.info("Performing full load")
+#             query = f"SELECT * FROM public.{table_name}"
+#             source_cur.execute(query)
+        
+#         # Fetch data
+#         rows = source_cur.fetchall()
+#         colnames = [desc[0] for desc in source_cur.description]
+        
+#         logger.info(f"✓ Fetched {len(rows)} rows from source")
+#         logger.info(f"Columns: {', '.join(colnames)}")
+        
+#         if len(rows) == 0:
+#             logger.info("No new data to sync")
+#             source_cur.close()
+#             warehouse_cur.close()
+#             source_conn.close()
+#             warehouse_conn.close()
+#             return {'table': table_name, 'rows': 0, 'status': 'success', 'message': 'No new data'}
+        
+#         # For full load, truncate target
+#         if strategy == 'full':
+#             warehouse_cur.execute(f"TRUNCATE TABLE raw.{table_name} CASCADE")
+#             warehouse_conn.commit()
+#             logger.info(f"✓ Truncated raw.{table_name}")
+        
+#         # Insert data
+#         cols_str = ', '.join(colnames)
+#         placeholders = ', '.join(['%s'] * len(colnames))
+#         insert_query = f"""
+#             INSERT INTO raw.{table_name} ({cols_str})
+#             VALUES ({placeholders})
+#         """
+        
+#         # For incremental with conflicts, use ON CONFLICT (need primary key)
+#         if strategy == 'incremental':
+#             # Try to find primary key
+#             warehouse_cur.execute(f"""
+#                 SELECT a.attname
+#                 FROM pg_index i
+#                 JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+#                 WHERE i.indrelid = 'raw.{table_name}'::regclass AND i.indisprimary
+#             """)
+#             pk_result = warehouse_cur.fetchone()
+            
+#             if pk_result:
+#                 pk_col = pk_result[0]
+#                 update_cols = [col for col in colnames if col != pk_col]
+#                 if update_cols:
+#                     update_str = ', '.join([f"{col} = EXCLUDED.{col}" for col in update_cols])
+#                     insert_query += f" ON CONFLICT ({pk_col}) DO UPDATE SET {update_str}"
+#                     logger.info(f"Using UPSERT with primary key: {pk_col}")
+        
+#         # Batch insert
+#         warehouse_cur.executemany(insert_query, rows)
+#         warehouse_conn.commit()
+        
+#         logger.info(f"✓ Successfully inserted {len(rows)} rows to raw.{table_name}")
+        
+#         source_cur.close()
+#         warehouse_cur.close()
+#         source_conn.close()
+#         warehouse_conn.close()
+        
+#         return {
+#             'table': table_name,
+#             'rows': len(rows),
+#             'status': 'success',
+#             'message': f'Synced {len(rows)} rows'
+#         }
+        
+#     except Exception as e:
+#         logger.error(f"✗ Error extracting {table_name}: {e}")
+#         raise
+
+
+# def check_connections(**context):
+#     """Pre-flight check untuk connections with retry"""
+#     logger.info("Checking database connections...")
+    
+#     # Check source with retry
+#     try:
+#         conn = connect_with_retry(SOURCE_CONFIG, max_retries=3, retry_delay=3)
+#         cur = conn.cursor()
+#         cur.execute("SELECT version()")
+#         version = cur.fetchone()[0][:70]
+#         logger.info(f"✓ Source DB connected: {version}")
+#         cur.close()
+#         conn.close()
+#     except Exception as e:
+#         raise Exception(f"✗ Source DB connection failed after retries: {e}")
+    
+#     # Check warehouse with retry
+#     try:
+#         conn = connect_with_retry(WAREHOUSE_CONFIG, max_retries=3, retry_delay=3)
+#         cur = conn.cursor()
+#         cur.execute("SELECT version()")
+#         version = cur.fetchone()[0][:70]
+#         logger.info(f"✓ Warehouse DB connected: {version}")
+#         cur.close()
+#         conn.close()
+#     except Exception as e:
+#         raise Exception(f"✗ Warehouse DB connection failed after retries: {e}")
+    
+#     logger.info("All connections OK!")
+
+
+# # DAG definition
+# default_args = {
+#     'owner': 'data-engineering',
+#     'depends_on_past': False,
+#     'email_on_failure': False,
+#     'email_on_retry': False,
+#     'retries': 3,  # Increase retry from 2 to 3
+#     'retry_delay': timedelta(minutes=2),  # Reduce delay from 5 to 2 minutes
+#     'retry_exponential_backoff': True,  # Exponential backoff (2min, 4min, 8min)
+#     'max_retry_delay': timedelta(minutes=10),
+#     'execution_timeout': timedelta(minutes=15),  # Kill task if > 15 min
+# }
+
+# with DAG(
+#     dag_id='sync_office_to_warehouse',
+#     default_args=default_args,
+#     description='Sync data dari database kantor ke warehouse (full + incremental)',
+#     schedule='0 * * * *',  # Run setiap 1 jam (hourly)
+#     start_date=datetime(2026, 1, 20),
+#     catchup=False,
+#     tags=['production', 'sync', 'office', 'warehouse', 'hourly'],
+#     max_active_runs=1,
+# ) as dag:
+    
+#     # Pre-flight check
+#     check_conn = PythonOperator(
+#         task_id='check_connections',
+#         python_callable=check_connections,
+#     )
+    
+#     start = EmptyOperator(task_id='start')
+#     end = EmptyOperator(task_id='end')
+    
+#     # Create extraction tasks
+#     extract_tasks = []
+#     for table_config in TABLES:
+#         task = PythonOperator(
+#             task_id=f"sync_{table_config['name']}",
+#             python_callable=extract_table,
+#             op_kwargs={'table_config': table_config},
+#         )
+#         extract_tasks.append(task)
+    
+#     # Set dependencies
+#     # Check connections first, then extract in sequence (to respect foreign keys)
+#     check_conn >> start
+    
+#     # Chain extraction tasks in order
+#     for i, task in enumerate(extract_tasks):
+#         if i == 0:
+#             start >> task
+#         else:
+#             extract_tasks[i-1] >> task
+    
+#     # Last task to end
+#     extract_tasks[-1] >> end

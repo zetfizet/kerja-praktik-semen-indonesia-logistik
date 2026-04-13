@@ -1,0 +1,134 @@
+# """
+# Contoh penggunaan Warehouse Sync Utility
+# File ini menunjukkan berbagai cara menggunakan fungsi sync dari utils/warehouse_sync.py
+# """
+
+# from utils.warehouse_sync import (
+#     sync_table,
+#     sync_all_tables, 
+#     sync_tables_by_schema,
+#     DEFAULT_TABLE_MAPPINGS,
+#     DEFAULT_SOURCE_DB_CONFIG,
+#     DEFAULT_TARGET_DB_CONFIG
+# )
+
+# # ===================================================================
+# # CONTOH 1: Sync satu tabel saja
+# # ===================================================================
+# def example_sync_single_table():
+#     """Sync satu tabel tertentu"""
+#     success, message = sync_table(
+#         source_table='armada_tms',
+#         target_schema='armada', 
+#         target_table='armada_tms'
+#     )
+#     print(f"Result: {message}")
+
+
+# # ===================================================================
+# # CONTOH 2: Sync semua tabel (default config)
+# # ===================================================================
+# def example_sync_all_default():
+#     """Sync semua tabel dengan konfigurasi default"""
+#     results = sync_all_tables()
+#     print(f"Success: {results['success_count']}, Failed: {results['failed_count']}")
+
+
+# # ===================================================================
+# # CONTOH 3: Sync dengan priority tables
+# # ===================================================================
+# def example_sync_with_priority():
+#     """Sync dengan tabel prioritas di-sync duluan"""
+#     results = sync_all_tables(
+#         priority_tables=['fact_weather_hourly', 'armada_tms']
+#     )
+#     return results
+
+
+# # ===================================================================
+# # CONTOH 4: Sync hanya tabel dari schema tertentu
+# # ===================================================================
+# def example_sync_by_schema():
+#     """Sync hanya tabel dari schema armada"""
+#     results = sync_tables_by_schema(target_schema='armada')
+#     print(f"Armada schema - Success: {results['success_count']}")
+
+
+# # ===================================================================
+# # CONTOH 5: Sync dengan custom table mappings
+# # ===================================================================
+# def example_sync_custom_tables():
+#     """Sync hanya tabel-tabel tertentu yang Anda pilih"""
+    
+#     # Pilih tabel mana saja yang mau di-sync
+#     custom_mappings = {
+#         'armada_tms': ('armada', 'armada_tms'),
+#         'delivery_order': ('delivery', 'delivery_order'),
+#         'fact_weather_hourly': ('weather', 'fact_weather_hourly'),
+#     }
+    
+#     results = sync_all_tables(table_mappings=custom_mappings)
+#     return results
+
+
+# # ===================================================================
+# # CONTOH 6: Sync dengan custom database config
+# # ===================================================================
+# def example_sync_custom_db():
+#     """Sync dengan database config berbeda"""
+    
+#     custom_source = {
+#         'host': 'my-custom-source.com',
+#         'database': 'source_db',
+#         'user': 'myuser',
+#         'password': 'mypass',
+#     }
+    
+#     custom_target = {
+#         'host': 'localhost',
+#         'database': 'my_warehouse',
+#         'user': 'postgres', 
+#         'password': 'mypassword',
+#     }
+    
+#     results = sync_all_tables(
+#         source_db_config=custom_source,
+#         target_db_config=custom_target
+#     )
+#     return results
+
+
+# # ===================================================================
+# # CONTOH 7: Untuk dipakai di Airflow DAG
+# # ===================================================================
+# def example_airflow_task():
+#     """
+#     Fungsi ini bisa langsung dipakai sebagai python_callable di PythonOperator
+    
+#     Contoh di DAG:
+    
+#     from airflow.operators.python import PythonOperator
+#     from utils.warehouse_sync import sync_all_tables
+    
+#     sync_task = PythonOperator(
+#         task_id='sync_warehouse',
+#         python_callable=sync_all_tables,
+#         op_kwargs={
+#             'priority_tables': ['fact_weather_hourly']
+#         },
+#         dag=dag,
+#     )
+#     """
+#     pass
+
+
+# if __name__ == '__main__':
+#     # Test individual functions
+#     print("Testing warehouse sync utilities...")
+    
+#     # Uncomment untuk test function tertentu:
+#     # example_sync_single_table()
+#     # example_sync_all_default()
+#     # example_sync_with_priority()
+#     # example_sync_by_schema()
+#     # example_sync_custom_tables()

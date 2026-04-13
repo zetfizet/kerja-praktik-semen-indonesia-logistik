@@ -1,0 +1,42 @@
+# Airflow runtime
+logs/
+airflow/logs/
+*.log
+*.pid
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Cache & temporary files
+.warehouse_metadata_cache.json
+*.cache
+*:Zone.Identifier
+
+# Environment & Secrets
+.env
+.env.local
+*.secret
+compose.yml
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+test_output/
+temp/
+tmp/
