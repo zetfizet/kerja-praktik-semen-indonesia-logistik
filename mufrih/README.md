@@ -27,25 +27,6 @@ Empat DAG yang saat ini dipakai sebagai alur utama:
 
 Dokumen dan DAG yang digunakan untuk operasional harian ada di folder utama project ini.
 
-## File Yang Perlu Dipush
-
-Untuk repo kantor, yang aman dan memang perlu dipush adalah source code dan template-nya, bukan secret atau data runtime.
-
-- `dags/` dan `plugins/`
-- `compose.example.yml`
-- `.env.example`
-- `README.md`
-- `docs/` dan skrip setup/utilitas yang memang dipakai
-- file SQL yang dipakai untuk inisialisasi atau transformasi
-
-Yang sebaiknya tidak dipush:
-
-- `.env`
-- `compose.yml` jika masih berisi password/secret hardcoded
-- `logs/`
-- cache, `__pycache__/`, dan file runtime lain
-
-Kalau `compose.yml` sudah disanitasi penuh dan hanya memakai environment variable, file itu bisa ikut dipush. Dalam kondisi repo ini sekarang, gunakan `compose.example.yml` sebagai template yang aman.
 
 ## Requirement
 
