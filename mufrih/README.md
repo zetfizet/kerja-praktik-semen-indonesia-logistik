@@ -1,117 +1,141 @@
 # Airflow ELT Pipeline
 
-Data pipeline menggunakan Airflow untuk sync data dari source database ke warehouse PostgreSQL, dengan transformasi daily aggregations.
+Project ini berisi pipeline Airflow untuk mengambil data dari source database, memuatnya ke warehouse PostgreSQL, lalu membangun tabel analitik untuk Metabase plus enrichment routing dan cuaca.
 
-## Architecture
+## Gambaran Arsitektur
 
 ```
-Source DB (SQL Server/MySQL)
-    ↓
-[warehouse_sync_optimized] @ 02:00 AM → public.* (88 tables, raw data)
-    ↓
-[warehouse_transform_simple] @ 03:00 AM → analytics.* (5 aggregated tables)
-    ↓
-Metabase Dashboard (query analytics.*)
+Source DB + BMKG API + GraphHopper
+  ↓
+weather_data_fetch / warehouse_sync_optimized / routing_enrichment
+  ↓
+PostgreSQL warehouse (public.*)
+  ↓
+warehouse_transform_simple
+  ↓
+analytics.* untuk dashboard Metabase
 ```
 
-## Setup
+## Quick Start
 
-### 1. Prerequisites
-- Docker/Podman installed
-- PostgreSQL 16
-- Python 3.13+
+1. Masuk ke folder project.
 
-### 2. Configuration
+```bash
+cd mufrih
+```
 
-Copy environment template:
+2. Salin template environment.
+
 ```bash
 cp .env.example .env
-# Edit .env dan isi dengan credentials kamu
 ```
 
-Generate secrets:
+3. Isi minimal variabel ini di `.env`:
+- `AIRFLOW_SECRET_KEY`
+- `AIRFLOW_FERNET_KEY`
+- `POSTGRES_PASSWORD`
+
+4. Buat file compose lokal dari template aman.
+
 ```bash
-# Generate Fernet Key
-python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
-
-# Generate Secret Key
-python -c "import secrets; print(secrets.token_urlsafe(32))"
+cp compose.example.yml compose.yml
 ```
 
-### 3. Start Services
+5. Jalankan stack.
 
 ```bash
 podman-compose up -d
 ```
 
-### 4. Access Airflow
+Alternatif Docker:
 
-- URL: http://localhost:8080
-- User: admin
-- Password: Check logs dengan `podman-compose logs airflow-webserver | grep "Password"`
-
-## DAGs
-
-### warehouse_sync_optimized
-- **Schedule**: Daily @ 02:00 AM
-- **Purpose**: Sync 88 tables dari source database ke warehouse (public schema)
-- **Features**: Soft-delete support, incremental sync, parallel execution
-
-### warehouse_transform_simple  
-- **Schedule**: Daily @ 03:00 AM
-- **Purpose**: Transform raw data ke analytics aggregations
-- **Transforms**:
-  - `daily_table_counts`: Row counts semua tables
-  - `orders_daily_summary`: Daily order metrics
-  - `customers_summary`: Customer statistics
-  - `delivery_daily_summary`: Delivery performance
-  - `inventory_summary`: Stock levels
-
-## Documentation
-
-- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Deployment instructions
-- [PIPELINE_SETUP.md](PIPELINE_SETUP.md) - Pipeline configuration
-- [SOFT_DELETE_IMPLEMENTATION.md](SOFT_DELETE_IMPLEMENTATION.md) - Soft delete feature
-- [MLFLOW_QUICKSTART.md](MLFLOW_QUICKSTART.md) - ML tracking setup
-
-## Project Structure
-
-```
-dags/                          # Airflow DAG files
-  ├── warehouse_sync_optimized.py
-  ├── warehouse_transform_simple.py
-  ├── config/                  # DAG configurations
-  └── utils/                   # Utility modules
-
-logs/                          # Runtime logs (not in git)
-plugins/                       # Airflow plugins
-docs/                          # Additional documentation
-
-*.sql                          # SQL setup scripts
-setup_*.sh                     # Shell setup scripts
-requirements-mlflow.txt        # Python dependencies
-Dockerfile                     # Custom Airflow image
-compose.yml                    # Docker compose (DO NOT commit with secrets!)
+```bash
+docker compose -f compose.yml up -d
 ```
 
-## Security Notes
+6. Akses service:
+- Airflow: http://localhost:8080
+- Metabase: http://localhost:3000
+- Postgres host port: 5433
 
-⚠️ **NEVER commit**:
-- `.env` file (contains real credentials)
-- `compose.yml` dengan hardcoded passwords
-- `logs/` folder
-- `__pycache__/` folders
+7. Jalankan DAG pertama kali secara manual (di Airflow UI):
+- `weather_data_fetch`
+- `warehouse_sync_optimized`
+- `routing_enrichment`
+- `warehouse_transform_simple`
 
-✅ **Safe to commit**:
-- `.env.example` (template without real values)
-- `compose.example.yml` (template using env vars)
-- DAG files
-- Documentation
-- SQL scripts
+## DAG Aktif dan Schedule
 
-## Contributing
+- `weather_data_fetch` (`0 * * * *`)
+  - Ambil data BMKG per jam dan simpan ke `public.fact_weather_hourly`.
+- `warehouse_sync_optimized` (`0 2 * * *`)
+  - Sinkronisasi data source ke `public.*` dengan incremental + soft delete untuk tabel transaksional.
+- `routing_enrichment` (`30 2 * * *`)
+  - Hitung metrik rute dan upsert ke `public.fact_route_metrics`.
+- `warehouse_transform_simple` (`0 3 * * *`)
+  - Transformasi data `public.*` menjadi agregasi harian di `analytics.*`.
 
-1. Clone repo
-2. Copy `.env.example` ke `.env` dan isi credentials
-3. Run `podman-compose up -d`
-4. Access http://localhost:8080
+## Validasi Cepat Setelah Deploy
+
+Jalankan query ini pada database warehouse:
+
+```sql
+SELECT COUNT(*) FROM public.fact_weather_hourly;
+SELECT COUNT(*) FROM public.fact_route_metrics;
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'analytics'
+ORDER BY table_name;
+```
+
+## Konfigurasi Environment
+
+Lihat detail lengkap di dokumen:
+- `docs/ENVIRONMENT_VARIABLES.md`
+
+Variabel penting:
+- `AIRFLOW_SECRET_KEY`
+- `AIRFLOW_FERNET_KEY`
+- `POSTGRES_PASSWORD`
+- `GRAPHHOPPER_API_KEY`
+- `GRAPHHOPPER_BASE_URL`
+- `GRAPHHOPPER_ALLOW_FALLBACK`
+
+## Operasional Harian
+
+Lihat runbook operasional:
+- `docs/OPERATIONS_RUNBOOK.md`
+
+Contoh command yang paling sering dipakai:
+
+```bash
+podman-compose ps
+podman-compose logs airflow-webserver --tail=100
+podman-compose restart airflow-webserver
+```
+
+## Batasan Saat Ini
+
+- Beberapa kredensial database masih hardcoded di DAG dan belum sepenuhnya berbasis environment variable.
+- Untuk deployment production, disarankan migrasi kredensial ke secret manager atau Airflow Connection.
+
+
+## Struktur Project
+
+```
+dags/                DAG utama dan utility
+docs/                Dokumentasi tambahan
+logs/                Log runtime lokal
+compose.example.yml  Template compose aman
+.env.example         Template environment
+README.md            Ringkasan project
+```
+
+## Dokumentasi Terkait
+
+- [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
+- [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
+- [docs/PIPELINE_SETUP.md](docs/PIPELINE_SETUP.md)
+- [docs/SOFT_DELETE_IMPLEMENTATION.md](docs/SOFT_DELETE_IMPLEMENTATION.md)
+- [docs/ENVIRONMENT_VARIABLES.md](docs/ENVIRONMENT_VARIABLES.md)
+- [docs/OPERATIONS_RUNBOOK.md](docs/OPERATIONS_RUNBOOK.md)
