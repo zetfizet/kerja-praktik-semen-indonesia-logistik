@@ -1,12 +1,125 @@
-# 📖 Helper Scripts Reference
+# 📖 Scripts Reference
 
-**Complete documentation for utility shell scripts**
+**Utility scripts for setup, maintenance, and data operations**
 
 ---
 
-## 📑 Scripts by Category
+## 📑 Table of Contents
 
-All scripts are located under `scripts/` directory, organized by function:
+- [Quick Start](#quick-start)
+- [Setup Scripts](#setup-scripts)
+- [ETL Scripts](#etl-scripts)
+- [Service Management](#service-management)
+- [Python Utilities](#python-utilities)
 
-- [Utility Scripts](#utility-scripts) - Startup and helpers
-- [Database Setup](#database-setup) - Schema and connection setup\n- [ETL & Sync](#etl--sync) - Data synchronization\n- [Dashboard Tools](#dashboard-tools) - Tool management\n- [Airflow Management](#airflow-management) - Airflow operations\n\n---\n\n## Utility Scripts\n\n### quick_start.sh\n\n**Location:** `scripts/utils/quick_start.sh`\n\n**Purpose:** Start entire stack in one command\n\n**Usage:**\n```bash\nbash scripts/utils/quick_start.sh\n```\n\n**What it does:**\n1. Checks Docker installation\n2. Builds Docker images\n3. Starts all containers (postgres, valkey, airflow)\n4. Initializes Airflow database\n5. Displays service URLs\n\n**Output:**\n```\n✅ PostgreSQL running at localhost:5433\n✅ Airflow UI at http://localhost:8080\n✅ Admin credentials: admin / rafie123\n```\n\n**When to use:**\n- First time setup\n- After stopping all services\n- Morning startup\n\n---\n\n### dashboard_options.sh\n\n**Location:** `scripts/utils/dashboard_options.sh`\n\n**Purpose:** Interactive menu for dashboard tool selection\n\n**Usage:**\n```bash\nbash scripts/utils/dashboard_options.sh\n```\n\n**Menu options:**\n```\n1. Start Metabase\n2. Stop Metabase\n3. Start Grafana\n4. Stop Grafana\n5. Start Superset\n6. Stop Superset\n7. Exit\n```\n\n**When to use:**\n- Quick access to dashboard tool controls\n- Don't remember exact script locations\n\n---\n\n### note.sh\n\n**Location:** `scripts/utils/note.sh`\n\n**Purpose:** Quick reference notes about project setup\n\n**Usage:**\n```bash\nbash scripts/utils/note.sh\n```\n\n**Shows:**\n- Important paths\n- Default credentials\n- Port numbers\n- Quick connection strings\n\n---\n\n### panduan_database.sh\n\n**Location:** `scripts/utils/panduan_database.sh`\n\n**Purpose:** Step-by-step database setup guide (Indonesian)\n\n**Usage:**\n```bash\nbash scripts/utils/panduan_database.sh\n```\n\n**Output:** Comprehensive setup walkthrough with explanations\n\n---\n\n## Database Setup\n\n### setup_warehouse_db.sh\n\n**Location:** `scripts/setup/setup_warehouse_db.sh`\n\n**Purpose:** Initialize warehouse database and schemas (FIRST TIME ONLY)\n\n**Usage:**\n```bash\nbash scripts/setup/setup_warehouse_db.sh\n```\n\n**What it does:**\n1. Connects to warehouse database\n2. Creates schemas: public, weather, analytics\n3. Creates weather tracking tables\n4. Creates analytics tables\n5. Sets up user permissions\n\n**Prerequisites:**\n- PostgreSQL container running\n- Database \"warehouse\" exists\n\n**Duration:** 1-2 minutes\n\n**Important:** Run this BEFORE ETL sync\n\n**Verify success:**\n```bash\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> \\dn           # List schemas\npsql\\> \\dt weather.* # List weather tables\n```\n\n---\n\n### setup_metabase_db.sh\n\n**Location:** `scripts/setup/setup_metabase_db.sh`\n\n**Purpose:** Configure Metabase database connection\n\n**Usage:**\n```bash\nbash scripts/setup/setup_metabase_db.sh\n```\n\n**What it does:**\n1. Waits for Metabase to be ready\n2. Creates admin account (if first time)\n3. Adds warehouse database connection\n4. Tests connection\n5. Displays Metabase URL\n\n**Prerequisites:**\n- Metabase container running\n- Warehouse database with tables\n\n**Duration:** 2-3 minutes\n\n---\n\n## ETL & Sync\n\n### copy_devom_structure.sh\n\n**Location:** `scripts/etl/copy_devom_structure.sh`\n\n**Purpose:** Replicate all table structures from DEVOM source (MUST RUN ONCE)\n\n**Usage:**\n```bash\nbash scripts/etl/copy_devom_structure.sh\n```\n\n**What it does:**\n1. Connects to devom.silog.co.id (om/om credentials)\n2. Lists all tables in source database\n3. Generates CREATE TABLE statements (DDL)\n4. Creates tables in warehouse.public schema\n5. Saves DDL to `sql/06_devom_tables_ddl.sql`\n\n**Critical:** This must run before daily_warehouse_sync DAG\n\n**Duration:** 5-15 minutes (many tables)\n\n**Output:**\n```\n✅ Connecting to DEVOM...\nFound 90+ tables\n✅ Creating tables in warehouse...\n✅ Complete! DDL saved to sql/06_devom_tables_ddl.sql\n```\n\n**Verify success:**\n```bash\npsql -h localhost -U postgres -d warehouse -p 5433\npsql\\> SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public';\n# Should return 90+\n```\n\n---\n\n### sync_tables_from_devom.sh\n\n**Location:** `scripts/etl/sync_tables_from_devom.sh`\n\n**Purpose:** Manual one-time sync of all data from DEVOM (alternative to DAG)\n\n**Usage:**\n```bash\nbash scripts/etl/sync_tables_from_devom.sh\n```\n\n**What it does:**\n1. Connects to devom.silog.co.id\n2. Syncs all tables (not incremental, full copy)\n3. Logs per-table status\n4. Creates summary report\n\n**When to use:**\n- Manual data refresh (outside of DAG schedule)\n- Historical data recovery\n- Quick testing\n\n**Duration:** 10-30 minutes\n\n**Note:** Regular syncs should use daily_warehouse_sync DAG (automatic)\n\n---\n\n### migrate_to_single_schema.sh\n\n**Location:** `scripts/etl/migrate_to_single_schema.sh`\n\n**Purpose:** Consolidate multi-schema to single \"public\" schema\n\n**Usage:**\n```bash\nbash scripts/etl/migrate_to_single_schema.sh\n```\n\n**What it does:**\n1. Moves all tables to public schema\n2. Keeps weather & analytics schemas separate\n3. Updates foreign key references\n4. Creates summary statistics\n\n**When to use:**\n- Schema consolidation\n- Simplify data model\n\n**Backup first:**\n```bash\n# Backup warehouse database\npg_dump -h localhost -U postgres -d warehouse -p 5433 > warehouse_backup.sql\n```\n\n---\n\n## Dashboard Tools\n\n### Metabase\n\n#### start_metabase.sh\n\n**Location:** `scripts/metabase/start_metabase.sh`\n\n```bash\nbash scripts/metabase/start_metabase.sh\n```\n\n**Starts:** Metabase container (port 3000)  \n**Access:** http://localhost:3000  \n**Duration:** 30-60 seconds to be ready\n\n---\n\n#### stop_metabase.sh\n\n**Location:** `scripts/metabase/stop_metabase.sh`\n\n```bash\nbash scripts/metabase/stop_metabase.sh\n```\n\n**Stops:** Metabase container  \n**Preserves:** Database (persistent volume)\n\n---\n\n### Grafana\n\n#### start_grafana.sh\n\n**Location:** `scripts/grafana/start_grafana.sh`\n\n```bash\nbash scripts/grafana/start_grafana.sh\n```\n\n**Starts:** Grafana container (port 3001)  \n**Access:** http://localhost:3001  \n**Default creds:** admin / admin  \n**Duration:** 10-20 seconds\n\n---\n\n#### stop_grafana.sh\n\n**Location:** `scripts/grafana/stop_grafana.sh`\n\n```bash\nbash scripts/grafana/stop_grafana.sh\n```\n\n**Stops:** Grafana container\n\n---\n\n### Superset\n\n#### start_superset.sh\n\n**Location:** `scripts/superset/start_superset.sh`\n\n```bash\nbash scripts/superset/start_superset.sh\n```\n\n**Starts:** Superset container (port 8088)  \n**Access:** http://localhost:8088  \n**Default creds:** admin / admin  \n**Duration:** 1-2 minutes (initialization)\n\n---\n\n#### stop_superset.sh\n\n**Location:** `scripts/superset/stop_superset.sh`\n\n```bash\nbash scripts/superset/stop_superset.sh\n```\n\n**Stops:** Superset container\n\n---\n\n## Airflow Management\n\n### stop_airflow_podman.sh\n\n**Location:** `scripts/airflow/stop_airflow_podman.sh`\n\n**Purpose:** Clean stop of Airflow containers\n\n**Usage:**\n```bash\nbash scripts/airflow/stop_airflow_podman.sh\n```\n\n**What it does:**\n1. Stops Airflow webserver\n2. Stops Airflow scheduler\n3. Stops Celery worker (if running)\n4. Preserves databases (no data loss)\n\n**When to use:**\n- Graceful shutdown\n- Container maintenance\n- Before rebuilding containers\n\n---\n\n## Script Dependency Tree\n\n```\nquick_start.sh (START HERE)\n    ├─ postgres (auto-started)\n    ├─ valkey (auto-started)\n    ├─ airflow containers (auto-started)\n    └─ Next: setup_warehouse_db.sh\n\nsetup_warehouse_db.sh\n    └─ Next: copy_devom_structure.sh\n\ncopy_devom_structure.sh\n    └─ Ready for: daily_warehouse_sync DAG\n\n[Parallel paths - can run in any order]\n├─ start_metabase.sh → setup_metabase_db.sh → Metabase ready\n├─ start_grafana.sh → configure in UI → Grafana ready\n└─ start_superset.sh → configure in UI → Superset ready\n```\n\n---\n\n## Safe Script Operations\n\n### Backup Database Before Migration\n\n```bash\n# Full backup\npg_dump -h localhost -U postgres -d warehouse -p 5433 \\\n  > warehouse_backup_$(date +%Y%m%d_%H%M%S).sql\n\n# Quick backup (schema only)\npg_dump -h localhost -U postgres -d warehouse -p 5433 \\\n  --schema-only > warehouse_schema.sql\n```\n\n### Test Script in Dry-Run Mode\n\nMost scripts support `--dry-run` or similar (check script for options):\n\n```bash\nbash scripts/etl/migrate_to_single_schema.sh --dry-run\n```\n\n### View Script Contents Before Running\n\n```bash\n# Read script to understand what it does\ncat scripts/etl/copy_devom_structure.sh\n\n# First 50 lines\nhead -n 50 scripts/etl/copy_devom_structure.sh\n```\n\n---\n\n## Troubleshooting Scripts\n\n### Script gives permission denied\n\n```bash\n# Give execute permission\nchmod +x scripts/utils/quick_start.sh\n\n# Run again\nbash scripts/utils/quick_start.sh\n```\n\n### Script can't find database\n\n```bash\n# Verify PostgreSQL is running\ndocker ps | grep postgres\n\n# If not running, start containers first\nbash scripts/utils/quick_start.sh\n```\n\n### Network connection timeout\n\n```bash\n# Test devom.silog.co.id connection\nping devom.silog.co.id\n\n# Or test port\nnc -zv devom.silog.co.id 5432\n```\n\n### Script logs for debugging\n\nMost scripts output logs to terminal. To save logs:\n\n```bash\n# Capture output\nbash scripts/etl/copy_devom_structure.sh 2>&1 | tee setup.log\n\n# View later\ncat setup.log\n```\n\n---\n\n📖 **Next:** Read [Troubleshooting Guide](TROUBLESHOOTING.md) for common issues  \n👈 **Back to:** [Main README](../README.md)\n
+---
+
+## Quick Start
+
+**Fastest way to start the entire system:**
+
+```bash
+cd /home/rafie/airflow-stack
+
+# Option 1: Use quick_start.sh
+bash scripts/utils/quick_start.sh
+
+# Option 2: Manual
+docker-compose up -d
+```
+
+---
+
+## Setup Scripts
+
+### scripts/setup/setup_warehouse_db.sh
+
+**Initialize PostgreSQL warehouse (localhost:5433)**
+
+```bash
+bash scripts/setup/setup_warehouse_db.sh
+```
+
+Creates: `warehouse` database with `public`, `weather`, `analytics` schemas
+
+### scripts/setup/setup_metabase_db.sh
+
+**Configure Metabase BI tool**
+
+```bash
+bash scripts/setup/setup_metabase_db.sh
+```
+
+---
+
+## ETL Scripts
+
+### scripts/etl/sync_tables_from_devom.sh
+
+**Manual sync of 90 DEVOM tables**
+
+```bash
+bash scripts/etl/sync_tables_from_devom.sh
+```
+
+### scripts/etl/copy_devom_structure.sh
+
+**Copy schema structure only (no data)**
+
+```bash
+bash scripts/etl/copy_devom_structure.sh
+```
+
+### scripts/etl/migrate_to_single_schema.sh
+
+**Migrate to single-schema architecture**
+
+```bash
+bash scripts/etl/migrate_to_single_schema.sh
+```
+
+---
+
+## Service Management
+
+### Airflow
+- **Stop:** `bash scripts/airflow/stop_airflow_podman.sh`
+
+### Metabase (Port 3000)
+- **Start:** `bash scripts/metabase/start_metabase.sh`
+- **Stop:** `bash scripts/metabase/stop_metabase.sh`
+
+### Grafana (Port 3001)
+- **Start:** `bash scripts/grafana/start_grafana.sh`
+- **Stop:** `bash scripts/grafana/stop_grafana.sh`
+
+### Superset (Port 8088)
+- **Start:** `bash scripts/superset/start_superset.sh`
+- **Stop:** `bash scripts/superset/stop_superset.sh`
+
+---
+
+## Python Utilities
+
+| Script | Purpose |
+|--------|---------|
+| `fetch_weather_bmkg.py` | Fetch weather from BMKG API |
+| `sync_data_from_app.py` | Sync app data to Airflow DB |
+| `sync_all_devom_tables.py` | Full 90-table sync |
+| `list_source_tables.py` | List DEVOM tables |
+| `copy_devom_structure.py` | Copy schema (Python) |
+| `console_fetch_weather.py` | Interactive weather fetch |
+
+---
+
+## Utilities
+
+- **quick_start.sh** - One-command startup
+- **dashboard_options.sh** - Menu-driven dashboard launcher
+- **panduan_database.sh** - Database management utilities
+- **note.sh** - Quick notes
+
+---
+
+📖 **See Also:** [Dashboards](DASHBOARDS.md) | [Installation](INSTALLATION.md)  
+👈 **Back:** [Main README](../README.md)
