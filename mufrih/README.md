@@ -1,6 +1,6 @@
 # Airflow ELT Pipeline
 
-Project ini berisi pipeline Airflow untuk mengambil data dari source database, memuatnya ke warehouse PostgreSQL, lalu membangun tabel analitik untuk Metabase dan kebutuhan routing/weather enrichment (tanpa MLflow).
+Project ini berisi pipeline Airflow untuk mengambil data dari source database, memuatnya ke warehouse PostgreSQL, lalu membangun tabel analitik untuk Metabase dan kebutuhan routing/weather enrichment.
 
 ## Gambaran Arsitektur
 
