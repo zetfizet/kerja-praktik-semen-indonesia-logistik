@@ -83,6 +83,7 @@ def fetch_weather_data():
     # PostgreSQL Connection
     DB_CONFIG = {
         'host': 'localhost',
+        'port': 5433,
         'database': 'warehouse',
         'user': 'postgres',
         'password': 'postgres123',
@@ -164,7 +165,7 @@ def fetch_weather_data():
             # Check and preview data to delete
             cursor.execute("""
                 SELECT COUNT(*), MIN(waktu), MAX(waktu)
-                FROM weather.fact_weather_hourly 
+                FROM public.fact_weather_hourly 
                 WHERE waktu < NOW() AT TIME ZONE 'Asia/Jakarta'
             """)
             delete_check = cursor.fetchone()
@@ -175,7 +176,7 @@ def fetch_weather_data():
             
             # DELETE expired weather records
             cursor.execute("""
-                DELETE FROM weather.fact_weather_hourly 
+                DELETE FROM public.fact_weather_hourly 
                 WHERE waktu < NOW() AT TIME ZONE 'Asia/Jakarta'
             """)
             deleted_count = cursor.rowcount
@@ -191,7 +192,7 @@ def fetch_weather_data():
             for record in records:
                 try:
                     cursor.execute("""
-                        INSERT INTO weather.fact_weather_hourly (
+                        INSERT INTO public.fact_weather_hourly (
                             adm4, lokasi, desa, kecamatan, kabupaten, provinsi,
                             waktu, cuaca, suhu_celsius, kelembapan, arah_angin, kecepatan_angin,
                             created_at
@@ -253,13 +254,13 @@ def fetch_weather_data():
             cursor.execute("""
                 SELECT EXISTS (
                     SELECT 1 FROM information_schema.tables 
-                    WHERE table_schema = 'weather' AND table_name = 'fact_weather_hourly'
+                    WHERE table_schema = 'public' AND table_name = 'fact_weather_hourly'
                 )
             """)
             
             if not cursor.fetchone()[0]:
                 cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS weather.fact_weather_hourly (
+                    CREATE TABLE IF NOT EXISTS public.fact_weather_hourly (
                         id SERIAL PRIMARY KEY,
                         adm4 VARCHAR(50),
                         lokasi VARCHAR(255),
@@ -278,7 +279,7 @@ def fetch_weather_data():
                     )
                 """)
                 conn.commit()
-                print("✓ Created weather.fact_weather_hourly table")
+                print("✓ Created public.fact_weather_hourly table")
             
             cursor.close()
             conn.close()
@@ -334,6 +335,7 @@ def verify_weather_data():
     try:
         conn = psycopg2.connect(
             host='localhost',
+            port=5433,
             database='warehouse',
             user='postgres',
             password='postgres123'
@@ -341,25 +343,36 @@ def verify_weather_data():
         cursor = conn.cursor()
         
         # Check total records
-        cursor.execute("SELECT COUNT(*) FROM weather.fact_weather_hourly")
+        cursor.execute("SELECT COUNT(*) FROM public.fact_weather_hourly")
         count = cursor.fetchone()[0]
         
-        # Check latest records
+        # Check latest records with full details
         cursor.execute("""
-            SELECT lokasi, waktu, cuaca, suhu_celsius
-            FROM weather.fact_weather_hourly
+            SELECT 
+                lokasi, 
+                TO_CHAR(waktu, 'YYYY-MM-DD HH24:MI') as waktu,
+                cuaca, 
+                suhu_celsius,
+                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at,
+                TO_CHAR(last_updated, 'YYYY-MM-DD HH24:MI:SS') as last_updated,
+                ROUND(data_age_minutes::numeric, 1) as age_mins,
+                freshness_status
+            FROM public.fact_weather_hourly
             ORDER BY created_at DESC
             LIMIT 5
         """)
         latest = cursor.fetchall()
         
-        print("\n" + "=" * 60)
+        print("\n" + "=" * 80)
         print(f"✓ Weather data verification:")
         print(f"  Total records in database: {count}")
-        print(f"  Latest records:")
+        print(f"\n  Latest 5 records:")
+        print(f"  {'Lokasi':<15} {'Waktu':<17} {'Cuaca':<10} {'Suhu':<5} {'Created At':<20} {'Last Updated':<20} {'Age':<6} {'Status':<8}")
+        print(f"  {'-'*15} {'-'*17} {'-'*10} {'-'*5} {'-'*20} {'-'*20} {'-'*6} {'-'*8}")
         for row in latest:
-            print(f"    - {row[0]} | {row[1]} | {row[2]} | {row[3]}°C")
-        print("=" * 60)
+            lokasi, waktu, cuaca, suhu, created, updated, age, status = row
+            print(f"  {lokasi:<15} {waktu:<17} {cuaca:<10} {suhu:>3}°C {created:<20} {updated:<20} {age if age else 'N/A':>5} {status or 'N/A':<8}")
+        print("=" * 80)
         
         cursor.close()
         conn.close()
@@ -383,9 +396,10 @@ def update_freshness_metrics():
     try:
         conn = psycopg2.connect(
             host='localhost',
+            port=5433,
             database='warehouse',
             user='postgres',
-            password='postgres123'
+            password='postgres                  3'
         )
         cursor = conn.cursor()
         
@@ -395,24 +409,24 @@ def update_freshness_metrics():
         
         # Update data_age_minutes and freshness_status
         cursor.execute("""
-            UPDATE weather.fact_weather_hourly SET
+            UPDATE public.fact_weather_hourly SET
                 data_age_minutes = EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60,
                 freshness_status = CASE
                     WHEN EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60 <= 60 THEN 'FRESH'
                     WHEN EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60 <= 180 THEN 'WARNING'
                     ELSE 'STALE'
                 END
-            WHERE waktu >= CURRENT_DATE AT TIME ZONE 'Asia/Jakarta'
+            WHERE waktu >= NOW()
         """)
         
         updated_rows = cursor.rowcount
         conn.commit()
         
-        # Get freshness summary
+        # Get freshness summary for future forecasts only
         cursor.execute("""
             SELECT freshness_status, COUNT(*) as count
-            FROM weather.fact_weather_hourly
-            WHERE waktu >= CURRENT_DATE AT TIME ZONE 'Asia/Jakarta'
+            FROM public.fact_weather_hourly
+            WHERE waktu >= NOW()
             GROUP BY freshness_status
             ORDER BY 
                 CASE freshness_status
@@ -424,8 +438,8 @@ def update_freshness_metrics():
         
         summary = cursor.fetchall()
         
-        print(f"✓ Updated {updated_rows} records with freshness metrics")
-        print(f"\nFreshness Summary:")
+        print(f"✓ Updated {updated_rows} future forecast records with freshness metrics")
+        print(f"\nFreshness Summary (future forecasts only):")
         for status, count in summary:
             emoji = {'FRESH': '✅', 'WARNING': '⚠️', 'STALE': '❌'}.get(status, '❓')
             print(f"  {emoji} {status}: {count} records")
@@ -441,8 +455,8 @@ def update_freshness_metrics():
 
 def cleanup_old_weather_data():
     """
-    Delete weather data that is older than 7 days
-    Keeps future forecasts and recent past data
+    Delete weather data where waktu < NOW (past data)
+    Only keep future forecasts
     """
     import psycopg2
     from datetime import datetime
@@ -450,17 +464,18 @@ def cleanup_old_weather_data():
     try:
         conn = psycopg2.connect(
             host='localhost',
+            port=5433,
             database='warehouse',
             user='postgres',
             password='postgres123'
         )
         cursor = conn.cursor()
         
-        # Delete records where waktu is more than 7 days in the past
-        # This keeps all future forecasts and recent data (up to 7 days old)
+        # Delete records where waktu < NOW (past data)
+        # Only keep future forecasts (waktu >= NOW)
         cursor.execute("""
-            DELETE FROM weather.fact_weather_hourly
-            WHERE waktu < NOW() - INTERVAL '7 days'
+            DELETE FROM public.fact_weather_hourly
+            WHERE waktu < NOW()
         """)
         
         deleted_count = cursor.rowcount
@@ -468,8 +483,8 @@ def cleanup_old_weather_data():
         
         print("\n" + "=" * 60)
         print(f"🗑️  Weather data cleanup completed:")
-        print(f"  Deleted {deleted_count} records older than 7 days")
-        print(f"  Kept all future forecasts and recent data (< 7 days old)")
+        print(f"  Deleted {deleted_count} past records (waktu < NOW)")
+        print(f"  Kept all future forecast data only")
         print("=" * 60)
         
         cursor.close()
@@ -500,7 +515,7 @@ freshness_check = PythonOperator(
     dag=dag,
 )
 
-# Task 4: Cleanup old/past weather data
+# Task 4: Cleanup old/past weather data (waktu < NOW)
 cleanup_weather = PythonOperator(
     task_id='cleanup_old_weather_data',
     python_callable=cleanup_old_weather_data,

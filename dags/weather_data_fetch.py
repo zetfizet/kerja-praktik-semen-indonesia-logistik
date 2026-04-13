@@ -83,6 +83,7 @@ def fetch_weather_data():
     # PostgreSQL Connection
     DB_CONFIG = {
         'host': 'localhost',
+        'port': 5433,
         'database': 'warehouse',
         'user': 'postgres',
         'password': 'postgres123',
@@ -164,7 +165,7 @@ def fetch_weather_data():
             # Check and preview data to delete
             cursor.execute("""
                 SELECT COUNT(*), MIN(waktu), MAX(waktu)
-                FROM weather.fact_weather_hourly 
+                FROM public.fact_weather_hourly 
                 WHERE waktu < NOW() AT TIME ZONE 'Asia/Jakarta'
             """)
             delete_check = cursor.fetchone()
@@ -175,7 +176,7 @@ def fetch_weather_data():
             
             # DELETE expired weather records
             cursor.execute("""
-                DELETE FROM weather.fact_weather_hourly 
+                DELETE FROM public.fact_weather_hourly 
                 WHERE waktu < NOW() AT TIME ZONE 'Asia/Jakarta'
             """)
             deleted_count = cursor.rowcount
@@ -191,7 +192,7 @@ def fetch_weather_data():
             for record in records:
                 try:
                     cursor.execute("""
-                        INSERT INTO weather.fact_weather_hourly (
+                        INSERT INTO public.fact_weather_hourly (
                             adm4, lokasi, desa, kecamatan, kabupaten, provinsi,
                             waktu, cuaca, suhu_celsius, kelembapan, arah_angin, kecepatan_angin,
                             created_at
@@ -253,13 +254,13 @@ def fetch_weather_data():
             cursor.execute("""
                 SELECT EXISTS (
                     SELECT 1 FROM information_schema.tables 
-                    WHERE table_schema = 'weather' AND table_name = 'fact_weather_hourly'
+                    WHERE table_schema = 'public' AND table_name = 'fact_weather_hourly'
                 )
             """)
             
             if not cursor.fetchone()[0]:
                 cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS weather.fact_weather_hourly (
+                    CREATE TABLE IF NOT EXISTS public.fact_weather_hourly (
                         id SERIAL PRIMARY KEY,
                         adm4 VARCHAR(50),
                         lokasi VARCHAR(255),
@@ -278,7 +279,7 @@ def fetch_weather_data():
                     )
                 """)
                 conn.commit()
-                print("✓ Created weather.fact_weather_hourly table")
+                print("✓ Created public.fact_weather_hourly table")
             
             cursor.close()
             conn.close()
@@ -334,6 +335,7 @@ def verify_weather_data():
     try:
         conn = psycopg2.connect(
             host='localhost',
+            port=5433,
             database='warehouse',
             user='postgres',
             password='postgres123'
@@ -341,13 +343,13 @@ def verify_weather_data():
         cursor = conn.cursor()
         
         # Check total records
-        cursor.execute("SELECT COUNT(*) FROM weather.fact_weather_hourly")
+        cursor.execute("SELECT COUNT(*) FROM public.fact_weather_hourly")
         count = cursor.fetchone()[0]
         
         # Check latest records
         cursor.execute("""
             SELECT lokasi, waktu, cuaca, suhu_celsius
-            FROM weather.fact_weather_hourly
+            FROM public.fact_weather_hourly
             ORDER BY created_at DESC
             LIMIT 5
         """)
@@ -367,78 +369,6 @@ def verify_weather_data():
     except Exception as e:
         print(f"❌ Error verifying weather data: {e}")
 
-def update_freshness_metrics():
-    """
-    Update data freshness metrics:
-    - data_age_minutes: Minutes since last_updated
-    - freshness_status: FRESH, WARNING, STALE based on age
-    
-    Rules:
-    - 0-60 mins   → FRESH (data is current)
-    - 60-180 mins → WARNING (3 hours, getting old)
-    - 180+ mins   → STALE (>3 hours, data is stale)
-    """
-    import psycopg2
-    
-    try:
-        conn = psycopg2.connect(
-            host='localhost',
-            database='warehouse',
-            user='postgres',
-            password='postgres123'
-        )
-        cursor = conn.cursor()
-        
-        print("\n" + "=" * 60)
-        print("🔄 Updating weather data freshness metrics...")
-        print("=" * 60)
-        
-        # Update data_age_minutes and freshness_status
-        cursor.execute("""
-            UPDATE weather.fact_weather_hourly SET
-                data_age_minutes = EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60,
-                freshness_status = CASE
-                    WHEN EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60 <= 60 THEN 'FRESH'
-                    WHEN EXTRACT(EPOCH FROM (NOW() - last_updated)) / 60 <= 180 THEN 'WARNING'
-                    ELSE 'STALE'
-                END
-            WHERE waktu >= CURRENT_DATE AT TIME ZONE 'Asia/Jakarta'
-        """)
-        
-        updated_rows = cursor.rowcount
-        conn.commit()
-        
-        # Get freshness summary
-        cursor.execute("""
-            SELECT freshness_status, COUNT(*) as count
-            FROM weather.fact_weather_hourly
-            WHERE waktu >= CURRENT_DATE AT TIME ZONE 'Asia/Jakarta'
-            GROUP BY freshness_status
-            ORDER BY 
-                CASE freshness_status
-                    WHEN 'FRESH' THEN 1
-                    WHEN 'WARNING' THEN 2
-                    WHEN 'STALE' THEN 3
-                END
-        """)
-        
-        summary = cursor.fetchall()
-        
-        print(f"✓ Updated {updated_rows} records with freshness metrics")
-        print(f"\nFreshness Summary:")
-        for status, count in summary:
-            emoji = {'FRESH': '✅', 'WARNING': '⚠️', 'STALE': '❌'}.get(status, '❓')
-            print(f"  {emoji} {status}: {count} records")
-        
-        print("=" * 60)
-        
-        cursor.close()
-        conn.close()
-        
-    except Exception as e:
-        print(f"❌ Error updating freshness metrics: {e}")
-        raise
-
 def cleanup_old_weather_data():
     """
     Delete weather data that is older than 7 days
@@ -450,6 +380,7 @@ def cleanup_old_weather_data():
     try:
         conn = psycopg2.connect(
             host='localhost',
+            port=5433,
             database='warehouse',
             user='postgres',
             password='postgres123'
@@ -459,7 +390,7 @@ def cleanup_old_weather_data():
         # Delete records where waktu is more than 7 days in the past
         # This keeps all future forecasts and recent data (up to 7 days old)
         cursor.execute("""
-            DELETE FROM weather.fact_weather_hourly
+            DELETE FROM public.fact_weather_hourly
             WHERE waktu < NOW() - INTERVAL '7 days'
         """)
         
@@ -493,19 +424,12 @@ verify_weather = PythonOperator(
     dag=dag,
 )
 
-# Task 3: Update freshness metrics
-freshness_check = PythonOperator(
-    task_id='update_freshness_metrics',
-    python_callable=update_freshness_metrics,
-    dag=dag,
-)
-
-# Task 4: Cleanup old/past weather data
+# Task 3: Cleanup old/past weather data
 cleanup_weather = PythonOperator(
     task_id='cleanup_old_weather_data',
     python_callable=cleanup_old_weather_data,
     dag=dag,
 )
 
-# Set task dependencies: fetch → verify → freshness → cleanup
-fetch_weather >> verify_weather >> freshness_check >> cleanup_weather
+# Set task dependencies: fetch → verify → cleanup
+fetch_weather >> verify_weather >> cleanup_weather
