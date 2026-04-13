@@ -8,9 +8,8 @@
 
 - [Database Overview](#database-overview)
 - [Schemas](#schemas)
-- [Data Dictionary](#data-dictionary)
+- [All 90 Tables](#all-90-tables)
 - [Key Tables](#key-tables)
-- [Relationships & Foreign Keys](#relationships--foreign-keys)
 
 ---
 
@@ -18,4 +17,555 @@
 
 ### Warehouse Database Configuration
 
-```\nDatabase Name:      warehouse\nHost:               localhost\nPort:               5433\nOwner:              postgres\nEncoding:           UTF-8\nCollate:            en_US.utf8\nCtype:              en_US.utf8\nSize:               2-5GB (typical)\n```\n\n### User Access\n\n```\nUser:               postgres\nPassword:           postgres123 (development)\nRole:               Superuser\nConnection limit:   Unlimited\n```\n\n---\n\n## Schemas\n\n### Schema 1: `public`\n\n**Purpose:** Business data from DEVOM warehouse (90+ tables)  \n**Owner:** postgres  \n**Size:** 1-3GB  \n**Update Frequency:** Daily (daily_warehouse_sync DAG)\n\n**Table Categories:**\n\n```\n📊 Master Data\n  ├─ drivers         (Driver/personnel master list)\n  ├─ armada          (Vehicle fleet data)\n  ├─ locations       (Geographic locations)\n  └─ customers       (Client master list)\n\n🚚 Operational Data\n  ├─ perjalanan      (Trip/journey records)\n  ├─ pengiriman      (Delivery assignments)\n  ├─ activity_log    (System activity tracking)\n  └─ orders          (Sales orders)\n\n💰 Financial Data\n  ├─ invoices        (Invoice records)\n  ├─ payments        (Payment transactions)\n  ├─ expenses        (Operating expenses)\n  └─ revenue         (Revenue recognition)\n\n📈 Support Data\n  ├─ support_tickets (Customer support)\n  ├─ maintenance     (Vehicle maintenance)\n  ├─ incidents       (Incident tracking)\n  └─ documents       (Reference documents)\n```\n\n**Example Tables:**\n\n```sql\n-- Driver information\nCREATE TABLE public.drivers (\n    driver_id INT PRIMARY KEY,\n    name VARCHAR(255),\n    license_number VARCHAR(50),\n    phone VARCHAR(20),\n    hire_date DATE,\n    status VARCHAR(20),\n    created_at TIMESTAMP,\n    updated_at TIMESTAMP\n);\n\n-- Vehicle fleet\nCREATE TABLE public.armada (\n    vehicle_id INT PRIMARY KEY,\n    plate_number VARCHAR(20) UNIQUE,\n    make VARCHAR(50),\n    model VARCHAR(50),\n    year INT,\n    color VARCHAR(30),\n    mileage INT,\n    gvwr DECIMAL(8,2),\n    capacity INT,\n    status VARCHAR(20),\n    created_at TIMESTAMP,\n    updated_at TIMESTAMP\n);\n\n-- Trip/Journey records\nCREATE TABLE public.perjalanan (\n    journey_id INT PRIMARY KEY,\n    driver_id INT,\n    vehicle_id INT,\n    origin_location_id INT,\n    destination_location_id INT,\n    start_time TIMESTAMP,\n    end_time TIMESTAMP,\n    distance_km DECIMAL(8,2),\n    fuel_consumed DECIMAL(8,3),\n    status VARCHAR(20),\n    created_at TIMESTAMP,\n    FOREIGN KEY (driver_id) REFERENCES public.drivers(driver_id),\n    FOREIGN KEY (vehicle_id) REFERENCES public.armada(vehicle_id)\n);\n```\n\n---\n\n### Schema 2: `weather`\n\n**Purpose:** Weather data from BMKG API  \n**Owner:** postgres  \n**Size:** 100-500MB  \n**Update Frequency:** Every hour (weather_data_fetch DAG)\n**Retention:** 30-day rolling window\n\n**Tables:**\n\n#### 2.1 fact_weather_hourly\n\n**Purpose:** Hourly weather snapshots  \n**Grain:** One record per location per hour  \n**Partitioning:** None (not required for 30-day window)\n\n```sql\nCREATE TABLE weather.fact_weather_hourly (\n    weather_id SERIAL PRIMARY KEY,\n    location VARCHAR(100) NOT NULL,\n    latitude DECIMAL(10, 8),\n    longitude DECIMAL(10, 8),\n    temperature_celsius DECIMAL(5, 2),\n    humidity_percent INT,\n    wind_speed_kmh DECIMAL(5, 2),\n    precipitation_mm DECIMAL(8, 3),\n    pressure_mb DECIMAL(7, 2),\n    weather_description VARCHAR(200),\n    data_timestamp TIMESTAMP NOT NULL,  -- When BMKG recorded\n    freshness_status VARCHAR(20),        -- FRESH, WARNING, STALE\n    created_at TIMESTAMP DEFAULT NOW(),\n    updated_at TIMESTAMP DEFAULT NOW(),\n    UNIQUE(location, data_timestamp, EXTRACT(HOUR FROM data_timestamp))\n);\n\n-- Indexes for common queries\nCREATE INDEX ix_weather_location_ts ON weather.fact_weather_hourly (location, data_timestamp DESC);\nCREATE INDEX ix_weather_freshness ON weather.fact_weather_hourly (freshness_status);\n```\n\n**Sample Data:**\n\n```\nlocation          | temperature | humidity | wind_speed | data_timestamp\n─────────────────────────────────────────────────────────────────────────\nJakarta           | 28.5        | 72       | 4.2        | 2026-04-13 10:00\nBandung           | 25.3        | 65       | 3.8        | 2026-04-13 10:00\nSurabaya          | 27.1        | 68       | 5.1        | 2026-04-13 10:00\nMedan             | 26.8        | 70       | 4.5        | 2026-04-13 10:00\n```\n\n#### 2.2 dim_locations\n\n**Purpose:** Weather location dimension  \n**Grain:** One record per location\n\n```sql\nCREATE TABLE weather.dim_locations (\n    location_id SERIAL PRIMARY KEY,\n    location_name VARCHAR(100) NOT NULL UNIQUE,\n    province VARCHAR(100),\n    latitude DECIMAL(10, 8),\n    longitude DECIMAL(10, 8),\n    elevation_m INT,\n    timezone VARCHAR(50),\n    active BOOLEAN DEFAULT TRUE,\n    created_at TIMESTAMP DEFAULT NOW()\n);\n```\n\n#### 2.3 daily_weather_summary\n\n**Purpose:** Aggregated daily weather (min, max, avg)  \n**Grain:** One record per location per day  \n**Update:** Calculated daily from hourly data\n\n```sql\nCREATE TABLE weather.daily_weather_summary (\n    summary_id SERIAL PRIMARY KEY,\n    location VARCHAR(100),\n    summary_date DATE NOT NULL,\n    temp_min DECIMAL(5, 2),\n    temp_max DECIMAL(5, 2),\n    temp_avg DECIMAL(5, 2),\n    humidity_avg INT,\n    wind_speed_avg DECIMAL(5, 2),\n    total_precipitation DECIMAL(8, 3),\n    created_at TIMESTAMP,\n    UNIQUE(location, summary_date)\n);\n```\n\n---\n\n### Schema 3: `analytics`\n\n**Purpose:** KPIs and business metrics  \n**Owner:** postgres  \n**Size:** 50-200MB  \n**Update Frequency:** Varies (scheduled separately)\n\n**Tables:**\n\n#### 3.1 kpi_daily_summary\n\n**Purpose:** Daily operational KPIs  \n**Grain:** One record per date\n\n```sql\nCREATE TABLE analytics.kpi_daily_summary (\n    kpi_date DATE PRIMARY KEY,\n    total_trips INT,\n    total_distance_km DECIMAL(10, 2),\n    total_fuel_consumed DECIMAL(10, 3),\n    avg_trip_distance DECIMAL(8, 2),\n    avg_driver_utilization_percent DECIMAL(5, 2),\n    fuel_efficiency_kmpl DECIMAL(6, 2),\n    on_time_delivery_rate DECIMAL(5, 2),\n    active_vehicles INT,\n    active_drivers INT,\n    created_at TIMESTAMP DEFAULT NOW(),\n    updated_at TIMESTAMP DEFAULT NOW()\n);\n```\n\n#### 3.2 driver_performance_metrics\n\n**Purpose:** Driver performance tracking  \n**Grain:** One record per driver per month\n\n```sql\nCREATE TABLE analytics.driver_performance_metrics (\n    metric_id SERIAL PRIMARY KEY,\n    driver_id INT,\n    metric_month DATE,  -- First day of month\n    total_trips INT,\n    total_distance_km DECIMAL(10, 2),\n    total_hours_worked DECIMAL(10, 2),\n    incidents_count INT,\n    safety_score DECIMAL(5, 2),\n    efficiency_score DECIMAL(5, 2),\n    created_at TIMESTAMP,\n    FOREIGN KEY (driver_id) REFERENCES public.drivers(driver_id),\n    UNIQUE(driver_id, metric_month)\n);\n```\n\n---\n\n## Key Tables\n\n### Top 10 Most Important Tables\n\n| # | Table | Schema | Rows | Purpose |\n|---|-------|--------|------|----------|\n| 1 | drivers | public | 50-500 | Driver master list |\n| 2 | armada | public | 100-1000 | Vehicle fleet |\n| 3 | perjalanan | public | 100K-1M | Trip records (daily sync) |\n| 4 | pengiriman | public | 50K-500K | Delivery assignments |\n| 5 | fact_weather_hourly | weather | 10K-50K | Weather snapshots (30-day) |\n| 6 | invoices | public | 10K-100K | Invoice records |\n| 7 | payments | public | 10K-100K | Payment transactions |\n| 8 | kpi_daily_summary | analytics | 500-2000 | Daily KPIs |\n| 9 | dim_locations | weather | 50-200 | Weather locations |\n| 10 | daily_weather_summary | weather | 1.5K-6K | Daily weather aggregates |\n\n---\n\n## Relationships & Foreign Keys\n\n### Entity Relationship Diagram (Logical)\n\n```\n┌─────────────────┐\n│    DRIVERS      │\n├─────────────────┤\n│ driver_id (PK)  │◄────┐\n│ name            │     │\n│ license_number  │     │ FK\n│ phone           │     │\n└─────────────────┘     │\n                        │\n┌─────────────────┐     ├──┐\n│    ARMADA       │     │  │\n├─────────────────┤     │  │\n│ vehicle_id (PK) │     │  │\n│ plate_number    │     │  │\n│ make            │     │  │\n└─────────────────┘     │  │\n                        │  │\n┌──────────────────┐    │  │\n│  PERJALANAN      │    │  │\n├──────────────────┤    │  │\n│ journey_id (PK)  │    │  │\n│ driver_id (FK)   │───┘  │\n│ vehicle_id (FK)  │──────┘\n│ origin_loc_id    │\n│ destination_id   │\n│ start_time       │\n│ end_time         │\n└──────────────────┘\n```\n\n### Key Relationships\n\n```\nDrivers\n  ├─ 1:N → Perjalanan (one driver, many trips)\n  └─ 1:N → Driver_Performance_Metrics (monthly metrics)\n\nArmada\n  ├─ 1:N → Perjalanan (one vehicle, many trips)\n  └─ 1:N → Maintenance_Records (maintenance history)\n\nPerjalanan\n  ├─ N:1 → Drivers\n  ├─ N:1 → Armada\n  ├─ N:1 → Pengiriman (delivery deliveries)\n  └─ 1:N → Activity_Log (activity tracking)\n\nPengiriman\n  ├─ N:1 → Perjalanan (assigned trip)\n  ├─ N:1 → Customers\n  └─ 1:N → Invoices (billing)\n\nInvoices\n  ├─ N:1 → Pengiriman (delivery to bill)\n  ├─ N:1 → Customers\n  └─ 1:N → Payments (payment records)\n```\n\n---\n\n## Data Growth & Maintenance\n\n### Estimated Data Growth (Monthly)\n\n```\nPerjalanan:              +50K-100K rows\nPengiriman:              +25K-50K rows\nActivity_Log:            +100K-500K rows\nFact_Weather_Hourly:     +720+ rows (24 hours × locations)\nInvoices/Payments:       +5K-10K rows\n────────────────────────────────────────\nTotal:                   +180K-660K rows/month\n\nStorage impact:          ~100-500MB/month\nApprox. yearly growth:   1.2-6GB\n```\n\n### Archive Strategy\n\n#### Weather Data (30-day window)\n\n```sql\n-- Automatic cleanup in weather_data_fetch DAG\nDELETE FROM weather.fact_weather_hourly\nWHERE created_at < NOW() - INTERVAL '30 days';\n```\n\n#### Business Data (Keep 2-3 years)\n\n```sql\n-- Manual archive (not yet automated)\narchive_perjalanan_2024 ← Copy 2024 data\narchive_pengiriman_2024 ← Copy 2024 data\n\nDELETE FROM perjalanan WHERE YEAR(start_time) < 2022;\nDELETE FROM pengiriman WHERE YEAR(delivery_date) < 2022;\n```\n\n---\n\n## Access & Querying\n\n### Sample Queries\n\n#### Total trips by driver (last 30 days)\n\n```sql\nSELECT\n    d.name,\n    COUNT(p.journey_id) as total_trips,\n    SUM(p.distance_km) as total_distance,\n    AVG(p.distance_km) as avg_trip_distance\nFROM public.drivers d\nLEFT JOIN public.perjalanan p ON d.driver_id = p.driver_id\n  AND p.start_time >= NOW() - INTERVAL '30 days'\nGROUP BY d.driver_id, d.name\nORDER BY total_trips DESC;\n```\n\n#### Weather trends (last 7 days)\n\n```sql\nSELECT\n    summary_date,\n    location,\n    temp_min,\n    temp_max,\n    temp_avg,\n    total_precipitation\nFROM weather.daily_weather_summary\nWHERE summary_date >= CURRENT_DATE - 7\nORDER BY summary_date DESC, location;\n```\n\n#### Daily KPI dashboard\n\n```sql\nSELECT\n    kpi_date,\n    total_trips,\n    total_distance_km,\n    avg_driver_utilization_percent,\n    fuel_efficiency_kmpl,\n    active_vehicles,\n    active_drivers\nFROM analytics.kpi_daily_summary\nWHERE kpi_date >= CURRENT_DATE - 30\nORDER BY kpi_date DESC;\n```\n\n---\n\n📖 **Next:** Read [Dashboards Setup](DASHBOARDS.md) for BI tools configuration  \n👈 **Back to:** [Main README](../README.md)\n
+```
+Database Name:      warehouse
+Host:               localhost
+Port:               5433
+Owner:              postgres
+Encoding:           UTF-8
+Collate:            en_US.utf8
+Ctype:              en_US.utf8
+Size:               2-5GB (typical)
+Tables:             90 (from DEVOM sync)
+```
+
+### User Access
+
+```
+User:               postgres
+Password:           postgres123 (development)
+Role:               Superuser
+Connection limit:   Unlimited
+```
+
+---
+
+## Schemas
+
+### Schema 1: `public` - Business Data (90 Tables)
+
+**Purpose:** Complete DEVOM company data synced daily  
+**Owner:** postgres  
+**Size:** 1-3GB  
+**Update Frequency:** Daily @ 00:00 UTC (via daily_warehouse_sync DAG)  
+**Sync Strategy:** Full sync (TRUNCATE + reload)
+
+**Table Count:** 90 tables
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 90 TABLES SYNCED FROM DEVOM (devom.silog.co.id)            │
+├─────────────────────────────────────────────────────────────┤
+│ ADMINISTRATIVE & MASTER DATA (14 tables)                    │
+│ ─────────────────────────────────────────────────────────── │
+│ • atribut                    - Product attributes           │
+│ • atribut_produk             - Product attributes mapping  │
+│ • bank                       - Bank information            │
+│ • categories_produk          - Product categories          │
+│ • jenis_armada               - Vehicle type classification │
+│ • jenis_file                 - File type classification    │
+│ • jenis_insiden              - Incident type classes       │
+│ • jenis_notifikasi           - Notification types          │
+│ • jenis_order                - Order type classes          │
+│ • jenis_satuan               - Unit of measure types       │
+│ • jenis_transaksi            - Transaction type classes    │
+│ • konversi                   - Unit conversion factors     │
+│ • language                   - Supported languages         │
+│ • language_text              - Language translations       │
+│                                                             │
+│ GEOGRAPHIC DATA (2 tables)                                 │
+│ ─────────────────────────────────────────────────────────── │
+│ • geofence                   - Geographic boundaries       │
+│ • locations                  - Location coordinates        │
+│                                                             │
+│ PERSONNEL & SECURITY (4 tables)                            │
+│ ─────────────────────────────────────────────────────────── │
+│ • daftar_user                - User registry               │
+│ • kontak_darurat             - Emergency contacts          │
+│ • role                       - User role definitions       │
+│ • status_user                - User status types           │
+│                                                             │
+│ VEHICLE & FLEET (9 tables)                                 │
+│ ─────────────────────────────────────────────────────────── │
+│ • armada_perangkat           - Vehicle device mapping     │
+│ • armada_tms                 - TMS tracking data          │
+│ • driver_armada              - Driver-vehicle assignment  │
+│ • gudang                     - Warehouse/depot info       │
+│ • parent_armada              - Vehicle hierarchy          │
+│ • perangkat                  - GPS/IoT devices            │
+│ • perangkat_gps_driver       - Driver GPS devices         │
+│ • rute                       - Route definitions          │
+│ • rute_perangkat             - Device route tracking      │
+│                                                             │
+│ DELIVERY & OPERATIONS (16 tables)                          │
+│ ─────────────────────────────────────────────────────────── │
+│ • delivery_order             - Delivery orders            │
+│ • detail_do                  - Delivery order lines       │
+│ • detail_po                  - Purchase order lines       │
+│ • detail_qc                  - QC check details           │
+│ • detail_sm                  - Service request details    │
+│ • detail_so                  - Sales order lines          │
+│ • notifikasi                 - Notifications              │
+│ • orders                     - Sales orders               │
+│ • order_tms                  - TMS orders                 │
+│ • pengingat_pemeliharaan_armada - Vehicle maintenance   │
+│ • pengembalian               - Returns/refunds            │
+│ • purchase_order             - Purchase orders            │
+│ • quality_control            - QC records                 │
+│ • sales_order                - Sales orders               │
+│ • status_order               - Order status types         │
+│ • units                      - Unit definitions           │
+│                                                             │
+│ CHAT & NOTIFICATIONS (5 tables)                            │
+│ ─────────────────────────────────────────────────────────── │
+│ • chat_room                  - Chat rooms                  │
+│ • room_last_read             - Chat read tracking         │
+│ • room_members               - Chat room membership       │
+│ • customers                  - Customer information       │
+│ • rating                     - Customer ratings           │
+│                                                             │
+│ ATTACHMENT & DOCUMENTS (8 tables)                          │
+│ ─────────────────────────────────────────────────────────── │
+│ • attachment                 - Generic attachments        │
+│ • attachment_armada          - Vehicle attachments        │
+│ • attachment_chat            - Chat attachments           │
+│ • attachment_driver          - Driver attachments         │
+│ • attachment_gudang          - Warehouse attachments      │
+│ • attachment_perangkat       - Device attachments         │
+│ • attachment_pengembalian    - Return attachments         │
+│ • attachment_qc              - QC attachments             │
+│                                                             │
+│ LOGGING & ACTIVITY (7 tables)                              │
+│ ─────────────────────────────────────────────────────────── │
+│ • log_aktifitas_driver       - Driver activity logs       │
+│ • log_chat                   - Chat activity logs         │
+│ • log_panggilan              - Call logs                  │
+│ • log_perangkat              - Device logs                │
+│ • log_perjalanan_armada      - Vehicle journey logs       │
+│ • log_sensor                 - Sensor data logs           │
+│ • log_service                - Service logs               │
+│                                                             │
+│ FINANCIAL & PAYMENT (5 tables)                             │
+│ ─────────────────────────────────────────────────────────── │
+│ • mata_uang                  - Currency definitions       │
+│ • metode_pembayaran          - Payment methods            │
+│ • pembayaran_fee             - Fee payments               │
+│ • rekening_driver            - Driver bank accounts       │
+│ • suppliers                  - Supplier information       │
+│                                                             │
+│ WAREHOUSE & INVENTORY (5 tables)                           │
+│ ─────────────────────────────────────────────────────────── │
+│ • lokasi_rak                 - Shelf/rack locations       │
+│ • produk                     - Product master             │
+│ • produk_gudang              - Warehouse stock            │
+│ • satuan                     - Unit of measure            │
+│ • stok                       - Stock levels               │
+│ • stok_movement              - Stock transaction          │
+│                                                             │
+│ STATUS & CONFIGURATION (4 tables)                          │
+│ ─────────────────────────────────────────────────────────── │
+│ • status_armada              - Vehicle status types       │
+│ • status_gudang              - Warehouse status           │
+│ • status_qc                  - QC status types            │
+│ • tenant                     - Multi-tenant config        │
+│                                                             │
+│ USER MANAGEMENT (2 tables)                                 │
+│ ─────────────────────────────────────────────────────────── │
+│ • user_role                  - User-role assignment       │
+│ • user_tenant                - User-tenant assignment     │
+│                                                             │
+│ ALERTS & REPORTING (2 tables)                              │
+│ ─────────────────────────────────────────────────────────── │
+│ • alert_geofence             - Geofence alerts            │
+│ • laporan_darurat            - Emergency reports          │
+│ • laporan_pengemudi          - Driver reports             │
+│                                                             │
+│ MISCELLANEOUS (2 tables)                                   │
+│ ─────────────────────────────────────────────────────────── │
+│ • weather                    - Historical weather data    │
+│ • z_test                     - Test/sandbox data          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**To see all 90 tables:**
+
+```sql
+SELECT tablename FROM pg_tables 
+WHERE schemaname = 'public' 
+ORDER BY tablename;
+
+-- Expected output: 90 rows
+```
+
+---
+
+### Schema 2: `weather` - BMKG API Data (3 Tables)
+
+**Purpose:** Hourly weather data from BMKG API  
+**Owner:** postgres  
+**Size:** 100-500MB  
+**Update Frequency:** Every hour (via weather_data_fetch DAG)  
+**Retention:** 30-day rolling window (auto-cleanup)
+
+#### Table 1: fact_weather_hourly
+
+**Purpose:** Hourly weather snapshots  
+**Grain:** One record per location per hour  
+**Partitioning:** None (30-day window, manageable size)
+
+```sql
+CREATE TABLE weather.fact_weather_hourly (
+    weather_id SERIAL PRIMARY KEY,
+    adm4 VARCHAR(20) NOT NULL,              -- Administrative code
+    lokasi VARCHAR(100) NOT NULL,           -- Location name  
+    desa VARCHAR(100),                      -- Village
+    kecamatan VARCHAR(100),                 -- Sub-district
+    kabupaten VARCHAR(100),                 -- Regency/city
+    provinsi VARCHAR(100),                  -- Province
+    waktu TIMESTAMP NOT NULL,               -- Forecast time
+    cuaca VARCHAR(200),                     -- Weather description
+    suhu_celsius DECIMAL(5, 2),             -- Temperature (°C)
+    kelembapan INT,                         -- Humidity (%)
+    arah_angin VARCHAR(50),                 -- Wind direction  
+    kecepatan_angin DECIMAL(5, 2),          -- Wind speed (km/h)
+    freshness_status VARCHAR(20),           -- FRESH/WARNING/STALE
+    created_at TIMESTAMP DEFAULT NOW(),     -- Record creation time
+    updated_at TIMESTAMP DEFAULT NOW(),     -- Last update
+    UNIQUE(adm4, waktu)
+);
+
+-- Performance indexes
+CREATE INDEX ix_weather_location_time 
+    ON weather.fact_weather_hourly (adm4, waktu DESC);
+CREATE INDEX ix_weather_freshness 
+    ON weather.fact_weather_hourly (freshness_status);
+CREATE INDEX ix_weather_created 
+    ON weather.fact_weather_hourly (created_at DESC);
+```
+
+**Sample Data:**
+
+```
+adm4           | lokasi      | suhu_celsius | kelembapan | waktu
+───────────────┼─────────────┼──────────────┼────────────┼─────────────────────────
+35.78.21.1004  | Jakarta     | 28.5         | 72         | 2026-04-13 10:00:00
+35.78.21.1004  | Jakarta     | 29.2         | 70         | 2026-04-13 11:00:00
+35.25.14.1010  | Bandung     | 24.8         | 65         | 2026-04-13 10:00:00
+```
+
+**Data Cleanup:**
+
+```sql
+-- Auto-cleanup in weather_data_fetch DAG
+DELETE FROM weather.fact_weather_hourly 
+WHERE created_at < NOW() - INTERVAL '30 days';
+```
+
+#### Table 2: dim_locations
+
+**Purpose:** Weather location dimension  
+**Grain:** One record per location
+
+```sql
+CREATE TABLE weather.dim_locations (
+    location_id SERIAL PRIMARY KEY,
+    adm4 VARCHAR(20) NOT NULL UNIQUE,       -- ADM4 code
+    location_name VARCHAR(100) NOT NULL,    -- Display name
+    province VARCHAR(100),                  -- Province name
+    city_regency VARCHAR(100),              -- City/regency name
+    latitude DECIMAL(10, 8),                -- Latitude coordinate
+    longitude DECIMAL(11, 8),               -- Longitude coordinate
+    elevation_m INT,                        -- Elevation (meters)
+    timezone VARCHAR(50),                   -- Timezone (Asia/Jakarta)
+    active BOOLEAN DEFAULT TRUE,             -- Is location active
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Table 3: daily_weather_summary
+
+**Purpose:** Daily aggregated weather  
+**Grain:** One record per location per day
+
+```sql
+CREATE TABLE weather.daily_weather_summary (
+    summary_id SERIAL PRIMARY KEY,
+    adm4 VARCHAR(20),                       -- Location code
+    summary_date DATE NOT NULL,              -- Date
+    temp_min DECIMAL(5, 2),                 -- Min temperature
+    temp_max DECIMAL(5, 2),                 -- Max temperature
+    temp_avg DECIMAL(5, 2),                 -- Avg temperature
+    humidity_avg INT,                       -- Avg humidity
+    wind_speed_avg DECIMAL(5, 2),           -- Avg wind speed
+    total_precipitation DECIMAL(8, 3),      -- Total precipitation (mm)
+    weather_description VARCHAR(200),       -- Dominant weather
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(adm4, summary_date)
+);
+```
+
+---
+
+### Schema 3: `analytics` - KPIs & Metrics (2 Tables)
+
+**Purpose:** Business metrics and KPIs  
+**Owner:** postgres  
+**Size:** 50-200MB  
+**Update Frequency:** Daily (if configured)
+
+#### Table 1: kpi_daily_summary
+
+```sql
+CREATE TABLE analytics.kpi_daily_summary (
+    kpi_date DATE PRIMARY KEY,
+    total_deliveries INT,                   -- Delivery count
+    total_distance_km DECIMAL(10, 2),       -- Total distance
+    total_orders INT,                       -- Order count
+    avg_delivery_time_hours DECIMAL(5, 2), -- Avg delivery time
+    active_drivers INT,                     -- Active drivers
+    active_vehicles INT,                    -- Active vehicles
+    on_time_delivery_rate DECIMAL(5, 2),    -- On-time % 
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Table 2: driver_performance_metrics
+
+```sql
+CREATE TABLE analytics.driver_performance_metrics (
+    metric_id SERIAL PRIMARY KEY,
+    driver_id INT,                          -- Driver ID (FK)
+    metric_month DATE,                      -- Month (first day)
+    total_trips INT,                        -- Trip count
+    total_distance_km DECIMAL(10, 2),       -- Distance driven
+    on_time_rate DECIMAL(5, 2),             -- On-time %
+    safety_score DECIMAL(5, 2),             -- Safety rating (0-100)
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(driver_id, metric_month)
+);
+```
+
+---
+
+## All 90 Tables
+
+**Complete alphabetical list of all business tables:**
+
+```
+1.  alert_geofence
+2.  armada_perangkat
+3.  armada_tms
+4.  atribut
+5.  atribut_produk
+6.  attachment
+7.  attachment_armada
+8.  attachment_chat
+9.  attachment_driver
+10. attachment_gudang
+11. attachment_pengembalian
+12. attachment_perangkat
+13. attachment_qc
+14. bank
+15. chat_room
+16. customers
+17. daftar_user
+18. delivery_order
+19. detail_do
+20. detail_po
+21. detail_qc
+22. detail_sm
+23. detail_so
+24. driver_armada
+25. geofence
+26. gudang
+27. jenis_armada
+28. jenis_file
+29. jenis_insiden
+30. jenis_notifikasi
+31. jenis_order
+32. jenis_satuan
+33. jenis_transaksi
+34. kategori_produk
+35. kontak_darurat
+36. konversi
+37. kriteria_produk
+38. language
+39. language_text
+40. laporan_darurat
+41. laporan_pengemudi
+42. locations
+43. log_aktifitas_driver
+44. log_chat
+45. log_panggilan
+46. log_perangkat
+47. log_perjalanan_armada
+48. log_sensor
+49. log_service
+50. lokasi_rak
+51. mata_uang
+52. metode_pembayaran
+53. notifikasi
+54. order_tms
+55. orders
+56. parent_armada
+57. pembayaran_fee
+58. pengembalian
+59. pengingat_pemeliharaan_armada
+60. perangkat
+61. perangkat_gps_driver
+62. produk
+63. produk_gudang
+64. purchase_order
+65. quality_control
+66. rating
+67. rekening_driver
+68. role
+69. room_last_read
+70. room_members
+71. rute
+72. rute_perangkat
+73. sales_order
+74. satuan
+75. status_armada
+76. status_gudang
+77. status_order
+78. status_qc
+79. status_user
+80. stok
+81. stok_movement
+82. suppliers
+83. tempat_istirahat_driver
+84. tenant
+85. units
+86. user_role
+87. user_tenant
+88. weather
+89. z_test
+```
+
+**Total: 89 tables (z_test is test/sandbox data)**
+
+---
+
+## Key Tables
+
+### Top 10 Most Important Tables
+
+| # | Table | Rows | Purpose | Update |
+|---|-------|------|---------|--------|
+| 1 | orders | 50K-500K | Sales orders master | Daily |
+| 2 | delivery_order | 50K-500K | Delivery assignments | Daily |
+| 3 | detail_do | 100K-1M | Delivery order lines | Daily |
+| 4 | log_perjalanan_armada | 100K-500K | Vehicle trip logs | Daily |
+| 5 | log_aktifitas_driver | 100K-500K | Driver activity | Daily |
+| 6 | customers | 1K-10K | Customer master | Daily |
+| 7 | armada_perangkat | 100-1K | Vehicle equipment | Daily |
+| 8 | perangkat | 100-1K | GPS/IoT devices | Daily |
+| 9 | fact_weather_hourly | 50K-200K | Weather (30-day) | Hourly |
+| 10 | stok | 10K-100K | Inventory levels | Daily |
+
+---
+
+## Data Growth & Maintenance
+
+### Estimated Monthly Growth
+
+```
+orders                    +10K-50K rows
+delivery_order            +10K-50K rows
+log_* tables              +200K-500K rows
+detail_do/po/so/qc/sm    +50K-200K rows
+Chat/notification tables  +50K-200K rows
+──────────────────────────────────────
+TOTAL:                    ~500K-2M rows/month
+Storage impact:           ~100-500MB/month
+Yearly growth:            ~1.2-6GB/year
+```
+
+### Archive Strategy
+
+#### Weather Data (30-day auto-cleanup)
+
+```sql
+-- Automatic in weather_data_fetch DAG
+DELETE FROM weather.fact_weather_hourly
+WHERE created_at < NOW() - INTERVAL '30 days';
+```
+
+#### Business Data (Keep 2-3 years)
+
+```sql
+-- Manual archive (not yet automated)
+-- Consider archiving old log_* tables for performance
+DELETE FROM log_perjalanan_armada 
+WHERE YEAR(start_time) < 2024;
+```
+
+---
+
+## Useful Queries
+
+### Total Size by Schema
+
+```sql
+SELECT 
+    schemaname,
+    pg_size_pretty(SUM(pg_total_relation_size(schemaname||'.'||tablename))) as total_size
+FROM pg_tables 
+WHERE schemaname IN ('public', 'weather', 'analytics')
+GROUP BY schemaname
+ORDER BY SUM(pg_total_relation_size(schemaname||'.'||tablename)) DESC;
+```
+
+### Top 10 Largest Tables
+
+```sql
+SELECT 
+    schemaname,
+    tablename,
+    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size,
+    n_live_tup as row_count
+FROM pg_tables
+LEFT JOIN pg_stat_user_tables USING (tablename)
+WHERE schemaname = 'public'
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC
+LIMIT 10;
+```
+
+### List All Tables with Row Counts
+
+```sql
+SELECT 
+    schemaname,
+    tablename,
+    n_live_tup as row_count,
+    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size
+FROM pg_stat_user_tables
+WHERE schemaname IN ('public', 'weather', 'analytics')
+ORDER BY schemaname, tablename;
+```
+
+### Count Tables in Each Schema
+
+```sql
+SELECT 
+    schemaname,
+    COUNT(*) as table_count
+FROM pg_tables 
+WHERE schemaname IN ('public', 'weather', 'analytics')
+GROUP BY schemaname;
+
+-- Expected output:
+-- schemaname | table_count
+-- ────────────┼─────────────
+-- public     | 89
+-- weather    | 3
+-- analytics  | 2
+```
+
+---
+
+📖 **Next:** Read [Architecture Guide](ARCHITECTURE.md) for system design  
+👈 **Back to:** [Main README](../README.md)

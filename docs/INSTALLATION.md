@@ -1,6 +1,6 @@
 # 📖 Installation & Setup Guide
 
-**Complete step-by-step guide to set up Airflow Stack from scratch**
+**Panduan lengkap setup Airflow Stack dari nol**
 
 ---
 
@@ -8,8 +8,6 @@
 
 - [Prerequisites](#prerequisites)
 - [Step-by-Step Installation](#step-by-step-installation)
-- [Database Setup](#database-setup)
-- [First DAG Run](#first-dag-run)
 - [Verify Installation](#verify-installation)
 - [Troubleshooting](#troubleshooting)
 
@@ -22,25 +20,22 @@
 - **OS:** Linux, macOS, or Windows (with WSL2)
 - **RAM:** Minimum 4GB (recommended 8GB)
 - **Disk:** 20GB free space
-- **Ports:** 5433, 6379, 8080, 3000, 3001, 8088 must be available
+- **Ports:** 5433, 6379, 8080 must be available
 
 ### Required Software
 
 ```bash
 # Check Docker
-docker --version
-# Docker version 24.0.0+
+docker --version      # Docker 24.0.0+
 
 # Check Docker Compose
-docker-compose --version
-# Docker Compose version 2.20.0+
+docker-compose --version   # 2.20.0+
 
-# Check Bash
-bash --version
-# GNU bash, version 5.0+
+# Verify connectivity to source
+ping devom.silog.co.id
 ```
 
-**Installation links:**
+**Setup links:**
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 

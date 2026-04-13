@@ -1,0 +1,1 @@
+podman stop postgres valkey airflow-webserver metabase 2>/dev/null; podman rm postgres valkey airflow-webserver metabase 2>/dev/null; echo "Containers cleaned!"

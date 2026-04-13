@@ -1,0 +1,171 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║          🎯 PANDUAN SETUP WAREHOUSE DATABASE - STEP BY STEP           ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+⚠️  PENTING: Jalankan perintah ini secara BERURUTAN!
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: Start Container & Database                                    │
+└────────────────────────────────────────────────────────────────────────┘
+
+$ bash quick_start.sh
+
+✅ Hasil:
+   - PostgreSQL running di port 5433
+   - Airflow running di port 8080
+   - Database warehouse dibuat (kosong)
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: Setup Schema Weather & Analytics                              │
+└────────────────────────────────────────────────────────────────────────┘
+
+$ bash setup_warehouse_db.sh
+
+✅ Hasil:
+   - User postgres/postgres123 dibuat
+   - Schema public, weather, analytics dibuat
+   - Tables weather schema dibuat
+   - Tables analytics schema dibuat
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: Copy Semua Tables dari DEVOM ⭐ PENTING!                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+$ bash copy_devom_structure.sh
+
+Proses:
+   1. Connect ke devom.silog.co.id
+   2. List semua tables (driver, armada, perjalanan, dll)
+   3. Generate DDL untuk semua tables
+   4. Create tables di warehouse.public dengan semua atribut
+
+✅ Hasil:
+   - Semua tables dari DEVOM dibuat di warehouse.public
+   - Struktur & atribut sama persis dengan DEVOM
+   - DDL tersimpan di: sql/06_devom_tables_ddl.sql
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 4: Connect di pgAdmin4                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+1. Buka pgAdmin4
+2. Right-click Servers → Register → Server
+3. Tab General:
+      Name: WAREHOUSE
+4. Tab Connection:
+      Host: localhost
+      Port: 5433
+      Database: warehouse
+      Username: postgres        ⬅️ BUKAN postgres123!
+      Password: postgres123
+      [✓] Save password
+5. Klik Save
+
+✅ Hasil:
+   - Server WAREHOUSE muncul di pgAdmin4
+   - Bisa lihat: Schemas → public, weather, analytics
+   - Bisa lihat: Tables dengan semua atribut
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 5: Verify Structure di pgAdmin4                                  │
+└────────────────────────────────────────────────────────────────────────┘
+
+Di pgAdmin4, jalankan query ini:
+
+-- List semua tables di schema public (data perusahaan)
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema='public' 
+ORDER BY table_name;
+
+-- List semua tables di schema weather (data cuaca)
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema='weather' 
+ORDER BY table_name;
+
+-- List semua kolom di table driver (contoh)
+SELECT column_name, data_type, character_maximum_length, is_nullable
+FROM information_schema.columns
+WHERE table_schema='public' AND table_name='driver'
+ORDER BY ordinal_position;
+
+✅ Expected:
+   - Banyak tables di schema public (semua dari DEVOM)
+   - Tables di schema weather (fact_weather_hourly, dll)
+   - Semua kolom/atribut sesuai dengan DEVOM
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 6: Sync Data dari DEVOM (First Run)                              │
+└────────────────────────────────────────────────────────────────────────┘
+
+1. Buka Airflow Web UI: http://localhost:8080
+2. Login (lihat credentials dengan perintah ini):
+   $ podman exec airflow-webserver cat /opt/airflow/simple_auth_manager_passwords.json.generated
+3. Find DAG: daily_warehouse_sync
+4. Klik tombol "Play" (trigger DAG)
+
+✅ Hasil:
+   - Data dari DEVOM ter-copy ke warehouse.public
+   - Tables terisi dengan data real
+   - Bisa verify di pgAdmin4: SELECT COUNT(*) FROM public.driver;
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ STEP 7: Start Weather Data Fetch                                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+Di Airflow Web UI:
+1. Find DAG: weather_data_fetch
+2. Klik tombol "Play" (trigger DAG)
+
+✅ Hasil:
+   - Data cuaca dari BMKG API masuk ke warehouse.weather
+   - Bisa verify: SELECT * FROM weather.fact_weather_hourly LIMIT 10;
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ ✅ SELESAI! Database Warehouse Siap!                                   │
+└────────────────────────────────────────────────────────────────────────┘
+
+Struktur final di pgAdmin4:
+
+warehouse (database)
+  └── Schemas
+      ├── public (data perusahaan dari DEVOM)
+      │   └── Tables: driver, armada, perjalanan, gps_tracking, ...
+      │       └── Atribut: uuid_user, nama_driver, nomor_plat, ...
+      │
+      ├── weather (data cuaca dari BMKG)
+      │   └── Tables: fact_weather_hourly, dim_weather_location, ...
+      │       └── Atribut: adm4, lokasi, waktu, suhu_celsius, ...
+      │
+      └── analytics (data analytics & KPI)
+          └── Tables: fact_driver_performance, ...
+
+Auto-update:
+✅ Input baru di DEVOM → sync otomatis (harian jam 00:00)
+✅ Data cuaca baru → fetch otomatis (per jam)
+
+═══════════════════════════════════════════════════════════════════════════
+
+🆘 TROUBLESHOOTING
+
+Error: "role postgres123 does not exist"
+→ Username salah! Gunakan: postgres (bukan postgres123)
+
+Error: "connection refused"
+→ Container belum running: bash quick_start.sh
+
+Error: "No tables in schema public"
+→ Belum run STEP 3: bash copy_devom_structure.sh
+
+Error: "Cannot connect to DEVOM"
+→ Check network/VPN, pastikan bisa akses devom.silog.co.id
+
+═══════════════════════════════════════════════════════════════════════════
+
+📖 MORE INFO:
+- STRUKTUR_WAREHOUSE.txt     (struktur lengkap + flow)
+- CARA_CONNECT_PGADMIN4.txt  (panduan connect pgAdmin4)
+- RINGKASAN_DATABASE.md      (overview + credentials)
+
+═══════════════════════════════════════════════════════════════════════════
