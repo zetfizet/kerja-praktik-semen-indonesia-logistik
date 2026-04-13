@@ -1,98 +1,117 @@
 # Airflow ELT Pipeline
 
-Project ini berisi pipeline Airflow untuk mengambil data dari source database, memuatnya ke warehouse PostgreSQL, lalu membangun tabel analitik untuk Metabase dan kebutuhan routing/weather enrichment.
+Data pipeline menggunakan Airflow untuk sync data dari source database ke warehouse PostgreSQL, dengan transformasi daily aggregations.
 
-## Gambaran Arsitektur
+## Architecture
 
 ```
-Source DB
-  ↓
-weather_data_fetch / routing_enrichment / warehouse_sync_optimized
-  ↓
-PostgreSQL warehouse (public.*)
-  ↓
-warehouse_transform_simple
-  ↓
-analytics.* untuk dashboard Metabase
+Source DB (SQL Server/MySQL)
+    ↓
+[warehouse_sync_optimized] @ 02:00 AM → public.* (88 tables, raw data)
+    ↓
+[warehouse_transform_simple] @ 03:00 AM → analytics.* (5 aggregated tables)
+    ↓
+Metabase Dashboard (query analytics.*)
 ```
 
-## DAG Aktif
+## Setup
 
-Empat DAG yang saat ini dipakai sebagai alur utama:
-
-- `weather_data_fetch` - ambil data cuaca BMKG dan simpan ke warehouse.
-- `warehouse_sync_optimized` - sync tabel operasional ke schema `public` dengan incremental sync dan soft delete untuk tabel transaksional.
-- `routing_enrichment` - hitung metric rute dan upsert ke `public.fact_route_metrics`.
-- `warehouse_transform_simple` - transform data `public.*` menjadi agregasi harian di `analytics.*`.
-
-Dokumen dan DAG yang digunakan untuk operasional harian ada di folder utama project ini.
-
-
-## Requirement
-
-- Docker atau Podman
-- `docker compose` atau `podman-compose`
+### 1. Prerequisites
+- Docker/Podman installed
 - PostgreSQL 16
-- Akses jaringan ke source database
-- Python 3.13+ jika ingin menjalankan skrip bantu di host
+- Python 3.13+
 
-## Konfigurasi
+### 2. Configuration
 
-1. Salin template environment.
-
+Copy environment template:
 ```bash
 cp .env.example .env
+# Edit .env dan isi dengan credentials kamu
 ```
 
-2. Isi nilai berikut di `.env`:
+Generate secrets:
+```bash
+# Generate Fernet Key
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 
-- `AIRFLOW_SECRET_KEY`
-- `AIRFLOW_FERNET_KEY`
-- `POSTGRES_PASSWORD`
-- credential source database jika berbeda dari default
+# Generate Secret Key
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
 
-3. Jika perlu, sesuaikan `compose.example.yml` lalu gunakan itu sebagai acuan untuk `compose.yml` lokal.
-
-## Menjalankan Project
-
-1. Pastikan file environment sudah terisi.
-2. Jalankan stack container.
+### 3. Start Services
 
 ```bash
 podman-compose up -d
 ```
 
-Kalau memakai Docker Compose, perintah setara juga bisa dipakai.
+### 4. Access Airflow
 
-3. Buka Airflow di:
+- URL: http://localhost:8080
+- User: admin
+- Password: Check logs dengan `podman-compose logs airflow-webserver | grep "Password"`
 
-```text
-http://localhost:8080
+## DAGs
+
+### warehouse_sync_optimized
+- **Schedule**: Daily @ 02:00 AM
+- **Purpose**: Sync 88 tables dari source database ke warehouse (public schema)
+- **Features**: Soft-delete support, incremental sync, parallel execution
+
+### warehouse_transform_simple  
+- **Schedule**: Daily @ 03:00 AM
+- **Purpose**: Transform raw data ke analytics aggregations
+- **Transforms**:
+  - `daily_table_counts`: Row counts semua tables
+  - `orders_daily_summary`: Daily order metrics
+  - `customers_summary`: Customer statistics
+  - `delivery_daily_summary`: Delivery performance
+  - `inventory_summary`: Stock levels
+
+## Documentation
+
+- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Deployment instructions
+- [PIPELINE_SETUP.md](PIPELINE_SETUP.md) - Pipeline configuration
+- [SOFT_DELETE_IMPLEMENTATION.md](SOFT_DELETE_IMPLEMENTATION.md) - Soft delete feature
+- [MLFLOW_QUICKSTART.md](MLFLOW_QUICKSTART.md) - ML tracking setup
+
+## Project Structure
+
+```
+dags/                          # Airflow DAG files
+  ├── warehouse_sync_optimized.py
+  ├── warehouse_transform_simple.py
+  ├── config/                  # DAG configurations
+  └── utils/                   # Utility modules
+
+logs/                          # Runtime logs (not in git)
+plugins/                       # Airflow plugins
+docs/                          # Additional documentation
+
+*.sql                          # SQL setup scripts
+setup_*.sh                     # Shell setup scripts
+requirements-mlflow.txt        # Python dependencies
+Dockerfile                     # Custom Airflow image
+compose.yml                    # Docker compose (DO NOT commit with secrets!)
 ```
 
-4. Ambil password awal dari log container jika memakai mode standalone.
+## Security Notes
 
-## Output Utama
+⚠️ **NEVER commit**:
+- `.env` file (contains real credentials)
+- `compose.yml` dengan hardcoded passwords
+- `logs/` folder
+- `__pycache__/` folders
 
-- Data raw tersinkron ke schema `public` di warehouse PostgreSQL.
-- Tabel analitik harian dibuat di schema `analytics`.
-- Hasil routing enrichment tersedia di `public.fact_route_metrics`.
-- Metabase dapat query langsung ke `analytics.*`.
+✅ **Safe to commit**:
+- `.env.example` (template without real values)
+- `compose.example.yml` (template using env vars)
+- DAG files
+- Documentation
+- SQL scripts
 
-## Struktur Project
+## Contributing
 
-```
-dags/              DAG utama dan utility
-docs/              Dokumentasi tambahan
-plugins/           Plugin Airflow
-logs/              Log runtime lokal
-*.sql              Script setup dan transformasi
-compose.example.yml Template compose aman tanpa secret
-.env.example       Template environment
-```
-
-## Dokumentasi Terkait
-
-- [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
-- [docs/PIPELINE_SETUP.md](docs/PIPELINE_SETUP.md)
-- [docs/SOFT_DELETE_IMPLEMENTATION.md](docs/SOFT_DELETE_IMPLEMENTATION.md)
+1. Clone repo
+2. Copy `.env.example` ke `.env` dan isi credentials
+3. Run `podman-compose up -d`
+4. Access http://localhost:8080
