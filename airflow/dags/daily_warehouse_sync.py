@@ -39,11 +39,11 @@ SOURCE_DB_CONFIG = {
 
 # Target (warehouse) database credentials
 TARGET_DB_CONFIG = {
-    'host': 'localhost',
+    'host': 'postgres',
     'database': 'warehouse',
     'user': 'postgres',
-    'password': 'postgres123',
-    'port': 5433,
+    'password': 'postgres',
+    'port': 5432,
 }
 
 # Table mappings: source_table -> (target_schema, target_table)
@@ -248,7 +248,7 @@ sync_task = PythonOperator(
 verify_task = BashOperator(
     task_id='verify_warehouse_data',
     bash_command='''
-    PGPASSWORD='postgres123' psql -h localhost -p 5433 -U postgres -d warehouse -c "
+    PGPASSWORD='postgres' psql -h postgres -p 5432 -U postgres -d warehouse -c "
     SELECT 
         tablename as table_name,
         pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size
@@ -266,7 +266,7 @@ verify_task = BashOperator(
 company_count_task = BashOperator(
     task_id='check_company_data',
     bash_command='''
-    PGPASSWORD='postgres123' psql -h localhost -p 5433 -U postgres -d warehouse -c "
+    PGPASSWORD='postgres' psql -h postgres -p 5432 -U postgres -d warehouse -c "
     SELECT 
         COUNT(*) as total_tables,
         'public' as schema_name

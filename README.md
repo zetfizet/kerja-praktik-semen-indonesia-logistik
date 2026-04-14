@@ -10,7 +10,7 @@
 ## 📑 Table of Contents
 
 - [About Project](#-about-project)
-- [Quick Start](#-quick-start-5-minutes)
+- [Quick Start](#-quick-start)
 - [How It Works](#-how-it-works)
 - [DAGs & Data Pipelines](#-dags--data-pipelines)
 - [Documentation](#-documentation)

@@ -55,6 +55,9 @@ airflow/plugins/__pycache__/
 airflow/dags/__pycache__/
 dags/__pycache__/
 
+# Visualization exports not meant for Git
+metabase_visualizations/
+
 # Database credentials (use .env.example as template)
 .env
 
