@@ -1,3 +1,6 @@
+![Weather Dashboard Cover 1](docs/img/img-1.png)
+![Weather Dashboard Cover 2](docs/img/img-2.png)
+
 # 🚀 Airflow Stack - Platform Data Warehouse & Weather Analytics
 
 > **Platform orchestration data production-ready dengan Apache Airflow, PostgreSQL warehouse, dan analytics dashboard terintegrasi**
