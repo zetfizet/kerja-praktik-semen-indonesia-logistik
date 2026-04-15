@@ -7,6 +7,8 @@
 ![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-336791)
 ![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Latest-2496ED)
 
+Link Demo: https://demo-weather-dashboard.vercel.app/
+
 ![Weather Dashboard Cover 1](docs/img/img-1.png)
 ![Weather Dashboard Cover 2](docs/img/img-2.png)
 
